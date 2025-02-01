@@ -1,0 +1,80 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc} %Pour l'encodage en utf-8
+\usepackage[T1]{fontenc} %Pour les accents
+\usepackage[french]{babel} %Pour les langues
+
+\usepackage{siunitx} %Pour les unités
+\usepackage{fancyhdr} %Pour les entêtes et bas de page
+\usepackage{graphicx} %Pour les figures
+\usepackage{mathtools} %Pour les maths
+\usepackage[margin=2.5cm]{geometry} %Pour les marges de la page
+\usepackage{hyperref} %Pour les liens et les métadonnées
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	urlcolor=blue,
+	pdfauthor={Dalina CHABANE, Khalil FALAH, Maxime BELLAUD, Paul ROUSSEAU},
+	pdftitle={ATECE - Préparation pour la séance 2}
+} %Pour modifier la couleur des liens
+\allowdisplaybreaks %Pour avoir une suite d'équations sur plusieurs pages
+
+%Configuration du style de la page
+\pagestyle{fancy}
+\setlength{\headheight}{14.5pt}
+\lhead{ATCE}
+\rhead{Préparation pour la séance 2}
+
+\title{ATCE - Préparation pour la séance 2}
+\author{Dalina CHABANE, Khalil FALAH, \\ Maxime BELLAUD, Paul ROUSSEAU}
+\date{31/01/2025}
+
+\begin{document}
+
+\maketitle
+
+\section{\texorpdfstring{Broches du microcontrôleur qu'il faut absolument \linebreak connecter pour le faire fonctionner, en plus des \linebreak alimentations et du résonateur à quartz}{Broches du microcontrôleur qu'il faut absolument connecter pour le faire fonctionner, en plus des alimentations et du résonateur à quartz}}
+
+\begin{itemize}
+	\item Alimentation : Vcc (broches 14 et 34) en \SI{5}{\volt} et GND (broches 15, 23, 35 et 43).
+	\item Résonateur : XTAL1 (input, broche 17) et XTAL2 (output, broche 16).
+	\item $\overline{\text{RESET}}$ (broche 13), reliée à Vcc via une résistance de tirage.
+\end{itemize}
+
+\section{Composants additionnels, en plus du microcontrôleur, que nous sommes susceptibles d'utiliser}
+
+\begin{itemize}
+	\item Oscillateur à Quartz de \SI{16}{\mega\hertz}.
+	\item Composants passifs (résistances, condensateurs, etc)
+	\item Régulateur de tension
+	\item Condensateur à valeur variable commandée par une tension (diode varicap)
+	\item De quoi téléverser le programme dans le microcontrôleur (USB ?)
+	\item Connecteur d'alimentation \SI{5}{\volt} (USB ?)
+\end{itemize}
+
+\section{Gestion de la tension d'alimentation du circuit (valeur moyenne et stabilité)}
+
+\begin{itemize}
+	\item Pile ou source de tension continue extérieure (\qtyrange{7}{12}{\volt})
+	\item Filtrage avec des condensateurs
+	\item Diode Zener en protection
+	\item Séparation des plans de masse entre les parties puissance/analogique/numérique
+	\item Composants déjà faits ? Par exemple le LM7805 ou le LM1117
+\end{itemize}
+
+\section{Génération de la tension de commande qui ajustera le condensateur de tirage de l'oscillateur}
+
+\begin{itemize}
+	\item Fast PWM avec un filtre passe-bas\footnote{Dans les sections des timers, \textit{Modes of Operation} $\rightarrow$ \textit{Fast PWM} $\rightarrow$ «~This high frequency makes the fast PWM mode well suited for power regulation, rectification, and DAC applications~»}
+	\item Utilisation de transistors si une tension supérieure à \SI{5}{\volt} est nécessaire
+\end{itemize}
+
+\section{Périphériques du microcontrôleur qui seront nécessaires aux tâches de gestion du temps}
+
+\begin{itemize}
+	\item Timers (modes CTC, Output Compare et Input Capture)
+	\item Interruptions
+\end{itemize}
+
+\end{document}
