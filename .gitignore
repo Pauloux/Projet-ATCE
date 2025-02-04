@@ -3,3 +3,8 @@
 *.out
 *.synctex.gz
 *.bak
+
+PCB/Paul/*
+!PCB/Paul/Paul.kicad_pro
+!PCB/Paul/Paul.kicad_sch
+!PCB/Paul/sym-lib-table
