@@ -3,9 +3,12 @@
 *.out
 *.synctex.gz
 *.bak
+*.DS_Store
 
+# PCB
+# Paul
 PCB/Paul/*
 !PCB/Paul/Paul.kicad_pro
 !PCB/Paul/Paul.kicad_sch
 !PCB/Paul/sym-lib-table
-.DS_Store
+!PCB/Paul/Paul.pdf
