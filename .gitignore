@@ -6,9 +6,10 @@
 *.DS_Store
 
 # PCB
-# Paul
-PCB/Paul/*
-!PCB/Paul/Paul.kicad_pro
-!PCB/Paul/Paul.kicad_sch
-!PCB/Paul/sym-lib-table
-!PCB/Paul/Paul.pdf
+# PCB ATCE
+PCB/PCB ATCE/*
+!PCB/PCB ATCE/PCB ATCE.kicad_pro
+!PCB/PCB ATCE/PCB ATCE.kicad_sch
+!PCB/PCB ATCE/PCB ATCE.kicad_pcb
+!PCB/PCB ATCE/sym-lib-table
+!PCB/PCB ATCE/PCB ATCE.pdf
