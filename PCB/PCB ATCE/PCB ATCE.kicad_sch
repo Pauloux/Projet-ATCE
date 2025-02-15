@@ -4410,7 +4410,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Crystal:Crystal_SMD_Abracon_ABM3-2Pin_5.0x3.2mm_HandSoldering"
 			(at 45.72 60.96 0)
 			(effects
 				(font
@@ -4419,7 +4419,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.farnell.com/datasheets/3153929.pdf"
 			(at 45.72 60.96 0)
 			(effects
 				(font
@@ -4429,6 +4429,15 @@
 			)
 		)
 		(property "Description" "Two pin crystal"
+			(at 45.72 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,258 €"
 			(at 45.72 60.96 0)
 			(effects
 				(font
@@ -4477,7 +4486,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_USB:USB_Mini-B_Wuerth_65100516121_Horizontal"
 			(at 74.93 88.9 0)
 			(effects
 				(font
@@ -4486,7 +4495,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.farnell.com/datasheets/2697485.pdf"
 			(at 74.93 88.9 0)
 			(effects
 				(font
@@ -4496,6 +4505,15 @@
 			)
 		)
 		(property "Description" "USB mini/micro connector"
+			(at 71.12 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "1,000 €"
 			(at 71.12 87.63 0)
 			(effects
 				(font
@@ -4557,7 +4575,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 			(at 35.56 53.6448 0)
 			(effects
 				(font
@@ -4566,7 +4584,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.yageo.com/en/Chart/Download/pdf/AC0805JRNPO9BN150"
 			(at 31.75 54.61 0)
 			(effects
 				(font
@@ -4576,6 +4594,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 31.75 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,0742 €"
 			(at 31.75 54.61 0)
 			(effects
 				(font
@@ -4625,7 +4652,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_SMD:SW_Tactile_SPST_NO_Straight_CK_PTS636Sx25SMTRLFS"
 			(at 194.31 127 0)
 			(effects
 				(font
@@ -4634,7 +4661,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.farnell.com/datasheets/3148632.pdf"
 			(at 194.31 127 0)
 			(effects
 				(font
@@ -4644,6 +4671,15 @@
 			)
 		)
 		(property "Description" "Push button switch, generic, two pins"
+			(at 194.31 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,937 €"
 			(at 194.31 132.08 0)
 			(effects
 				(font
@@ -4694,7 +4730,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
 			(at 214.63 71.12 0)
 			(effects
 				(font
@@ -4713,6 +4749,15 @@
 			)
 		)
 		(property "Description" "test point"
+			(at 209.55 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" ""
 			(at 209.55 71.12 0)
 			(effects
 				(font
@@ -4893,7 +4938,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 			(at 46.6852 81.28 0)
 			(effects
 				(font
@@ -4902,7 +4947,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://4donline.ihs.com/images/VipMasterIC/IC/YAGO/YAGO-S-A0017891388/YAGO-S-A0017891388-1.pdf?hkey=6D3A4C79FDBF58556ACFDE234799DDF0"
 			(at 45.72 77.47 0)
 			(effects
 				(font
@@ -4912,6 +4957,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 45.72 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,0982 €"
 			(at 45.72 77.47 0)
 			(effects
 				(font
@@ -5027,7 +5081,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Package_SO:SOIC-8-N7_3.9x4.9mm_P1.27mm"
 			(at 231.14 73.66 0)
 			(effects
 				(font
@@ -5036,7 +5090,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#sec__SUBCKT_Subcircuits"
+		(property "Datasheet" "https://www.farnell.com/datasheets/630314.pdf"
 			(at 231.14 73.66 0)
 			(effects
 				(font
@@ -5083,6 +5137,15 @@
 			)
 		)
 		(property "Sim.Name" "kicad_builtin_opamp"
+			(at 231.14 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,353 €"
 			(at 231.14 73.66 0)
 			(effects
 				(font
@@ -5142,7 +5205,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 			(at 98.7552 110.49 0)
 			(effects
 				(font
@@ -5151,7 +5214,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://4donline.ihs.com/images/VipMasterIC/IC/YAGO/YAGO-S-A0017891388/YAGO-S-A0017891388-1.pdf?hkey=6D3A4C79FDBF58556ACFDE234799DDF0"
 			(at 97.79 106.68 0)
 			(effects
 				(font
@@ -5161,6 +5224,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 97.79 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,0982 €"
 			(at 97.79 106.68 0)
 			(effects
 				(font
@@ -5209,7 +5281,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 91.44 93.218 90)
 			(effects
 				(font
@@ -5218,7 +5290,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.yageo.com/upload/media/product/app/datasheet/rchip/pyu-rc_group_51_rohs_l.pdf"
 			(at 91.44 91.44 0)
 			(effects
 				(font
@@ -5228,6 +5300,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 91.44 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,016 €"
 			(at 91.44 91.44 0)
 			(effects
 				(font
@@ -5411,7 +5492,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Package_QFP:TQFP-44_10x10mm_P0.8mm"
 			(at 116.84 45.72 0)
 			(effects
 				(font
@@ -5420,7 +5501,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7766-8-bit-AVR-ATmega16U4-32U4_Datasheet.pdf"
 			(at 116.84 45.72 0)
 			(effects
 				(font
@@ -5431,6 +5512,15 @@
 		)
 		(property "Description" ""
 			(at 116.84 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "5,250 €"
+			(at 133.35 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5606,7 +5696,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 			(at 230.8352 33.02 0)
 			(effects
 				(font
@@ -5615,7 +5705,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://search.kemet.com/component-documentation/download/specsheet/C1206C106J4RACTU"
 			(at 229.87 29.21 0)
 			(effects
 				(font
@@ -5625,6 +5715,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 229.87 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "1,230 €"
 			(at 229.87 29.21 0)
 			(effects
 				(font
@@ -5675,7 +5774,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 			(at 266.3952 33.02 0)
 			(effects
 				(font
@@ -5684,7 +5783,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://search.kemet.com/component-documentation/download/specsheet/C1206C106J4RACTU"
 			(at 265.43 29.21 0)
 			(effects
 				(font
@@ -5694,6 +5793,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 265.43 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "1,230 €"
 			(at 265.43 29.21 0)
 			(effects
 				(font
@@ -5809,7 +5917,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_SMD:SW_Tactile_SPST_NO_Straight_CK_PTS636Sx25SMTRLFS"
 			(at 91.44 29.21 0)
 			(effects
 				(font
@@ -5818,7 +5926,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.farnell.com/datasheets/3148632.pdf"
 			(at 91.44 29.21 0)
 			(effects
 				(font
@@ -5828,6 +5936,15 @@
 			)
 		)
 		(property "Description" "Push button switch, generic, two pins"
+			(at 91.44 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,937 €"
 			(at 91.44 34.29 0)
 			(effects
 				(font
@@ -6012,7 +6129,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 83.312 73.66 90)
 			(effects
 				(font
@@ -6021,7 +6138,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://4donline.ihs.com/images/VipMasterIC/IC/SCMP/SCMPS00166/SCMPS00166-1.pdf?hkey=6D3A4C79FDBF58556ACFDE234799DDF0"
 			(at 85.09 73.66 0)
 			(effects
 				(font
@@ -6031,6 +6148,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 85.09 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,015 €"
 			(at 85.09 73.66 0)
 			(effects
 				(font
@@ -6146,7 +6272,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 185.42 72.898 90)
 			(effects
 				(font
@@ -6155,7 +6281,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.farnell.com/datasheets/3937397.pdf"
 			(at 185.42 71.12 0)
 			(effects
 				(font
@@ -6165,6 +6291,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 185.42 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,015€"
 			(at 185.42 71.12 0)
 			(effects
 				(font
@@ -6213,7 +6348,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Diode_SMD:D_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
 			(at 31.75 85.09 0)
 			(effects
 				(font
@@ -6222,7 +6357,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.farnell.com/datasheets/1835977.pdf"
 			(at 31.75 85.09 0)
 			(effects
 				(font
@@ -6232,6 +6367,15 @@
 			)
 		)
 		(property "Description" "Variable capacitance diode"
+			(at 31.75 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,172 €"
 			(at 31.75 85.09 0)
 			(effects
 				(font
@@ -6348,7 +6492,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Coaxial:SMA_Molex_73251-2200_Horizontal"
 			(at 179.07 102.87 0)
 			(effects
 				(font
@@ -6357,7 +6501,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://4donline.ihs.com/images/VipMasterIC/IC/AMPH/AMPHS06465/AMPHS06465-1.pdf?hkey=6D3A4C79FDBF58556ACFDE234799DDF0"
 			(at 179.07 102.87 0)
 			(effects
 				(font
@@ -6367,6 +6511,15 @@
 			)
 		)
 		(property "Description" "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+			(at 179.07 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "6,940 €"
 			(at 179.07 102.87 0)
 			(effects
 				(font
@@ -6549,7 +6702,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 			(at 248.6152 33.02 0)
 			(effects
 				(font
@@ -6558,7 +6711,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://search.kemet.com/component-documentation/download/specsheet/C1206C106J4RACTU"
 			(at 247.65 29.21 0)
 			(effects
 				(font
@@ -6568,6 +6721,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 247.65 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "1,230 €"
 			(at 247.65 29.21 0)
 			(effects
 				(font
@@ -6815,7 +6977,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
 			(at 180.34 71.12 0)
 			(effects
 				(font
@@ -6834,6 +6996,15 @@
 			)
 		)
 		(property "Description" "test point"
+			(at 175.26 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" ""
 			(at 175.26 71.12 0)
 			(effects
 				(font
@@ -6881,7 +7052,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 			(at 239.7252 33.02 0)
 			(effects
 				(font
@@ -6890,7 +7061,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://search.kemet.com/component-documentation/download/specsheet/C1206C106J4RACTU"
 			(at 238.76 29.21 0)
 			(effects
 				(font
@@ -6900,6 +7071,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 238.76 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "1,230 €"
 			(at 238.76 29.21 0)
 			(effects
 				(font
@@ -6951,7 +7131,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
 			(at 257.81 73.66 0)
 			(effects
 				(font
@@ -6970,6 +7150,15 @@
 			)
 		)
 		(property "Description" "test point"
+			(at 252.73 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" ""
 			(at 252.73 73.66 0)
 			(effects
 				(font
@@ -7018,7 +7207,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 			(at 196.5452 83.82 0)
 			(effects
 				(font
@@ -7027,7 +7216,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://search.kemet.com/component-documentation/download/specsheet/C1206C106J4RACTU"
 			(at 195.58 80.01 0)
 			(effects
 				(font
@@ -7037,6 +7226,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 195.58 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "1,230 €"
 			(at 195.58 80.01 0)
 			(effects
 				(font
@@ -7086,7 +7284,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 			(at 35.56 68.8848 0)
 			(effects
 				(font
@@ -7095,7 +7293,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.yageo.com/en/Chart/Download/pdf/AC0805JRNPO0BN100"
 			(at 31.75 69.85 0)
 			(effects
 				(font
@@ -7105,6 +7303,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 31.75 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,067 €"
 			(at 31.75 69.85 0)
 			(effects
 				(font
@@ -7221,7 +7428,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 181.102 125.73 90)
 			(effects
 				(font
@@ -7230,7 +7437,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.farnell.com/datasheets/3937397.pdf"
 			(at 182.88 125.73 0)
 			(effects
 				(font
@@ -7240,6 +7447,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 182.88 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,015 €"
 			(at 182.88 125.73 0)
 			(effects
 				(font
@@ -7288,7 +7504,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 91.44 89.408 90)
 			(effects
 				(font
@@ -7297,7 +7513,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://www.yageo.com/upload/media/product/app/datasheet/rchip/pyu-rc_group_51_rohs_l.pdf"
 			(at 91.44 87.63 0)
 			(effects
 				(font
@@ -7307,6 +7523,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 91.44 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,016 €"
 			(at 91.44 87.63 0)
 			(effects
 				(font
@@ -7357,7 +7582,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 			(at 257.5052 33.02 0)
 			(effects
 				(font
@@ -7366,7 +7591,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://search.kemet.com/component-documentation/download/specsheet/C1206C106J4RACTU"
 			(at 256.54 29.21 0)
 			(effects
 				(font
@@ -7376,6 +7601,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 256.54 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "1,230 €"
 			(at 256.54 29.21 0)
 			(effects
 				(font
@@ -7493,7 +7727,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Inductor_SMD:L_0805_2012Metric_Pad1.05x1.20mm_HandSolder"
 			(at 45.72 95.25 0)
 			(effects
 				(font
@@ -7502,7 +7736,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "http://www.farnell.com/datasheets/3006832.pdf"
 			(at 45.72 95.25 0)
 			(effects
 				(font
@@ -7512,6 +7746,15 @@
 			)
 		)
 		(property "Description" "Inductor"
+			(at 45.72 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Prix/U" "0,214 €"
 			(at 45.72 95.25 0)
 			(effects
 				(font
