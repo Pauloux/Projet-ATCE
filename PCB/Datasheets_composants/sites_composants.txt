@@ -1,0 +1,31 @@
+J'ai choisi un fournisseur Farnell : 
+
+micro-controleur : https://fr.farnell.com/microchip/atmega32u4-au/micro-8-bits-avr-32k-flash-usb/dp/1748525
+
+varcap : https://fr.farnell.com/infineon/bb85702vh7902xtsa1/diode-rf-0-52pf-35v-0-02a-sc-79/dp/2725709
+
+C 15pF : https://fr.farnell.com/yageo/ac0805jrnpo9bn150/cond-15pf-50v-mlcc-0805/dp/4166205
+
+C 10pF : https://fr.farnell.com/yageo/ac0805jrnpo0bn100/cond-10pf-100v-mlcc-0805/dp/4166196RL
+
+C 1uF : https://fr.farnell.com/yageo/cc0805jkx7r7bb105/cond-1uf-16v-mlcc-0805/dp/4166923
+
+C 10uF : https://fr.farnell.com/kemet/c1206c106j4ractu/condensateur-10-f-16v-5-x7r-1206/dp/2581105
+
+L 10uH : https://fr.farnell.com/murata/lqm21pn1r0mghl/inductance-1uh-60mhz-0805/dp/3471400
+
+R 0Ohm : https://fr.farnell.com/multicomp-pro/mcmr08x000-ptl/res-0r0-0-125w-0805-couche-epaisse/dp/2073603
+
+R 22Ohm : https://fr.farnell.com/yageo/rc0805fr-0722rl/res-couche-epaisse-22r-1-0-125w/dp/9237283
+
+R 5kOhm : https://fr.farnell.com/vishay/crcw08055k00fkea/res-5k-1-0-125w-0805/dp/4177786
+
+coax : https://fr.farnell.com/amphenol-connex/132134/rf-coaxial-sma-jack-50ohm-solder/dp/2112465
+
+PUSH : https://fr.farnell.com/multicomp-pro/mcfte-3c-v/commutateur-micro-detection-cms/dp/1316985
+
+USB : https://fr.farnell.com/molex/51387-0530/conn-mini-usb-usb-2-0-type-b-fem/dp/3500674
+
+Ampli : https://fr.farnell.com/microchip/mcp6241t-e-sn/ampli-op-simple-550khz-0-3v-us/dp/2857527
+
+quartz : https://fr.farnell.com/ecliptek/e1sea18-16-000mtr/resonateur-ceramique-16mhz-cms/dp/3572921
