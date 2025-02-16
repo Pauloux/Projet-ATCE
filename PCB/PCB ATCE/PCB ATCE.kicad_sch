@@ -4382,6 +4382,46 @@
 		)
 		(uuid "f70bf152-b38b-4359-b802-3eea1d2b19f4")
 	)
+	(label "D-"
+		(at 82.55 90.17 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2872b7e1-8256-456a-86a0-d5126a46cee4")
+	)
+	(label "D+"
+		(at 99.06 87.63 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2fe6b1af-59de-4d89-8693-ea8b55aa547c")
+	)
+	(label "D-"
+		(at 99.06 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "32ccd191-4caa-41fa-94c2-2b99e07d5325")
+	)
+	(label "D+"
+		(at 82.55 87.63 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "90ec687d-0a75-45f3-94d0-1f0a4e6c1745")
+	)
 	(symbol
 		(lib_id "Device:Crystal")
 		(at 45.72 60.96 90)
@@ -4839,6 +4879,73 @@
 			(project ""
 				(path "/0ca51401-30cc-4cc1-83e5-abd29d3bd674"
 					(reference "#PWR012")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 134.62 158.75 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2d0b3efb-60c8-4f95-bcb6-9293983338cd")
+		(property "Reference" "TP1"
+			(at 137.16 160.7819 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 137.16 163.3219 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+			(at 129.54 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 129.54 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 134.62 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b2043076-42c5-46c8-8aa5-ae36ee19c5ab")
+		)
+		(instances
+			(project ""
+				(path "/0ca51401-30cc-4cc1-83e5-abd29d3bd674"
+					(reference "TP1")
 					(unit 1)
 				)
 			)
