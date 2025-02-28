@@ -6,10 +6,5 @@
 *.DS_Store
 
 # PCB
-# PCB ATCE
-PCB/PCB ATCE/*
-!PCB/PCB ATCE/PCB ATCE.kicad_pro
-!PCB/PCB ATCE/PCB ATCE.kicad_sch
-!PCB/PCB ATCE/PCB ATCE.kicad_pcb
-!PCB/PCB ATCE/sym-lib-table
-!PCB/PCB ATCE/PCB ATCE.pdf
+**/PCB ATCE-backups
+**fp-info-cache
