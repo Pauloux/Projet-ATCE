@@ -8,3 +8,4 @@
 # PCB
 **/PCB ATCE-backups
 **fp-info-cache
+**/*.kicad_prl
