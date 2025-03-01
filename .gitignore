@@ -6,6 +6,6 @@
 *.DS_Store
 
 # PCB
-**/PCB ATCE-backups
+**/*backups
 **fp-info-cache
 **/*.kicad_prl
