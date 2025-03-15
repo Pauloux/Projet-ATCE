@@ -24,18 +24,12 @@
         }
       ],
       "showGrid": true,
-      "traces": [
-        {
-          "color": "rgb(228, 26, 28)",
-          "signal": "V(/XTALTest)",
-          "trace_type": 257
-        }
-      ]
+      "traces": []
     },
     {
       "analysis": "AC",
       "commands": [
-        ".ac dec 1000 10Meg 20Meg",
+        ".ac dec 1000000 15.9Meg 16.1Meg",
         ".kicad adjustpaths",
         ".save all",
         ".probe alli",
@@ -50,23 +44,14 @@
       },
       "measurements": [
         {
-          "expr": "MIN_AT vdb(/XTAL2)",
-          "format": "3~Hz"
-        },
-        {
           "expr": "MAX_AT vdb(/XTAL2)",
-          "format": "3~Hz"
+          "format": "8~Hz"
         }
       ],
       "showGrid": true,
       "traces": [
         {
-          "color": "rgb(152, 78, 163)",
-          "signal": "V(/XTAL1) (gain)",
-          "trace_type": 521
-        },
-        {
-          "color": "rgb(255, 127, 0)",
+          "color": "rgb(55, 126, 184)",
           "signal": "V(/XTAL2) (gain)",
           "trace_type": 521
         }
