@@ -1,9 +1,14 @@
+# Général
 *.aux
 *.log
 *.out
 *.synctex.gz
+*.toc
 *.bak
 *.DS_Store
+
+# Compte rendu
+Compte rendu/*.pdf
 
 # PCB
 **/*backups
