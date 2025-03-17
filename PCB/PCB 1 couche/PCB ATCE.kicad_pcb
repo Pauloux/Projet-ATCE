@@ -1503,14 +1503,14 @@
 			)
 		)
 	)
-	(footprint "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+	(footprint "TestPoint:TestPoint_Pad_D1.5mm"
 		(layer "F.Cu")
 		(uuid "232ae3ac-af59-4d76-ab62-f3df09f724e7")
 		(at 120.75 107)
-		(descr "Keystone Miniature THM Test Point 5000-5004, http://www.keyelco.com/product-pdf.cfm?p=1309")
-		(tags "Through Hole Mount Test Points")
+		(descr "SMD pad as test Point, diameter 1.5mm")
+		(tags "test point SMD pad")
 		(property "Reference" "TP4"
-			(at 2.75 1.2 0)
+			(at 0 -1.648 0)
 			(layer "F.SilkS")
 			(uuid "09e55261-5068-4f1e-9849-a372533e04be")
 			(effects
@@ -1521,7 +1521,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 0 2.5 0)
+			(at 0 1.75 0)
 			(layer "F.Fab")
 			(uuid "469ab43b-f8cd-480c-ba66-2b4c9f8f8fdb")
 			(effects
@@ -1562,7 +1562,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "3a6c8711-3c79-4e22-8550-10fb647bf9ac")
+			(uuid "f46d0e8b-0678-4585-b2d4-be36647040fc")
 			(effects
 				(font
 					(size 1 1)
@@ -1574,82 +1574,31 @@
 		(path "/25fc6d58-1537-4dc0-a904-3bbca2572000")
 		(sheetname "/")
 		(sheetfile "PCB ATCE.kicad_sch")
-		(attr through_hole)
+		(attr exclude_from_pos_files)
 		(fp_circle
 			(center 0 0)
-			(end 1.4 0)
+			(end 0 0.95)
 			(stroke
-				(width 0.15)
+				(width 0.12)
 				(type solid)
 			)
 			(fill no)
 			(layer "F.SilkS")
-			(uuid "67db4660-7c65-4e9e-b7ed-25c535a0651e")
+			(uuid "79f37259-ee22-4e1b-98d9-c3c1da356f52")
 		)
 		(fp_circle
 			(center 0 0)
-			(end 1.65 0)
+			(end 1.25 0)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(fill no)
 			(layer "F.CrtYd")
-			(uuid "9dfe0234-2bee-4599-97ee-ddf263280d93")
-		)
-		(fp_line
-			(start -0.75 -0.25)
-			(end 0.75 -0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "294e1fc4-2fc1-4fbd-8bd8-cbc7d0f3a223")
-		)
-		(fp_line
-			(start -0.75 0.25)
-			(end -0.75 -0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "2a6c4660-8733-4e3b-902e-843dabe28aaa")
-		)
-		(fp_line
-			(start 0.75 -0.25)
-			(end 0.75 0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "a326eeb9-d476-4692-8356-a98c74bc2a03")
-		)
-		(fp_line
-			(start 0.75 0.25)
-			(end -0.75 0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "fa66f973-10a0-4b64-b07b-44ea518dabef")
-		)
-		(fp_circle
-			(center 0 0)
-			(end 1.25 0)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.Fab")
-			(uuid "7b7c7de0-398c-4ebf-8b52-8ab07d50621f")
+			(uuid "7d6f5a19-c261-4769-864f-a0b23595aab1")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 -2.5 0)
+			(at 0 -1.65 0)
 			(layer "F.Fab")
 			(uuid "9133eb20-38c5-4620-ab99-73b24c252026")
 			(effects
@@ -1659,29 +1608,16 @@
 				)
 			)
 		)
-		(pad "1" thru_hole circle
+		(pad "1" smd circle
 			(at 0 0)
-			(size 2 2)
-			(drill 1)
-			(layers "*.Cu" "*.Mask")
-			(remove_unused_layers no)
+			(size 1.5 1.5)
+			(layers "F.Cu" "F.Mask")
 			(net 6 "Net-(U2-+)")
 			(pinfunction "1")
 			(pintype "passive")
 			(uuid "8be8fab4-f49f-452b-80ea-576b7cb63f08")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/TestPoint.3dshapes/TestPoint_Keystone_5000-5004_Miniature.wrl"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "F.Cu")
@@ -2215,14 +2151,14 @@
 			)
 		)
 	)
-	(footprint "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+	(footprint "TestPoint:TestPoint_Pad_D1.5mm"
 		(layer "F.Cu")
 		(uuid "341e753a-e627-4717-b276-b105ea10e669")
 		(at 138.5 79.75)
-		(descr "Keystone Miniature THM Test Point 5000-5004, http://www.keyelco.com/product-pdf.cfm?p=1309")
-		(tags "Through Hole Mount Test Points")
+		(descr "SMD pad as test Point, diameter 1.5mm")
+		(tags "test point SMD pad")
 		(property "Reference" "TP1"
-			(at -0.1 -2.25 0)
+			(at 0 -1.648 0)
 			(layer "F.SilkS")
 			(uuid "62840405-5340-46f9-9150-d8fe63f03a5a")
 			(effects
@@ -2233,7 +2169,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 0 2.5 0)
+			(at 0 1.75 0)
 			(layer "F.Fab")
 			(uuid "20cf989b-5222-4924-b7b3-1d7e2dcef41a")
 			(effects
@@ -2273,82 +2209,31 @@
 		(path "/2d0b3efb-60c8-4f95-bcb6-9293983338cd")
 		(sheetname "/")
 		(sheetfile "PCB ATCE.kicad_sch")
-		(attr through_hole)
+		(attr exclude_from_pos_files)
 		(fp_circle
 			(center 0 0)
-			(end 1.4 0)
+			(end 0 0.95)
 			(stroke
-				(width 0.15)
+				(width 0.12)
 				(type solid)
 			)
 			(fill no)
 			(layer "F.SilkS")
-			(uuid "01c334fa-6240-48e0-a78a-de1878163bbd")
+			(uuid "8fdd2552-ffc1-41de-aab9-3c2c57233bcc")
 		)
 		(fp_circle
 			(center 0 0)
-			(end 1.65 0)
+			(end 1.25 0)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(fill no)
 			(layer "F.CrtYd")
-			(uuid "59504024-1bde-4ab3-96d0-81650e15d2de")
-		)
-		(fp_line
-			(start -0.75 -0.25)
-			(end 0.75 -0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "afa6d3b3-dea5-4919-899d-e550e590d043")
-		)
-		(fp_line
-			(start -0.75 0.25)
-			(end -0.75 -0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "62fced09-b99a-4989-8178-173a1320e4e9")
-		)
-		(fp_line
-			(start 0.75 -0.25)
-			(end 0.75 0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "b3e342bf-cb37-44ca-b636-8082d7c435da")
-		)
-		(fp_line
-			(start 0.75 0.25)
-			(end -0.75 0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "66be5c1b-db71-401f-8f09-721eb7b51eeb")
-		)
-		(fp_circle
-			(center 0 0)
-			(end 1.25 0)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.Fab")
-			(uuid "f1166cdf-4793-4e99-bc58-f287feb23e47")
+			(uuid "203e7c7a-409e-49b7-9d7b-220cdd1d85a1")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 -2.5 0)
+			(at 0 -1.65 0)
 			(layer "F.Fab")
 			(uuid "9e93612f-14dd-4649-930b-760eb1ed6c2f")
 			(effects
@@ -2358,29 +2243,16 @@
 				)
 			)
 		)
-		(pad "1" thru_hole circle
+		(pad "1" smd circle
 			(at 0 0)
-			(size 2 2)
-			(drill 1)
-			(layers "*.Cu" "*.Mask")
-			(remove_unused_layers no)
+			(size 1.5 1.5)
+			(layers "F.Cu" "F.Mask")
 			(net 2 "GND")
 			(pinfunction "1")
 			(pintype "passive")
 			(uuid "b5120737-3bc7-4ae5-a0d3-13bc98c65d30")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/TestPoint.3dshapes/TestPoint_Keystone_5000-5004_Miniature.wrl"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 		(layer "F.Cu")
@@ -2914,14 +2786,14 @@
 			)
 		)
 	)
-	(footprint "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+	(footprint "TestPoint:TestPoint_Pad_D1.5mm"
 		(layer "F.Cu")
 		(uuid "4c545fe1-1326-47dc-a248-7a12c4f7026c")
 		(at 129.5 107.25)
-		(descr "Keystone Miniature THM Test Point 5000-5004, http://www.keyelco.com/product-pdf.cfm?p=1309")
-		(tags "Through Hole Mount Test Points")
+		(descr "SMD pad as test Point, diameter 1.5mm")
+		(tags "test point SMD pad")
 		(property "Reference" "TP3"
-			(at 2.7 1.35 0)
+			(at 0 2.25 180)
 			(layer "F.SilkS")
 			(uuid "babded0e-3524-4c4b-85d7-959ea0f3193b")
 			(effects
@@ -2932,7 +2804,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 0 2.5 0)
+			(at 0 1.75 0)
 			(layer "F.Fab")
 			(uuid "d051f2fc-0b4d-49fe-ac60-90a538d5d419")
 			(effects
@@ -2973,7 +2845,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "96030b6f-fe71-4eb4-a2d6-dae4cec65b2b")
+			(uuid "5444d8d8-cd28-4de7-b5f3-fd1ed0f76f39")
 			(effects
 				(font
 					(size 1 1)
@@ -2985,82 +2857,31 @@
 		(path "/d0468674-9773-4fe8-bb84-fdc3af48aaed")
 		(sheetname "/")
 		(sheetfile "PCB ATCE.kicad_sch")
-		(attr through_hole)
+		(attr exclude_from_pos_files)
 		(fp_circle
 			(center 0 0)
-			(end 1.4 0)
+			(end 0 0.95)
 			(stroke
-				(width 0.15)
+				(width 0.12)
 				(type solid)
 			)
 			(fill no)
 			(layer "F.SilkS")
-			(uuid "d46a6582-9287-452e-a50a-46abf07ba853")
+			(uuid "d83e25cd-8c8f-40e7-9249-97eb77512a6b")
 		)
 		(fp_circle
 			(center 0 0)
-			(end 1.65 0)
+			(end 1.25 0)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(fill no)
 			(layer "F.CrtYd")
-			(uuid "6e1693d1-9cd6-41df-b34b-0729834e13c7")
-		)
-		(fp_line
-			(start -0.75 -0.25)
-			(end 0.75 -0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "c2364f88-3a70-4a33-9263-4a7a701f3329")
-		)
-		(fp_line
-			(start -0.75 0.25)
-			(end -0.75 -0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "b8b4237d-91d5-4cf3-8f38-2ff4a856ba50")
-		)
-		(fp_line
-			(start 0.75 -0.25)
-			(end 0.75 0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "9f4a8cb5-66f5-4bad-b383-92bee4b6db6a")
-		)
-		(fp_line
-			(start 0.75 0.25)
-			(end -0.75 0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "57d99ba0-9666-4cd9-a414-cda3186677d4")
-		)
-		(fp_circle
-			(center 0 0)
-			(end 1.25 0)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.Fab")
-			(uuid "48e180d7-27af-44d6-8365-4b5bc1213906")
+			(uuid "61cbf4d1-0690-4bd8-8b79-52ee5e39084f")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 -2.5 0)
+			(at 0 -1.65 0)
 			(layer "F.Fab")
 			(uuid "75cd984f-38f1-4909-8758-210b7b0f2335")
 			(effects
@@ -3070,29 +2891,16 @@
 				)
 			)
 		)
-		(pad "1" thru_hole circle
+		(pad "1" smd circle
 			(at 0 0)
-			(size 2 2)
-			(drill 1)
-			(layers "*.Cu" "*.Mask")
-			(remove_unused_layers no)
+			(size 1.5 1.5)
+			(layers "F.Cu" "F.Mask")
 			(net 11 "Net-(U2--)")
 			(pinfunction "1")
 			(pintype "passive")
 			(uuid "4f2bcd7c-555b-461e-a832-09bb3c26aebb")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/TestPoint.3dshapes/TestPoint_Keystone_5000-5004_Miniature.wrl"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "F.Cu")
@@ -3736,14 +3544,14 @@
 			)
 		)
 	)
-	(footprint "TestPoint:TestPoint_Keystone_5000-5004_Miniature"
+	(footprint "TestPoint:TestPoint_Pad_D1.5mm"
 		(layer "F.Cu")
 		(uuid "7a75af0b-f835-44a7-b29d-6d0b9ad72cb8")
 		(at 152.5 87)
-		(descr "Keystone Miniature THM Test Point 5000-5004, http://www.keyelco.com/product-pdf.cfm?p=1309")
-		(tags "Through Hole Mount Test Points")
+		(descr "SMD pad as test Point, diameter 1.5mm")
+		(tags "test point SMD pad")
 		(property "Reference" "TP2"
-			(at -1 2.5 90)
+			(at 0 -1.648 0)
 			(layer "F.SilkS")
 			(uuid "7d5cb095-148c-4ec7-96b2-a92147cfff7d")
 			(effects
@@ -3754,7 +3562,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 0 2.5 0)
+			(at 0 1.75 0)
 			(layer "F.Fab")
 			(uuid "bfd9c339-34ab-43b1-aacf-e97d4fdd8bcd")
 			(effects
@@ -3795,7 +3603,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "2b667430-fcb0-40fc-bc6e-943af8e9aa96")
+			(uuid "ff5f422a-8286-4c9e-bc13-ea8ebec61652")
 			(effects
 				(font
 					(size 1 1)
@@ -3807,82 +3615,31 @@
 		(path "/c3c1afb9-bae2-4b93-915d-d3edd553241e")
 		(sheetname "/")
 		(sheetfile "PCB ATCE.kicad_sch")
-		(attr through_hole)
+		(attr exclude_from_pos_files)
 		(fp_circle
 			(center 0 0)
-			(end 1.4 0)
+			(end 0 0.95)
 			(stroke
-				(width 0.15)
+				(width 0.12)
 				(type solid)
 			)
 			(fill no)
 			(layer "F.SilkS")
-			(uuid "aee9b77d-5db8-4866-86de-450463a97d06")
+			(uuid "cf975921-5d9d-4160-89e0-4211e0d0ff33")
 		)
 		(fp_circle
 			(center 0 0)
-			(end 1.65 0)
+			(end 1.25 0)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(fill no)
 			(layer "F.CrtYd")
-			(uuid "2900c9a8-e0f9-44ce-ace2-140ed7c4e1d4")
-		)
-		(fp_line
-			(start -0.75 -0.25)
-			(end 0.75 -0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "705a1f07-3286-4e0d-849b-7b6e584e4123")
-		)
-		(fp_line
-			(start -0.75 0.25)
-			(end -0.75 -0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "d5eb85b3-deff-4a19-9264-acdc93d012cc")
-		)
-		(fp_line
-			(start 0.75 -0.25)
-			(end 0.75 0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "c5af924a-b207-462b-81c9-5c8334d81f60")
-		)
-		(fp_line
-			(start 0.75 0.25)
-			(end -0.75 0.25)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "a517e676-a43f-410e-bf50-6cfa82f1a2cc")
-		)
-		(fp_circle
-			(center 0 0)
-			(end 1.25 0)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.Fab")
-			(uuid "bfd66d30-f689-4e9c-9a3b-c48691d96b9d")
+			(uuid "575b38ba-f722-4361-b28b-60a27b2a4db2")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 -2.5 0)
+			(at 0 -1.65 0)
 			(layer "F.Fab")
 			(uuid "553a319b-7dd1-4a16-9eb5-13c683300cd4")
 			(effects
@@ -3892,29 +3649,16 @@
 				)
 			)
 		)
-		(pad "1" thru_hole circle
+		(pad "1" smd circle
 			(at 0 0)
-			(size 2 2)
-			(drill 1)
-			(layers "*.Cu" "*.Mask")
-			(remove_unused_layers no)
+			(size 1.5 1.5)
+			(layers "F.Cu" "F.Mask")
 			(net 15 "Net-(U1-(ADC12{slash}OC1A{slash}~{OC4B}{slash}PCINT5)PB5)")
 			(pinfunction "1")
 			(pintype "passive")
 			(uuid "52787990-6c4d-4e13-bd5d-9e6b9857d115")
 		)
 		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/TestPoint.3dshapes/TestPoint_Keystone_5000-5004_Miniature.wrl"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "F.Cu")
