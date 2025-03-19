@@ -1058,7 +1058,7 @@
 		)
 		(uuid "67f5128d-b4aa-49c3-a772-26cfd286dee0")
 	)
-	(text ".param FREQUENCY=7.812k"
+	(text ".param FREQUENCY=62k"
 		(exclude_from_sim no)
 		(at 25.146 103.124 0)
 		(effects
@@ -1620,7 +1620,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10u"
+		(property "Value" "1u"
 			(at 55.88 58.4199 0)
 			(effects
 				(font
@@ -2747,7 +2747,7 @@
 		(lib_id "Simulation_SPICE:BSOURCE")
 		(at 29.21 77.47 0)
 		(unit 1)
-		(exclude_from_sim yes)
+		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
