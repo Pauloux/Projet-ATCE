@@ -17,12 +17,21 @@ void init_PWM () {
 	TCCR4D |= (1 << WGM40);
 
 	// Frequency
-	OCR4C = 255;
+	// 1024
+	TC4H = 0x03;
+	OCR4C = 0xFF;
 	// Duty cycle
-	OCR4D = 64;
+	// 512
+	TC4H = 0x01;
+	OCR4D = 0xFF;
 
 	// Start timer (prescaler = 1)
 	TCCR4B |= (1 << CS40);
+}
+
+void set_duty_cycle (short duty_cycle) {
+	TC4H = (((duty_cycle) & 0x300) >> 8);
+	OCR4D = (duty_cycle & 0xFF);
 }
 
 int main(void) {
@@ -33,7 +42,11 @@ int main(void) {
 
 	init_PWM();
 
+	short i = 0;
 	while (1) {
+		set_duty_cycle(i);
 
+		i = (i + 1) % 1024;
+		_delay_ms(10);
 	}
 }
