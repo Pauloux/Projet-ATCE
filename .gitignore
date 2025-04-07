@@ -2,6 +2,7 @@
 *.aux
 *.log
 *.out
+*.hex
 *.synctex.gz
 *.toc
 *.bak
