@@ -4,7 +4,7 @@
     {
       "analysis": "TRAN",
       "commands": [
-        ".tran 100u 60m 0",
+        ".tran 10m 1 0",
         ".kicad adjustpaths",
         ".save all",
         ".probe alli",
@@ -28,6 +28,11 @@
         {
           "color": "rgb(55, 126, 184)",
           "signal": "V(/PWM_filtered)",
+          "trace_type": 257
+        },
+        {
+          "color": "rgb(228, 26, 28)",
+          "signal": "V(/PWM_input)",
           "trace_type": 257
         }
       ]

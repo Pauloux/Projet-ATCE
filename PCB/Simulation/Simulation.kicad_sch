@@ -1058,7 +1058,7 @@
 		)
 		(uuid "67f5128d-b4aa-49c3-a772-26cfd286dee0")
 	)
-	(text ".param FREQUENCY=62k"
+	(text ".param FREQUENCY=10k"
 		(exclude_from_sim no)
 		(at 25.146 103.124 0)
 		(effects
@@ -2201,7 +2201,7 @@
 				)
 			)
 		)
-		(property "Value" "0p"
+		(property "Value" "2.52p"
 			(at 184.15 43.18 90)
 			(effects
 				(font
@@ -2237,6 +2237,24 @@
 		)
 		(property "Prix/U" "0,067 €"
 			(at 184.15 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" "C"
+			(at 232.41 232.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" "1=- 2=+"
+			(at 232.41 232.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
