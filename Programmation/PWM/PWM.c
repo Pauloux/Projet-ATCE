@@ -29,7 +29,7 @@ void init_PWM () {
 	TCCR4B |= (1 << CS40);
 }
 
-void set_duty_cycle (short duty_cycle) {
+void set_PWM_duty_cycle (short duty_cycle) {
 	TC4H = (((duty_cycle) & 0x300) >> 8);
 	OCR4D = (duty_cycle & 0xFF);
 }
@@ -44,9 +44,14 @@ int main(void) {
 
 	short i = 0;
 	while (1) {
-		set_duty_cycle(i);
+		set_PWM_duty_cycle(i);
 
 		i = (i + 1) % 1024;
-		_delay_ms(10);
+		if ((i == 0) | (i == 1023)) {
+			_delay_ms(5000);
+		}
+		else {
+			_delay_ms(10);
+		}
 	}
 }
