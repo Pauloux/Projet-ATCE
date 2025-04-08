@@ -12,11 +12,10 @@ minicom -D /dev/ttyACM0 -C frequence.dat
 extern USB_ClassInfo_CDC_Device_t VirtualSerial_CDC_Interface;
 extern FILE USBSerialStream;
 
+// ICP
 volatile short nbr_cycle_ICP_temp = 0;
 volatile short nbr_cycle_ICP = 0;
-
 volatile long nbr_clk_ICP = 0;
-
 volatile char flag_ICP = 0;
 
 // Lorsqu'un cycle complet est réalisé
@@ -70,6 +69,9 @@ int main(void) {
 			// Réinitialise le drapeau pour pouvoir réaliser une nouvelle mesure
 			flag_ICP = 0;
 		}
-		_delay_ms(10);
+		
+		CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
+		CDC_Device_USBTask(&VirtualSerial_CDC_Interface);
+		USB_USBTask();
 	}
 }
