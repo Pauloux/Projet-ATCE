@@ -8,7 +8,7 @@ figure;
 
 % Duty cycle
 subplot(2, 1, 1);
-plot(duty_cycle/1024*100, 'LineWidth', 1.5);
+plot(duty_cycle/1023*100, 'LineWidth', 1.5);
 title('Duty cycle');
 xlabel('Temps (s)');
 ylabel('Duty cycle (%)');

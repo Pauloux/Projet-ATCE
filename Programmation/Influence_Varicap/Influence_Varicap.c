@@ -93,7 +93,10 @@ int main(void) {
 	short i = 0;
 	while (1) {
 		// Change the duty_cycle
-		i = (i + 128) % 1024;
+		i = (i + 93);
+		if (i > 1023) {
+			i = 0;
+		}
 		set_PWM_duty_cycle(i);
 
 		_delay_ms(2000);
