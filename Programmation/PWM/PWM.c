@@ -46,12 +46,12 @@ int main(void) {
 	while (1) {
 		set_PWM_duty_cycle(i);
 
-		i = (i + 1) % 1024;
 		if ((i == 0) | (i == 1023)) {
 			_delay_ms(5000);
 		}
 		else {
 			_delay_ms(10);
 		}
+		i = (i + 1) % 1024;
 	}
 }

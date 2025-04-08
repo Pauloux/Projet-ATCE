@@ -18,13 +18,14 @@ int main(void) {
 	while (1) {
 		PORTF ^= (1 << PORTF1);
 
-		fprintf(&USBSerialStream,"Hello world\n\r");
+		// Prend du temps et fausse les durées
+		//fprintf(&USBSerialStream,"Hello world\n\r");
 
 		//   les 3 lignes ci-dessous pour accepter les signaux venant du PC 
-		CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
-		CDC_Device_USBTask(&VirtualSerial_CDC_Interface);
-		USB_USBTask();
+		//CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
+		//CDC_Device_USBTask(&VirtualSerial_CDC_Interface);
+		//USB_USBTask();
 
-		_delay_ms(1000);
+		_delay_ms(500);
 	}
 }

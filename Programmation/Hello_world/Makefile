@@ -1,6 +1,6 @@
 MCU	= atmega32u4
 TARGET = Hello_world
-EMPLACEMENT_LUFA=/home/pauloux/Documents/0CMI/0Semestre6/Électronique_Programmable/Microcontrôleur/TP/LUFA
+EMPLACEMENT_LUFA=../LUFA
 
 all: $(TARGET).hex
 
