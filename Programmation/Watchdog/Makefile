@@ -1,6 +1,6 @@
 MCU     = atmega32u4
-TARGET  = watchdog
-EMPLACEMENT_LUFA = /home/parallels/Desktop/TP_Friedt/TP1/lufa
+TARGET  = Watchdog
+EMPLACEMENT_LUFA = ../LUFA
 
 all: $(TARGET).hex
 
