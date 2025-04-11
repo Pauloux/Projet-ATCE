@@ -17,3 +17,5 @@ Compte rendu/*.pdf
 **/*backups
 **fp-info-cache
 **/*.kicad_prl
+
+**/*.FCBak
