@@ -180,30 +180,50 @@ Nous ajoutons 3 points de test, un à la sortie PWM, un à la sortie du filtre p
 Nous choisissons de ne pas mettre de point de test vers le résonateur pour ne pas ajouter de bruit au signal.
 
 \section{Choix des composants}
-\subsection{Microcontrôleur et USB}
-L’Atmega32U4 a été choisi pour sa capacité à gérer les fonctions d’asservissement nécessaires. Il intègre notamment des timers 16 bits, essentiels pour l’input capture afin de mesurer précisément la fréquence de l’oscillateur, et permet l’émission d’une PWM 10 bits pour le filtrage du signal de commande. \\
+\subsection{Choix des composants principaux}
 
-Les critères de choix pour l'USB sont d'abord le format (mini ou micro) dépendant des préférences d’encombrement et de robustesse mécanique, puis le connecteur horizontal ou vertical selon la disposition de la carte. L'empreinte “Horizontal” : ce modèle (souvent référence “USB\_OTG\_SMD\_xxx”) se soude facilement et supporte un alignement correct sur la carte.
+\textbf{Microcontrôleur~:} L’Atmega32U4 a été sélectionné pour ses timers 16 bits, nécessaires à l’input capture pour mesurer précisément la fréquence de l’oscillateur, et sa capacité à générer une PWM 10 bits pour le signal de commande. Son boîtier TQFP-44 (SMD) est compatible avec un montage en surface et une soudure manuelle, et il est disponible chez Farnell (par exemple, référence 1748525, prix unitaire d’environ 5,250~€). \\
 
-\subsection{Résonateur à quartz et Varicap}
-Pour l'empreinte du quartz à 16MHz, on choisit SMD Abracon ABM7 (généralement 5,0×3,2mm) : très répandu, faible encombrement, montage en surface pour simplifier la fabrication. \\
-Il est suffisamment précis pour le microcontrôleur et la mesure du temps, et compatible avec l’asservissement GPS, comme il est assez répondu chez Farnell, Mouser, etc. \\
+\textbf{Connecteur USB~:} Un connecteur USB mini-B horizontal (référence \texttt{USB\_OTG\_SMD\_xxx} ) a été choisi pour son faible encombrement et sa robustesse mécanique. Ce modèle SMD facilite le soudage et l’alignement sur la carte, et est largement disponible (par exemple, Molex sur Farnell, référence 3500674, environ 1,00~€). \\
 
-La BB833 est une diode varicap (ou varactor) utilisée pour ajuster la fréquence d’oscillation du quartz. Etant un ancien modèle pas forcément disponible chez les fournisseurs, on opte pour l'alternative du BB857 qui a des caractéristiques similaires : plage de capacité adaptée à la dérive de fréquence que l’on souhaite corriger, tension maximale (ou tension inverse de fonctionnement) compatible avec l’alimentation choisie, empreinte SMD (boîtier 0805/2012 Metric) : format compact, facile à souder en surface, et disponible chez de nombreux fournisseurs.
+\textbf{Résonateur à quartz~:} Un quartz SMD Abracon ABM3 à 16~MHz (5,0$\times$3,2~mm, empreinte \texttt{Crystal\_SMD\_Abracon\_ABM3}) a été retenu pour sa précision, son faible encombrement, et sa compatibilité avec l’asservissement GPS. Il est égelement disponible chez Farnell à 0,258~€. \\
 
-\subsection{Boitiers et connecteurs}
-Le format 0805 offre une taille réduite, ce qui permet de réaliser une densité élevée sur le PCB tout en conservant une bonne maniabilité lors de l’assemblage et soudage. Pour les composants nécessitant une puissance ou des tolérances particulières, le format 1206 peut être utilisé. Ces boitiers sont standards sur le marché, ce qui facilite leur approvisionnement auprès de fournisseurs reconnus. \\
+\textbf{Varicap~:} La diode varicap BB833 a été remplacée par la BB857, plus disponible, avec une plage de capacité (5~pF à 10~pF) adaptée à la correction de la fréquence, une tension inverse compatible (jusqu’à 5~V), et un boîtier SMD 0805 (2012 Metric) facile à souder. Elle est disponible chez Farnell (référence 2725709, environ 0,172~€). \\
+
+\textbf{Boîtiers des composants passifs~:} Les boîtiers SMD 0805 ont été privilégiés pour les résistances et condensateurs (par exemple, R5 à 5~k$\Omega$, C5 à 10~$\mu$F), offrant une taille réduite et une densité élevée sur le PCB, tout en restant maniables pour une soudure manuelle. Le format 1206 a été utilisé pour des composants nécessitant une meilleure dissipation de puissance (par exemple, R1 à 0~$\Omega$). Ces formats standards garantissent une disponibilité chez les fournisseurs comme Farnell.
 
 
+\subsection{Processus de sélection des composants}
+Pour chaque composant, nous avons suivi une méthodologie spécifique afin de garantir leur compatibilité avec notre design et nos contraintes de fabrication~:
+
+\begin{description}
+    \item[Fixation de la taille des boîtiers et des empreintes~:] 
+    Nous avons défini des boîtiers SMD (principalement 0805, avec quelques 1206 pour des besoins spécifiques) pour tous les composants passifs, car ils sont adaptés à un montage en surface et à une soudure manuelle. Les empreintes correspondantes ont été choisies dans la bibliothèque KiCad (par exemple, \texttt{Resistor\_SMD:R\_0805\_2012Metric} pour une résistance 0805, ou \texttt{Capacitor\_SMD:C\_0805\_2012Metric} pour un condensateur 0805). Pour les composants plus complexes comme le quartz ou la varicap, des empreintes spécifiques ont été sélectionnées (par exemple, \texttt{Crystal\_SMD\_Abracon\_ABM3} pour le quartz). \\
+
+    \item[Sélection des composants sur Farnell~:] 
+    Les composants ont été choisis sur Farnell en fonction de plusieurs critères~:
+    \begin{itemize}
+        \item \textbf{Valeur électrique~:} Par exemple, un condensateur de 10~$\mu$F pour le découplage ou une résistance de 5~k$\Omega$ pour le filtre RC.
+        \item \textbf{Capacité et tolérance~:} Pour les condensateurs, une tolérance de $\pm$5~\% a été privilégiée pour les applications de découplage et de circuits de filtrage. Pour les résistances, une tolérance de $\pm$1~\% a été choisie pour plus de précision.
+        \item \textbf{Dimensions et boîtier~:} Les dimensions ont été vérifiées pour correspondre aux empreintes KiCad (par exemple, un boîtier 0805 mesure 2,0$\times$1,2~mm).
+        \item \textbf{Prix unitaire et disponibilité~:} Les prix unitaires ont été comparés pour optimiser les coûts. Par exemple, pour un condensateur de 1~$\mu$F en boîtier 0805, nous avons comparé plusieurs références sur Farnell. La référence 4166923 a été retenue, avec un prix unitaire de 0,121~€, une tolérance de $\pm$5~\%, et une disponibilité en stock suffisante pour notre projet.
+    \end{itemize}
+
+    \item[Exemple de sélection~:] 
+    Prenons l’exemple du condensateur C5 (10~$\mu$F) utilisé dans le filtre RC avec R5. Nous avons d’abord fixé un boîtier 0805 pour ce condensateur, en raison de sa taille compacte et de sa compatibilité avec une soudure manuelle. Dans KiCad, l’empreinte \texttt{Capacitor\_SMD:C\_0805\_2012Metric} a été assignée. Sur Farnell, nous avons recherché des condensateurs SMD de 10~$\mu$F en boîtier 0805. Parmi les options, la référence 2470435 a été choisie~: elle offre une tolérance de $\pm$10~\%, une tension nominale de 16~V (supérieure à notre alimentation de 5~V), un prix unitaire de 0,118~€, et une disponibilité immédiate (plus de 10~000 unités en stock). Une alternative, la référence 2906022, était légèrement plus chère (1.180~€) pour des caractéristiques similaires, donc nous avons privilégié l'option de la réference 2581105 à 1.230~€.
+\end{description}
 
 \subsection{Liste des composants (BOM)}
-Pour chacun des éléments (condensateurs, résistances, bobines, diode varicap, quartz, etc.), nous avons consulté les fiches techniques disponibles sur Farnell afin de :
+Après avoir sélectionné tous les composants, nous avons généré la nomenclature (BOM) dans KiCad pour regrouper et organiser les informations, qu'on peut retrouver en annexe Figure \ref{BOM} ou à telecharger en \cite{Lien BOM}. Voici les étapes suivies~:
+
 \begin{itemize}
-\item Vérifier la valeur électrique (par exemple, 1 $\mu F$ pour un condensateur de découplage, 22 $\Omega$ pour certaines résistances ou les valeurs spécifiques pour le réseau de charge du quartz).
-\item Confirmer que les caractéristiques dimensionnelles du composant correspondent à l’empreinte utilisée dans notre design KiCad. Par exemple, le choix entre un boîtier CMS en format 0805 ou 1206 dépend de la densité de montage voulue et des contraintes mécaniques lors de l’assemblage.
-\item Chaque composant a été comparé en fonction de son prix unitaire. Par exemple, un condensateur de 1 $\mu F$ en 0805 (référence 2470435) a été retenu car son prix est de l’ordre de 0,118 $\euro $ et il est parfaitement adapté aux besoins de découplage du microcontrôleur.
-\item La disponibilité du composant sur Farnell ainsi que la possibilité d’en commander en quantité suffisante ont également été prises en compte.
+    \item \textbf{Ajout des prix à la BOM~:} Pour chaque composant, le prix unitaire (obtenu sur Farnell) a été ajouté manuellement dans les champs personnalisés de KiCad (via Eeschema, en éditant les propriétés des composants). Par exemple, pour le condensateur 4166923, le champ ``Prix'' a été rempli avec ``0,121~€''.
+    \item \textbf{Groupement par valeur~:} Dans l’outil de génération de BOM de KiCad (accessible via ``Fabriquer > Liste des composants''), nous avons configuré le script pour regrouper les composants par valeur. Par exemple, tous les condensateurs de 1~$\mu$F en boîtier 0805 ont été regroupés sous une seule ligne, avec une quantité totale (par exemple, 3 unités pour C5, C10, etc.).
+    \item \textbf{Exportation de la BOM~:} La BOM a été exportée au format CSV pour faciliter son utilisation lors de la commande des composants. Le fichier inclut les colonnes suivantes~: référence, valeur, empreinte, quantité, prix unitaire, et lien vers la fiche technique sur Farnell. Cela permet une commande rapide et une vérification finale avant achat.
+    \item \textbf{La disponibilité du composant :} Sur Farnell, il faut verifier la disponibilité de notre besoin ainsi que la possibilité d’en commander en quantité suffisante ont également été prises en compte.
 \end{itemize}
+
+
 
 
 \section{Routage du PCB}
@@ -214,12 +234,17 @@ Pour chacun des éléments (condensateurs, résistances, bobines, diode varicap,
 
 %\cite{Référence} pour citer la référence. La référence est l'argument de bibitem. Par exemple pour bibitem{Toto}, on fait \cite{Toto}
 
+\newpage
 \section{Bibliographie}
 \renewcommand{\refname}{}
 \vspace{-1cm}
 \begin{thebibliography}{}
+	\bibitem{Lien BOM}
+		Fichier BOM format .csv à télecharger : \url{}
+		
 	\bibitem{Technique de soudure de composants CMS}
 		Technique de soudure de composants CMS : \url{https://youtu.be/us5zLlp1aV0?si=Flcb0uajIgZAhLWc}
+	
 \end{thebibliography}
 
 \newpage
@@ -230,5 +255,12 @@ Pour chacun des éléments (condensateurs, résistances, bobines, diode varicap,
 \end{center}
 \vfill
 \newpage
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.6]{BOM.png}
+	\caption{Fichier .csv généré depuis la BOM du schéma}
+	\label{BOM}
+\end{figure}
 
 \end{document}
