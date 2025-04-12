@@ -61,10 +61,22 @@ int main(void) {
 
 	init_ICP();
 
+	char timer_debut_mesure = 0;
+	char flag_debut_mesure = 0;
+
 	while (1) {
 		if (flag_ICP == 1) {
-			//fprintf(&USBSerialStream, "%d cycles complets + %ld coups d'horloges\n\r", nbr_cycle_ICP_display, nbr_clk_ICP_display);
-			fprintf(&USBSerialStream, "%d,%ld\n\r", nbr_cycle_ICP, nbr_clk_ICP);
+			if (flag_debut_mesure == 0) {
+				if (timer_debut_mesure < 5) {
+					timer_debut_mesure++;
+				}
+				else {
+					flag_debut_mesure = 1;
+				}
+			}
+			else {
+				fprintf(&USBSerialStream, "%d,%ld\n\r", nbr_cycle_ICP, nbr_clk_ICP);
+			}
 
 			// Réinitialise le drapeau pour pouvoir réaliser une nouvelle mesure
 			flag_ICP = 0;

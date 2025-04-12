@@ -5,6 +5,7 @@ minicom -D /dev/ttyACM0 -C frequence.dat
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
 
 #include "VirtualSerial.h"
 #include <util/delay.h>
@@ -16,22 +17,11 @@ extern USB_ClassInfo_CDC_Device_t VirtualSerial_CDC_Interface;
 extern FILE USBSerialStream;
 
 // ICP
-volatile short nbr_cycle_ICP_temp = 0;
-volatile short nbr_cycle_ICP = 0;
 volatile long nbr_clk_ICP = 0;
 volatile char flag_ICP = 0;
 
-// Lorsqu'un cycle complet est réalisé
-ISR (TIMER1_OVF_vect) {
-	nbr_cycle_ICP_temp++;
-}
-
 // Lorsque le front montant du 1PPS est détecté
 ISR (TIMER1_CAPT_vect) {
-	// Stocke le nombre de cycles réalisés
-	nbr_cycle_ICP = nbr_cycle_ICP_temp;
-	nbr_cycle_ICP_temp = 0;
-
 	// Stocke la valeur du compteur actuelle
 	nbr_clk_ICP = ICR1;
 
@@ -77,8 +67,8 @@ void init_ICP () {
 	// Sélection de la détection sur front montant
 	TCCR1B |= (1 << ICES1);	
 
-	// Active les interruptions pour l'overflow et l'ICP
-	TIMSK1 |= ((1 << ICIE1) | (1 << TOIE1));
+	// Active les interruptions pour l'ICP
+	TIMSK1 |= (1 << ICIE1);
 
 	// Active le timer (prescaler = 1)
 	TCCR1B |= (1 << CS10);
@@ -93,6 +83,9 @@ int main(void) {
 	init_PWM();
 	init_ICP();
 
+	// Active le chien de garde
+	wdt_enable(WDTO_15MS);
+
 	char timer_delais_consigne = 0;
 	char flag_consigne_prise = 0;
 	unsigned short consigne = 0;
@@ -100,11 +93,12 @@ int main(void) {
 	long erreur_precedente = 0;
 	short commande = 0;
 
+	// Pour déclencher le watchdog de force
+	//char timer_watchdog = 0;
+
 	while (1) {
 		// Send the ICP measure
 		if (flag_ICP == 1) {
-			//fprintf(&USBSerialStream, "%d,%d,%ld\n\r", i, nbr_cycle_ICP, nbr_clk_ICP);
-
 			// Récupérer la valeur de la consigne lors de la première mesure
 			if (flag_consigne_prise == 0) {
 				if (timer_delais_consigne < 10) {
@@ -119,8 +113,10 @@ int main(void) {
 			else {
 				erreur_actuelle = consigne - nbr_clk_ICP;
 
+				// Calcul de la commande
 				commande = (Kp * (erreur_actuelle - erreur_precedente) + Ki * erreur_actuelle + commande);
 
+				// Limite la commande
 				if (commande < -5000) {
 					commande = -5000;
 				}
@@ -130,13 +126,26 @@ int main(void) {
 
 				erreur_precedente = erreur_actuelle;
 
+				// Application de la commande
 				set_PWM_duty_cycle(512 + commande/100);
+
+				// Envoie des données
 				fprintf(&USBSerialStream, "%ld,%ld,%d\n\r", nbr_clk_ICP, erreur_actuelle, commande/100);
+
+				/*
+				// Pour déclencher le watchdog
+				timer_watchdog++;
+				if (timer_watchdog == 5) {
+					_delay_ms(100);
+				}
+				*/
 			}
 
 			// Réinitialise le drapeau pour pouvoir réaliser une nouvelle mesure
 			flag_ICP = 0;
 		}
+		// Réinitialise le chien de garde
+		wdt_reset();
 
 		CDC_Device_ReceiveByte(&VirtualSerial_CDC_Interface);
 		CDC_Device_USBTask(&VirtualSerial_CDC_Interface);

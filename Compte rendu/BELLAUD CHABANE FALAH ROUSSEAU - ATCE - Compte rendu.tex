@@ -13,18 +13,20 @@
 
 \hypersetup{
 	colorlinks=true,
-	linkcolor=black,
+	linkcolor=blue,
+	citecolor=blue,
 	urlcolor=blue,
 	pdfauthor={Maxime BELLAUD, Dalina CHABANE, Khalil FALAH, Paul ROUSSEAU},
 	pdftitle={ATCE - Compte rendu}
 } %Pour modifier la couleur des liens
+
 \allowdisplaybreaks %Pour avoir une suite d'équations sur plusieurs pages
 
 %Configuration du style de la page
 \pagestyle{fancy}
 \setlength{\headheight}{14.5pt}
 \lhead{ATCE}
-\rhead{compte rendu}
+\rhead{Compte rendu}
 
 \newcommand{\fc}{\ensuremath{f_c}}
 
@@ -40,15 +42,31 @@
 \title{ATCE \\
 Asservissement numérique d'un oscillateur à quartz}
 \author{Maxime BELLAUD, Dalina CHABANE,\\ Khalil FALAH, Paul ROUSSEAU}
-\date{L3 - S6 - 2025}
+\date{L3 - S6 - 2025 \\
+Semaine du 7 au 11 avril 2025}
 
 \begin{document}
 
 \maketitle
 
+{
+\hypersetup{hidelinks}
 \tableofcontents
+}
 
 \section{Introduction}
+
+L'objectif de ce projet est de réguler la fréquence d'un oscillateur à quartz à l'aide d'un microcontrôleur. Autrement dit, un oscillateur à quartz est sensible à son environnement extérieur, notamment la température, et notre objectif est de faire en sorte que la fréquence de l'oscillateur reste stable malgré ces perturbations.
+
+ L'intérêt pour nous est pédagogique car nous réaliserons toutes les étapes pour réaliser ce projet, c'est-à-dire créer le schéma, router le PCB, choisir les composants, souder le circuit, programmer le microcontrôleur, etc. Ce projet nous pousse donc à mettre en œuvre tout ce que nous avons appris pendant nos trois ans de licence, aussi bien en électronique analogique et numérique qu'en automatique.
+
+Ce projet se déroule pendant le dernier semestre de notre licence. Nous réalisons la partie théorique pendant le semestre à l'aide de quelques séances pour nous guider. La réalisation pratique a ensuite lieu pendant une semaine dédiée à ce projet.
+
+Pour réaliser ce projet, nous avons à disposition un PCB routé par nos enseignants ainsi que les composants montés en surface (passifs ou actifs comme le microcontrôleur) pour compléter le circuit. Bien sûr, nous disposons de matériel permettant de les souder. De plus, nous disposons d'oscilloscopes et de multimètres pour réaliser des tests, mais également d'un générateur de signaux afin de simuler un signal 1PPS\footnote{Signal dont le front montant a lieu exactement toutes les secondes} émit par un satellite. Pour terminer sur la partie matérielle, nous pouvons utiliser une imprimante 3D afin de réaliser une boîte pour le PCB.
+
+Les logiciels que nous utiliserons sont pour la plupart gratuits et libres. Pour réaliser le schéma, la simulation de circuits analogiques et le routage du PCB, nous utilisons KiCAD 9.0. Nous utilisons le langage C pour programmer le microcontrôleur et nous utilisons avr-gcc pour compiler les programmes. De plus, le traitement des informations acquises est réalisé avec MATLAB car c'est un logiciel qui nous est familier. Enfin, nous utilisons FreeCAD pour faire de la modélisation mécanique 3D.
+
+Dans un premier temps, nous présenterons comment nous avons conçu le circuit, simulé, puis routé le PCB. Ensuite se trouvera l'estimation du prix des composants et du PCB en fonction des volumes. Après, nous montrerons comment nous avons assemblé le PCB et imprimé par méthode additive une boîte pour celui-ci. Nous aborderons ensuite la programmation du microcontrôleur avant de passer aux tests et à l'évaluation des performances du système.
 
 \section{Schéma du circuit}
 
@@ -194,13 +212,23 @@ Pour chacun des éléments (condensateurs, résistances, bobines, diode varicap,
 
 \section{Conclusion}
 
+%\cite{Référence} pour citer la référence. La référence est l'argument de bibitem. Par exemple pour bibitem{Toto}, on fait \cite{Toto}
+
+\section{Bibliographie}
+\renewcommand{\refname}{}
+\vspace{-1cm}
+\begin{thebibliography}{}
+	\bibitem{Technique de soudure de composants CMS}
+		Technique de soudure de composants CMS : \url{https://youtu.be/us5zLlp1aV0?si=Flcb0uajIgZAhLWc}
+\end{thebibliography}
 
 \newpage
-\section*{Bibliographie}
-
-\begin{itemize}
-\item Technique de soudure de composants CMS : \url{https://youtu.be/us5zLlp1aV0?si=Flcb0uajIgZAhLWc}
-
-\end{itemize}
+\phantom{.}
+\vfill
+\begin{center}
+\section{Annexes}
+\end{center}
+\vfill
+\newpage
 
 \end{document}
