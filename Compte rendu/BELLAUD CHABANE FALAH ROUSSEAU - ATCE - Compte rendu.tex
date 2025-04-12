@@ -162,6 +162,31 @@ Nous ajoutons 3 points de test, un à la sortie PWM, un à la sortie du filtre p
 Nous choisissons de ne pas mettre de point de test vers le résonateur pour ne pas ajouter de bruit au signal.
 
 \section{Choix des composants}
+\subsection{Microcontrôleur et USB}
+L’Atmega32U4 a été choisi pour sa capacité à gérer les fonctions d’asservissement nécessaires. Il intègre notamment des timers 16 bits, essentiels pour l’input capture afin de mesurer précisément la fréquence de l’oscillateur, et permet l’émission d’une PWM 10 bits pour le filtrage du signal de commande. \\
+
+Les critères de choix pour l'USB sont d'abord le format (mini ou micro) dépendant des préférences d’encombrement et de robustesse mécanique, puis le connecteur horizontal ou vertical selon la disposition de la carte. L'empreinte “Horizontal” : ce modèle (souvent référence “USB\_OTG\_SMD\_xxx”) se soude facilement et supporte un alignement correct sur la carte.
+
+\subsection{Résonateur à quartz et Varicap}
+Pour l'empreinte du quartz à 16MHz, on choisit SMD Abracon ABM7 (généralement 5,0×3,2mm) : très répandu, faible encombrement, montage en surface pour simplifier la fabrication. \\
+Il est suffisamment précis pour le microcontrôleur et la mesure du temps, et compatible avec l’asservissement GPS, comme il est assez répondu chez Farnell, Mouser, etc. \\
+
+La BB833 est une diode varicap (ou varactor) utilisée pour ajuster la fréquence d’oscillation du quartz. Etant un ancien modèle pas forcément disponible chez les fournisseurs, on opte pour l'alternative du BB857 qui a des caractéristiques similaires : plage de capacité adaptée à la dérive de fréquence que l’on souhaite corriger, tension maximale (ou tension inverse de fonctionnement) compatible avec l’alimentation choisie, empreinte SMD (boîtier 0805/2012 Metric) : format compact, facile à souder en surface, et disponible chez de nombreux fournisseurs.
+
+\subsection{Boitiers et connecteurs}
+Le format 0805 offre une taille réduite, ce qui permet de réaliser une densité élevée sur le PCB tout en conservant une bonne maniabilité lors de l’assemblage et soudage. Pour les composants nécessitant une puissance ou des tolérances particulières, le format 1206 peut être utilisé. Ces boitiers sont standards sur le marché, ce qui facilite leur approvisionnement auprès de fournisseurs reconnus. \\
+
+
+
+\subsection{Liste des composants (BOM)}
+Pour chacun des éléments (condensateurs, résistances, bobines, diode varicap, quartz, etc.), nous avons consulté les fiches techniques disponibles sur Farnell afin de :
+\begin{itemize}
+\item Vérifier la valeur électrique (par exemple, 1 $\mu F$ pour un condensateur de découplage, 22 $\Omega$ pour certaines résistances ou les valeurs spécifiques pour le réseau de charge du quartz).
+\item Confirmer que les caractéristiques dimensionnelles du composant correspondent à l’empreinte utilisée dans notre design KiCad. Par exemple, le choix entre un boîtier CMS en format 0805 ou 1206 dépend de la densité de montage voulue et des contraintes mécaniques lors de l’assemblage.
+\item Chaque composant a été comparé en fonction de son prix unitaire. Par exemple, un condensateur de 1 $\mu F$ en 0805 (référence 2470435) a été retenu car son prix est de l’ordre de 0,118 $\euro $ et il est parfaitement adapté aux besoins de découplage du microcontrôleur.
+\item La disponibilité du composant sur Farnell ainsi que la possibilité d’en commander en quantité suffisante ont également été prises en compte.
+\end{itemize}
+
 
 \section{Routage du PCB}
 
