@@ -17,22 +17,11 @@ extern USB_ClassInfo_CDC_Device_t VirtualSerial_CDC_Interface;
 extern FILE USBSerialStream;
 
 // ICP
-volatile short nbr_cycle_ICP_temp = 0;
-volatile short nbr_cycle_ICP = 0;
 volatile long nbr_clk_ICP = 0;
 volatile char flag_ICP = 0;
 
-// Lorsqu'un cycle complet est réalisé
-ISR (TIMER1_OVF_vect) {
-	nbr_cycle_ICP_temp++;
-}
-
 // Lorsque le front montant du 1PPS est détecté
 ISR (TIMER1_CAPT_vect) {
-	// Stocke le nombre de cycles réalisés
-	nbr_cycle_ICP = nbr_cycle_ICP_temp;
-	nbr_cycle_ICP_temp = 0;
-
 	// Stocke la valeur du compteur actuelle
 	nbr_clk_ICP = ICR1;
 
@@ -78,8 +67,8 @@ void init_ICP () {
 	// Sélection de la détection sur front montant
 	TCCR1B |= (1 << ICES1);	
 
-	// Active les interruptions pour l'overflow et l'ICP
-	TIMSK1 |= ((1 << ICIE1) | (1 << TOIE1));
+	// Active les interruptions pour l'ICP
+	TIMSK1 |= (1 << ICIE1);
 
 	// Active le timer (prescaler = 1)
 	TCCR1B |= (1 << CS10);
