@@ -294,6 +294,26 @@ D'après le site Eurocircuits (voir Figure~\ref{fig:prix}), pour un prototype de
 La matrice de prix montre clairement comment le coût varie en fonction du délai de fabrication et de la quantité commandée. Chaque case présente le prix unitaire ainsi que le montant total pour la commande. Par exemple, pour une commande d’un seul PCB, le tarif passe de 100,53~€ avec un délai de 2 jours à 40,99~€ dès que le délai atteint 3 jours, où il se stabilise. Pour une commande de 5 PCB, le même phénomène se produit avec une forte réduction du prix unitaire entre 2 et 3 jours, puis une stabilité dès 3 jours. En revanche, pour des commandes plus importantes comme 10, 15 ou 20 PCB, le prix unitaire continue de baisser jusqu’à atteindre un délai de fabrication de 5 jours, après quoi il se fixe. Cela montre qu’en choisissant un délai de fabrication légèrement plus long, on peut réduire significativement le coût unitaire, en particulier pour des commandes groupées. Ainsi, commander 5 PCB par exemple s'avère être une option intéressante, permettant de bénéficier d'un tarif avantageux tout en obtenant suffisamment d'exemplaires pour divers besoins (plusieurs test ou autre).
 
 
+
+\subsection{Soudure des composants}
+
+Le PCB étant livré nu, l'objectif est de souder les composants afin d'obtenir une carte fonctionnelle. Cette étape constitue une première approche de la soudure de composants montés en surface, notre expérience préalable se limitant aux composants traversants.
+
+La méthode suivie repose sur les recommandations vues en cours. Pour faciliter l’implantation, le plug-in  «~Interactive HTML BOM~» est installé dans KiCad, permettant de localiser précisément chaque composant sur la carte.
+
+Dans un premier temps, on a défini l’ordre des composants à souder en amont. Le connecteur USB est placé en premier pour vérifier la présence du \SI{5}{\volt} et de la masse, suivi des composants les plus petits (diodes, résistances, condensateurs), puis de l’Atmega, et enfin des composants traversants (boutons, connecteur BNC). Cette organisation vise à garantir un espace de travail maximal pour les composants les plus délicats à souder.
+
+La soudure de l’USB s’avère complexe et nécessite plusieurs essais. Un court-circuit se produit lorsqu’une bille d’étain retombe sur les broches du connecteur, les reliant entre elles. On essaye une première fois de le désouder à la tresse échoue, cependant on a eu besoin du technicien qui a retirer le connecteur avec un pistolet à air chaud. Le vernis à donc fondu dans cette partie du PCB. Après nettoyage de l'éteint sur l'usb et la suppression d’une plaque métallique à l’arrière du connecteur, qui était la source du court-circuit. On a pu ressoudé le port USB correctement (voir la figure \ref{}). La suite de la soudure se déroule sans problème.
+
+%% mettre image du connecteur
+
+Pour conclure, l’utilisation de la loupe binoculaire nous a demandé un temps d’adaptation, chaque membre du groupe a eu l'occassion de participer à l’assemblage, à l’exception d’un membre qui préfère ne pas intervenir. Tout au long de l'assemblage du PCB, nous avons vérifié au multimètre pour détecter d’éventuels courts-circuits et contrôler la présence de la tension d’alimentation. La soudure est achevée dès le mardi midi. Nous avons pu verifier le fonctionnement de la carte, ce qui nous as permis d’aborder les étapes suivantes du projet rapidement.
+
+%% mettre image du pcb finit
+
+
+
+
 \section{Programmation}
 
 Une fois le circuit physique réalisé, il ne reste qu'à programmer le microcontrôleur afin que le système réalise ce qu'on attend de lui. Nous disposons d'un circuit quasiment complet afin qu'une partie du groupe puisse commencer la programmation pendant que l'autre partie assemble le PCB.
