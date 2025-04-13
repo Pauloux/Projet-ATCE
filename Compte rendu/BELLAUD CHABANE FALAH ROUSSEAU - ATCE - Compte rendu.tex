@@ -167,6 +167,23 @@ Après avoir sélectionné tous les composants, nous avons généré la nomencla
 
 \section{Routage du PCB}
 
+Le routage commence par la récupération des empreintes, suivie du placement des composants selon une logique. L'Atmega est placé en premier, au centre de la carte. Le quartz est positionné au plus proche pour ne pas perturber la stabilité de l’oscillateur. Les capacités de découplage sont rapprochées des broches d’alimentation, tandis que le connecteur USB est disposé de façon à optimiser le routage des paires différentielles.
+
+Une fois que ces éléments important sont positionnés, on dessine le contour du PCB avec la couche (Edge.Cuts). Les autres composants sont ensuite répartis de manière à limiter la longueur des pistes et à éviter les croisements.
+
+Le routage suit le même ordre précis : le groupe avec le quartz, les capacités de découplage, USB, puis le reste du circuit. Les empreintes sont déplacer pour faciliter le routage de certaine piste. Le plan \SI{5}{\volt} est relié directement sur la couche du haut, tandis que le plan de masse, situé sur la deuxième couche, est connecté à l’aide de vias traversants.
+
+On effectue le contrôle de conception (DRC) pour corriger toutes les erreurs ou avertissements, notamment ceux liés à la sérigraphie (F.SilkScreen) que l’on repositionne.
+
+Cette méthode est celle du PCB double couche. Puis pour la version monocouche le principal défi consiste à superposer les plans \SI{5}{\volt} et  de masse sur une même couche, ce qui impose de déplacer certaines empreintes.
+
+Les paramètres du routage sont fait pour respecter la classe 4, mais l’empreinte du connecteur BNC impose des vias traversans de classe 6. En dernier, on ajoute des perçages aux coins du PCB pour permettre sa fixation dans un boîtier.
+
+
+% mettre photos PCB 1 et 2 couches en annexe
+
+
+
 \section{Estimation du coût}
 
 \section{Conclusion}
