@@ -36,22 +36,22 @@ void init_PWM () {
 	// Déclaration du PORTD7 en sortie
 	DDRD |= (1 << PORTD7);
 
-	// Clear on up-counting and set on down-counting 
+	// Mise à 0 lorsque le compteur monte, mise à 1 lorsque le compteur descend
 	TCCR4C |= (1 << COM4D1) | (1 << PWM4D);
 
 	// Phase and Frequency Correct PWM
 	TCCR4D |= (1 << WGM40);
 
-	// Frequency
+	// Sélection de la fréquence
 	// 1024
 	TC4H = 0x03;
 	OCR4C = 0xFF;
-	// Duty cycle
+	// Sélection du rapport de cycle (duty cycle)
 	// 512
 	TC4H = 0x01;
 	OCR4D = 0xFF;
 
-	// Start timer (prescaler = 1)
+	// Activation du timer (prescaler = 1)
 	TCCR4B |= (1 << CS40);
 }
 
@@ -97,7 +97,7 @@ int main(void) {
 	//char timer_watchdog = 0;
 
 	while (1) {
-		// Send the ICP measure
+		// Lorsqu'une mesure a été réalisée
 		if (flag_ICP == 1) {
 			// Récupérer la valeur de la consigne lors de la première mesure
 			if (flag_consigne_prise == 0) {
@@ -110,6 +110,7 @@ int main(void) {
 					fprintf(&USBSerialStream, "Consigne : %d\n\r", consigne);
 				}
 			}
+			// Régulation
 			else {
 				erreur_actuelle = consigne - nbr_clk_ICP;
 

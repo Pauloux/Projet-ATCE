@@ -40,6 +40,8 @@
 \newcommand{\XLT}{\ensuremath{X_{LT}}}
 \newcommand{\XCT}{\ensuremath{X_{CT}}}
 \newcommand{\XCosci}{\ensuremath{X_{C \text{osci}}}}
+\newcommand{\Kp}{\ensuremath{K_p}}
+\newcommand{\Ki}{\ensuremath{K_i}}
 
 \title{ATCE \\ Asservissement numérique d'un oscillateur à quartz}
 \author{Maxime BELLAUD, Dalina CHABANE,\\ Khalil FALAH, Paul ROUSSEAU}
@@ -424,6 +426,51 @@ Nous considérons que cette partie est fonctionnelle et que l'on peut mesurer pr
 
 \subsection{Régulation}
 
+Maintenant que nous pouvons contrôler le procédé (la fréquence de résonance du résonateur) avec le programme PWM et le mesurer avec le programme ICP, nous pouvons réguler le système. L'objectif est de mesurer la fréquence de l'oscillateur et de polariser la Varicap correctement afin que la fréquence reste stable et devienne insensible aux perturbations comme la température par exemple.
+
+Nous utilisons pour cela un régulateur PID et en calculant les coefficients avec la méthode de Takahashi \cite{Cours automatique Gonzalo}. Nous avons pour cela besoin d'informations tirées de la réponse indicielle du système.
+
+En traçant l'évolution de la fréquence mesurée en fonction du rapport cyclique du signal PWM, et donc de la tension de polarisation de la Varicap (figure \ref{Graphique - Influence Varicap} en annexe), on observe que la caractéristique n'est pas linéaire. Nous travaillerons donc au milieu de la courbe pour la régulation.
+
+\subsubsection{Réponse indicielle}
+
+Pour tracer la réponse indicielle, nous réalisons un programme qui utilise les fonctions précédemment créées afin de générer un signal PWM et de mesurer la fréquence de l'oscillateur. L'algorithme dans la boucle principale infinie permet de générer un signal créneau pour la valeur du rapport cyclique du PWM. Concrètement, le rapport cyclique est de 462 sur 1023 pendant \SI{5}{\second}, puis il passe à 562 sur 1023 pendant \SI{5}{\second} avant que le cycle ne recommence. Cela permet de rester dans une gamme de $\pm 50$ sur 1023 de rapport cyclique.
+
+Nous enregistrons les valeurs d'un certain nombre (24 mesures retenues) de réponse indicielle et nous réalisons une moyenne (\ref{Graphique - Réponse indicielle}). À partir de ce graphique, nous déterminons : \nopagebreak
+\begin{itemize}
+	\item La période d'échantillonnage $T$ est de \SI{1}{\second}. C'est un paramètre qui nous est imposé par la nature du signal 1 PPS. On a donc $\boxed{T = \SI{1}{\second}}$
+	\item Un retard $L$ nul. En effet, le système est échantillonné toutes les secondes et le système réagit beaucoup plus rapidement qu'une seconde. On considère donc $\boxed{L = \SI{0}{\second}}$.
+	\item Une pente $\boxed{a = \SI{42.67}{\hertz/\second}}$.
+\end{itemize}
+
+Étant donné que le retard est nul et qu'il n'y a pas de dépassement, nous choisissons de réaliser un régulateur PI, ce qui doit normalement suffire pour bien réguler le système. Avec la méthode de Takahashi, on obtient alors : \nopagebreak
+\begin{align*}
+	\Aboxed{\Kp & \approx 0.029} \\
+	\Aboxed{\Ki & \approx 0.025}
+\end{align*}
+
+\subsection{Implémentation du régulateur}
+
+Pour implémenter facilement le régulateur PI, nous utilisons la formule suivante : \nopagebreak
+\[
+\text{cmd}_{n+1} = \Kp (\varepsilon_{n+1} - \varepsilon_n) + \Ki \varepsilon_{n+1} + \text{cmd}_n
+\]
+Avec cmd la commande et $\varepsilon$ l'erreur telle que $\varepsilon = \text{consigne} - \text{fréquence mesurée}$.
+
+En effet, cette formule permet de ne pas avoir besoin de stocker le résultat d'une intégrale ou de la somme des erreurs qui pourrait éventuellement déborder de la capacité de la mémoire d'une variable. Cela se fait naturellement en prenant en compte la commande à l'état précédent pour calculer la prochaine commande.
+
+Étant donné que nous sommes sur un microcontrôleur, nous souhaitons éviter d'utiliser des nombres flottants et donc utiliser exclusivement des entiers. Nous multiplions donc les coefficients \Kp\ et \Ki\ par 1000, ce qui nous donne $\Kp = 29$ et $\Ki = 25$. Il faut ensuite simplement diviser la commande par 1000 pour contrebalancer l'effet de la multiplication par 1000 des coefficients.
+
+Notons que le rapport cyclique appliqué est $512 + \text{cmd}$ afin de se placer autour du point de fonctionnement choisi qui est de 512 sur 1023. De plus, afin de rester dans ce domaine, nous limitons la commande cmd à $\pm 50$ (après la division par 1000 donc $\pm 50 000$ dans la véritable variable). Lors des premiers tests, nous avons remarqué que le système fonctionnait mal car la commande était trop faible (1 ou 2). Nous avons donc divisé la commande lors de l'application par 100 ou lieu de 1000 (ce qui fait une commande multipliée par 10), ce qui donne des performances satisfaisantes.
+
+À noter que cette commande n'est calculée et appliquée qu'une fois par seconde, ce qui correspond à notre période d'échantillonnage. La valeur de consigne est prise comme étant la fréquence mesurée \SI{5}{\second} après le démarrage du système afin de laisser le temps à la fréquence de se stabiliser avec un rapport cyclique du PWM de \SI{50}{\percent} (512/1023). C'est ensuite cette fréquence qui sera maintenue grâce à la régulation.
+
+On voit sur la figure \ref{Graphique - Comparaison} en annexe que le régulateur permet d'avoir un système beaucoup moins sensible aux perturbations. De plus, nous avons remarqué que sans régulation, lorsque le résonateur refroidi, la fréquence tend parfois vers une autre valeur que celle avant le chauffage. C'est un effet que l'on ne retrouve pas avec le régulateur puisqu'une commande est appliquée afin que la fréquence retrouve rapidement sa valeur de consigne (on peut observer la consigne sur le graphique du bas).
+
+Globalement, la fréquence avec l'asservissement reste dans un intervalle de $\pm \SI{2}{\hertz}$, ce qui est très satisfaisant. Lors de l'application d'une perturbation, la fréquence varie un petit peu plus mais reste dans un intervalle de $\pm \SI{5}{\hertz}$ contrairement au système non régulé qui varie de quelques dizaines de hertz.
+
+Nous avons démontré que le système est capable de suivre une consigne et de rejeter des perturbations, ce qui rempli donc l'objectif que nous nous étions fixé. Nous pouvons cependant noter que le système ne peut pas rejeter des perturbations trop grandes car sa commande est limitée à $\pm 50$ afin de rester dans une zone de fonctionnement linéaire.
+
 \subsection{Watchdog}
 
 \section{Conclusion}
@@ -435,20 +482,23 @@ Nous considérons que cette partie est fonctionnelle et que l'on peut mesurer pr
 \renewcommand{\refname}{}
 \vspace{-1cm}
 \begin{thebibliography}{}
-    \bibitem{Documentation ATMEGA32U4}
-        Documentation de l'ATMEGA32U4 : \\ \href{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr-atmega16u4-32u4_datasheet.pdf}{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr- \\ atmega16u4-32u4\_datasheet.pdf}
+	\bibitem{Documentation ATMEGA32U4}
+	Documentation de l'ATMEGA32U4 : \\ \href{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr-atmega16u4-32u4_datasheet.pdf}{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr- \\ atmega16u4-32u4\_datasheet.pdf}
 
-    \bibitem{Lien BOM}
-        Fichier BOM format .csv à télecharger : \href{Images/BOM_PCB.csv}{Télécharger le fichier CSV}
+	\bibitem{Lien BOM}
+	Fichier BOM format .csv à télecharger : \href{Images/BOM_PCB.csv}{Télécharger le fichier CSV}
 
-    \bibitem{Butterworth}
-        Modèle de circuit Butterworth-Van Dyke : \\ \url{https://demonstrations.wolfram.com/ButterworthVanDykeCircuit}
+	\bibitem{Butterworth}
+	Modèle de circuit Butterworth-Van Dyke : \\ \url{https://demonstrations.wolfram.com/ButterworthVanDykeCircuit}
         
-    \bibitem{Technique de soudure de composants CMS}
-        Technique de soudure de composants CMS : \\ \url{https://youtu.be/us5zLlp1aV0?si=Flcb0uajIgZAhLWc}
+	\bibitem{Technique de soudure de composants CMS}
+	Technique de soudure de composants CMS : \\ \url{https://youtu.be/us5zLlp1aV0?si=Flcb0uajIgZAhLWc}
 
-    \bibitem{USB OTG}
-        USB OTG broche ID et câble : \\ \href{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}
+	\bibitem{USB OTG}
+	USB OTG broche ID et câble : \\ \href{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}
+        
+	\bibitem{Cours automatique Gonzalo}
+	Automatique linéaire échantillonnée, Gonzalo Cabodevila (méthode de Takahashi) : \\ \href{http://jmfriedt.free.fr/Gonzalo_cours1A.pdf}{http://jmfriedt.free.fr/Gonzalo\_cours1A.pdf}
 \end{thebibliography}
 
 \newpage
@@ -529,5 +579,26 @@ Nous considérons que cette partie est fonctionnelle et que l'on peut mesurer pr
 	\caption{Graphique représentant l'évolution de la valeur de mesurée par l'input capture (ICP) en fonction du temps. L'ICP peut également être interprétée comme la fréquence de l'oscillateur modulo $2^16$ en \si{\hertz}.}
 	\label{Graphique - ICP}
 \end{figure}
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{Ressources/Graphiques/Influence_Varicap.png}
+	\caption{Graphique représentant la fréquence mesurée de l'oscillateur modulo 65536 ($2^{16}$) en fonction du rapport cyclique du signal PWM, et donc de la tension de polarisation de la Varicap.}
+	\label{Graphique - Influence Varicap}
+\end{figure}
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{Ressources/Graphiques/Reponse_indicielle.png}
+	\caption{Réponse indicielle moyenne d'un échelon de rapport cyclique passant de 462 à 562 sur 1023.}
+	\label{Graphique - Réponse indicielle}
+\end{figure}
+
+\begin{sidewaysfigure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{Ressources/Graphiques/Comparaison.png}
+	\caption{Graphique comparant l'évolution de la fréquence de l'oscillateur avec et sans régulation (graphique du haut). On peut voir la commande sur le graphique du bas qui permet de compenser l'effet de la température.}
+	\label{Graphique - Comparaison}
+\end{sidewaysfigure}
 
 \end{document}

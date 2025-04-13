@@ -1,4 +1,4 @@
-data = readmatrix('frequence.dat');
+data = readmatrix('frequence_courte.dat');
 
 duty_cycle    = data(:,1);
 nbr_cycle_ICP = data(:,2);
@@ -20,6 +20,6 @@ subplot(2, 1, 2);
 plot(nbr_clk_ICP, 'LineWidth', 1.5);
 title('Fréquence');
 xlabel('Temps (s)');
-ylabel('Valeur ICP');   
+ylabel('Fréquence % 65536 (Hz)');   
 grid on;             
 axis tight;               % Ajuste l'échelle automatiquement autour des valeurs de nbr_clk_ICP

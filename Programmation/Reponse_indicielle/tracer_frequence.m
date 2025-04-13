@@ -8,16 +8,16 @@ figure;
 
 disp(["Nombre de mesures : ", num2str(size(nbr_clk_ICP, 1)/10)])
 
-% Fréquence
+% Tracé de toutes les mesures de fréquence
 for i = 1:(size(nbr_clk_ICP, 1)/10) - 1
     plot(1:10 ,nbr_clk_ICP(1 + i * 10:10 + i * 10), 'LineWidth', 1.5);
     hold on
 end
 title('Fréquence');
 xlabel('Temps (s)');
-ylabel('Valeur ICP');
+ylabel('Fréquence % 65536 (Hz)');
 grid on;             
-axis tight;               % Ajuste l'échelle automatiquement autour des valeurs de nbr_clk_ICP
+axis tight;
 
 % Calcul de la moyenne sur chaque point de la période
 num_periodes = size(nbr_clk_ICP, 1)/10; % Nombre total de périodes
@@ -29,6 +29,6 @@ figure;
 plot(1:10, moyenne_clk, 'b-', 'LineWidth', 2);
 title('Valeur moyenne de ICP sur une période');
 xlabel('Temps (s)');
-ylabel('Valeur ICP moyenne');
+ylabel('Fréquence % 65536 moyenne (Hz)');
 grid on;
 axis tight;
