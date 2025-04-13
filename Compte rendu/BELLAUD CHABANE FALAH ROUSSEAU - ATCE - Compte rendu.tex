@@ -10,6 +10,7 @@
 \usepackage{mathtools} %Pour les maths
 \usepackage[margin=2.5cm]{geometry} %Pour les marges de la page
 \usepackage{hyperref} %Pour les liens et les métadonnées
+\usepackage{rotating} %Pour les figures penchées
 
 \hypersetup{
 	colorlinks=true,
@@ -27,6 +28,10 @@
 \setlength{\headheight}{14.5pt}
 \lhead{ATCE}
 \rhead{Compte rendu}
+
+\newcommand{\Vcc}{\ensuremath{V_{\text{CC}}}}
+\newcommand{\GND}{\ensuremath{\text{GND}}}
+\newcommand{\HWB}{\ensuremath{\overline{\text{HWB}}}}
 
 \newcommand{\fc}{\ensuremath{f_c}}
 
@@ -68,118 +73,52 @@ Les logiciels que nous utiliserons sont pour la plupart gratuits et libres. Pour
 
 Dans un premier temps, nous présenterons comment nous avons conçu le circuit, simulé, puis routé le PCB. Ensuite se trouvera l'estimation du prix des composants et du PCB en fonction des volumes. Après, nous montrerons comment nous avons assemblé le PCB et imprimé par méthode additive une boîte pour celui-ci. Nous aborderons ensuite la programmation du microcontrôleur avant de passer aux tests et à l'évaluation des performances du système.
 
-\section{Schéma du circuit}
+\section{Schéma électrique}
 
-% Ceci est un (très) brouillon
+Pour commencer, nous réalisons le schéma électrique avec le logiciel KiCAD. Il est représenté sur la figure \ref{Schéma - Schéma électrique} en annexe. On peut diviser le schéma en plusieurs sous-circuits : le filtre passe-bas, le suiveur, le résonateur et le port USB. Avant de passer à l'explication du schéma, notons que nous avons créé le composant du microcontrôleur sur KiCAD afin de voir clairement toutes ses broches.
 
-Dans un premier temps, nous réalisons le schéma du circuit. L'objectif est de déterminer quels composants choisir et comment les connecter entre eux.
+\paragraph{Alimentation et boutons}
 
-La documentation de l'ATMEGA32U4 peut se trouver à l'adresse suivante : \newline \nopagebreak
-\href{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr-atmega16u4-32u4_datasheet.pdf}{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr-atmega16u4- \\ 32u4\_datasheet.pdf}
+Nous commençons par alimenter les broches du microcontrôleur avec \Vcc\ et \GND. De plus, nous ajoutons les boutons RESET et \HWB. Un circuit de pull-up est intégré dans le microcontrôleur pour RESET mais pas pour \HWB\ donc nous en réalisons un avec une résistance de \SI{5}{\kilo\ohm}.
 
-\subsection{Alimentation}
+\paragraph{Capacités de découplage}
 
-\subsubsection{Broches}
+Pour calculer les valeurs des capacités de découplage, nous utilisons la formule $C = \frac{i \times \Delta t}{\Delta u}$. Nous identifions dans la documentation \cite{Documentation ATMEGA32U4} une consommation d'environ \SI{13}{\milli\ampere}\footnote{Figure 30-4}. De plus, à \SI{16}{\mega\hertz} et en choisissant $\Delta u = \SI{0.1}{\volt}$, on obtient $C = \SI{8.125}{\micro\farad}$, ce que nous arrondissons à $\boxed{C = \SI{10}{\micro\farad}}$.
 
-\begin{itemize}
-	\item VCC (alimentation du microcontrôleur) : broches 14, 24, 34 et 44
-	\item GND (masse de l'alimentation) : broches 15, 23, 35 et 43
-	\item UVCC (alimentation du port USB) : broche 2
-	\item UGND (masse du port USB) : broche 5
-\end{itemize}
+\paragraph{Entrées et sorties}
 
-\subsubsection{Découplage}
+Le signal \SI{1}{PPS} servant de référence de temps est connecté à la broche 32, ce qui permet d'utiliser la fonction «~input capture~» (ICP) du timer 3, offrant ainsi les avantages d'un compteur de 16 bits. La sortie PWM est quant à elle connectée à la broche 29 afin de profiter de la résolution de 16 bits du timer 1.
 
-Ces 5 broches doivent être découplées afin d'avoir une alimentation la plus stable possible. Il nous faut donc calculer la valeur de ces condensateurs.
+\paragraph{Filtre}
 
-On sait que $q = C \times U$, donc en dérivant, on obtient $\frac{dq}{dt} = C \times \frac{du}{dt}$. De plus, on sait que $\frac{dq}{dt} = i$ donc $i = C \times \frac{du}{dt}$, que l'on peut aussi écrire $i = C \times \frac{\Delta u}{\Delta t}$ donc $C = \frac{i \Delta t}{\Delta u}$.
+Le filtre passe-bas en sortie du signal PWM permet d'obtenir une tension continue proportionnelle au rapport de cycle (duty cycle) du PWM. Le suiveur permet ensuite que la suite du circuit n'influence pas cette tension continue qui doit rester la plus précise et stable possible.
 
-Sur la figure 30-4 de la documentation de l'ATMEGA32U4, on lit une consommation de courant du microcontrôleur de \SI{13}{\milli\ampere} pour \SI{5}{\volt} et \SI{16}{\mega\hertz}. De plus, $\Delta t = \frac{1}{\SI{16}{\mega\hertz}} = \SI{62}{\nano\second}$. Enfin, on choisit une fluctuation de tension $\Delta u = \SI{0.1}{\volt}$.
+\paragraph{Résonateur}
 
-On obtient alors $C = \SI{8.125}{\micro\farad}$. Nous choisissons alors d'arrondir à $\boxed{C = \SI{10}{\micro\farad}}$, ce qui correspond alors à un courant de \SI{16}{\milli\ampere}, toujours pour $\Delta V = \SI{0.1}{\volt}$
+Le résonateur Y1 est connecté au broches XTAL1 et XTAL2 du microcontrôleur et on place les capacités de pieds C1 et C2. La Varicap (diode dont la capacité change en fonction de sa tension de polarisation) est placée en parallèle d'une capacité de pied, ce qui permet de faire varier la fréquence de résonance de Y1. Cependant, la tension de polarisation de la Varicap ne doit pas influencer le résonateur, et le résonateur ne doit pas influencer la polarisation de la Varicap. Nous utilisons pour cela un T de polarisation.
 
-\subsection{Bouton de reset}
+\bigskip
 
-Le signal pour réinitialisé le microcontrôleur se trouve sur la broche 13. De plus, on voit sur la figure 8-1 de la documentation de l'ATMEGA32U4 qu'une résistance de pull-up est déjà placée dans le microcontrôleur. Il suffit donc de placer un bouton entre la broche 13 et GND.
+Pour le T de polarisation, on détermine les conditions suivantes : \nopagebreak
+\begin{align*}
+	\CT & \gg \Cosci \\
+	\LT & \gg \frac{1}{4 \pi f^2 \CT^2}
+\end{align*}
 
-\subsection{Bouton d'activation du bootloader}
+\Cosci\ sont les capacités de pieds de l'oscillateur, qui sont de l'ordre de \SI{20}{\pico\farad}, donc nous choisissons $\boxed{\CT = \SI{1}{\micro\farad}}$. On en déduit alors $\boxed{\LT = \SI{10}{\micro\henry}}$.
 
-Le signal d'activation du bootloader est noté HWB et est actif à l'état bas. Contrairement à la broche reset, il n'y a pas de circuit de pull-up intégré. On réalise alors un circuit pull-up standard afin que la broche soit à l'état haut lorsque le bouton est relâché et qu'il ne reste pas dans un état flottant. Nous choisissons une résistance de \SI{5}{\kilo\ohm}, qui est une valeur standard pour ces circuits.
+À très basse fréquence, c'est-à-dire en continu, on a $\XLT \to 0$ et $\XCT \to \infty$, ce qui confirme que la tension continue n'influence pas le résonateur. À \SI{16}{\mega\hertz}, on obtient $\XLT \approx \SI{1}{\kilo\ohm}$ et $\XCT \approx \SI{10}{\milli\ohm}$, ce qui indique que l'oscillateur «~voit~» bien la Varicap mais n'influence pas sa tension de polarisation continue car $\XCT \gg \XLT$.
 
-\subsection{Connecteur coaxial pour signal GPS}
+\paragraph{Port USB}
 
-Le signal GPS générera un signal d'une impulsion par seconde (1PPS). Il faudra mesurer cette période à l'aide d'un Input Capture (IC). Nous choisissons le timer 3, qui est un timer sur 16 bits afin d'avoir le plus grand nombre de bits possibles. Ainsi, l'ICP3 correspond à la broche 32. Nous pensons également à raccorder le blindage du connecteur à la masse.
+Le port USB est simplement connecté comme indiqué dans le documentation du microcontrôleur \cite{Documentation ATMEGA32U4}. La broche ID est laissée déconnectée car cela a peu d'importance pour nous. Enfin, la résistance de \SI{0}{\ohm} nous permet de tester que l'alimentation de l'USB est correcte avant de connecter le reste du circuit lors de l'assemblage.
 
-\subsection{Connecteur USB}
+\paragraph{Points de test}
 
-Connecteur de type mini-USB pour pouvoir utiliser le même câble que la Olimexino.
-
-\begin{itemize}
-	\item VBUS du microcontrôleur (broche 7) connecté au VBUS du connecteur USB. C'est l'alimentation \SI{5}{\volt}.
-	\item D+ et D- du microcontrôleur (broches 3 et 4) connectées au D+ et D- du connecteur USB. C'est une paire différentielle permettant de transmettre des données. Des résistances de \SI{22}{\ohm} sont placées entre les D+ et D- du microcontrôleur et du connecteur USB (partie 2.2.8 et 2.2.9 de la documentation de l'ATMEGA32U4).
-	\item Le blindage (shield) est connecté à la masse.
-	\item ID du connecteur USB laissé déconnecté pour indiquer que le microcontrôleur est un périphérique (\href{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}).
-\end{itemize}
-
-Ajout d'une résistance de \SI{0}{\ohm} entre VBUS et le reste du circuit. Cela permettra de s'assurer que l'on a bien \SI{5}{\volt} avant de connecter le reste du circuit.
-
-\subsection{Convertisseur numérique-analogique}
-
-Pour réaliser un DAC, nous utilisons un signal PWM suivi d'un filtre passe-bas.
-
-\subsubsection{PWM}
-
-Utilisation du timer 1 car il a une taille de 16 bits. Cela permettra d'avoir plus de liberté qu'un compteur sur 8 bits. La sortie du PWM sera donc le OC1A (broche 29).
-
-\subsubsection{Filtre passe-bas}
-
-La fréquence de coupure d'un filtre passe-bas est donnée par $\fc = \frac{1}{2 \pi R C}$. En prenant les valeurs des composants les plus utilisés, c'est-à-dire $C = \SI{10}{\micro\farad}$ et $R = \SI{5}{\kilo\ohm}$, on obtient $\fc = \SI{3.18}{\hertz}$. Ainsi, en générant un signal PWM d'au moins \SI{1}{\kilo\hertz}, le signal devrait être filtré correctement et seule la composante continue sera conservée. La fréquence du PWM peut être augmentée pour réduire l'oscillation de la tension en sortie du filtre (voir avec les simulations).
-
-\subsection{Résonateur}
-
-Connexion de l'oscillateur entre XTAL1 et XTAL2 comme indiqué sur la figure 6-2 de la documentation de l'ATMEGA32U4.
-
-\subsubsection{Varicap}
-
-Afin de modifier la fréquence de résonance de l'oscillateur à quartz, on utilise une Varicap pour modifier la valeur des capacités de pied C1 et C2.
-
-\subsubsection{T de polarisation}
-
-La polarisation de la Varicap ne doit pas influencer le résonateur et le signal de l'oscillateur ne doit pas perturber le circuit de polarisation de la Varicap. Pour cela, on utilise un T de polarisation.
-
-La capacité du T de polarisation notée \CT\ ne doit pas influencer la valeur des capacités de pied. Ainsi, on doit avoir $\XCT \ll \XCosci \Leftrightarrow \frac{1}{\CT \omega} \ll \frac{1}{\Cosci \omega} \Leftrightarrow \CT \gg \Cosci$.
-
-\Cosci\ dépendra du résonateur choisi mais est de l'ordre de \SI{20}{\pico\farad	}. Ainsi, on peut choisir $\CT = \SI{1}{\micro\farad}$.
-
-Pour la bobine du T de polarisation, à \SI{16}{\mega\hertz}, il faut que $\XLT \gg \XCT \Leftrightarrow 2 \pi f \LT \gg \frac{1}{2 \pi f \CT} \Leftrightarrow \LT \gg \frac{1}{4 \pi f^2 \CT^2}$, avec $f$ la fréquence en \si{\hertz}. On choisit donc $\LT = \SI{10}{\micro\henry}$.
-
-Pour vérifier, à très basse fréquence, on a bien $\XLT \to 0$ et $\XCT \to \infty$. À \SI{16}{\mega\hertz}, on a $\XLT \approx \SI{1005}{\ohm}$ et $\XCT \approx \SI{10}{\milli\ohm}$.
-
-\subsubsection{Suiveur}
-
-Afin de s'assurer que la tension de polarisation de la diode est imposée par le DAC, on place un amplificateur monté en suiveur entre la sortie du filtre passe-bas et le T de polarisation de la Varicap (du côté de la bobine). Le suiveur est un rail-to-rail afin de pouvoir exploiter la plage de valeur complète de 0 à \SI{5}{\volt}.
-
-\subsection{Autres}
-
-\subsubsection{UCAP}
-
-La documentation du microcontrôleur (partie 2.2.12) indique de connecter UCAP à la masse via un condensateur de \SI{1}{\micro\farad}.
-
-\subsubsection{AREF}
-
-Étant donné que le projet ne nécessite pas de conversion analogique-numérique, l'ADC ne sera pas utilisé et AREF (broche 42) peut être laissée déconnectée.
-
-\subsection{Points de test}
-
-Afin de vérifier que le circuit fonctionne comme prévu, nous plaçons des points de test qui permettront de visualiser la tension à ces points.
-
-La résistance de \SI{0}{\ohm} fait office de point de tests pour l'alimentation. La résistance de \SI{0}{\ohm} sera placée une fois que l'on aura vérifié qu'un potentiel de \SI{5}{\volt} est bien présent à cet endroit.
-
-Nous ajoutons 3 points de test, un à la sortie PWM, un à la sortie du filtre passe-bas, et un à la sortie du suiveur. Ainsi, cela nous permettra de vérifier que le signal PWM est correct, que le signal est ensuite bien filtré, et enfin que l'amplificateur suiveur fonctionne.
-
-Nous choisissons de ne pas mettre de point de test vers le résonateur pour ne pas ajouter de bruit au signal.
+Enfin, nous ajoutons des points de tests afin de pouvoir vérifier le fonctionnement du système lors de la conception. Nous choisissons cependant de ne pas en mettre dans le circuit du résonateur afin de ne pas le perturber.
 
 \section{Choix des composants}
+
 \subsection{Choix des composants principaux}
 
 \textbf{Microcontrôleur~:} L’Atmega32U4 a été sélectionné pour ses timers 16 bits, nécessaires à l’input capture pour mesurer précisément la fréquence de l’oscillateur, et sa capacité à générer une PWM 10 bits pour le signal de commande. Son boîtier TQFP-44 (SMD) est compatible avec un montage en surface et une soudure manuelle, et il est disponible chez Farnell (par exemple, référence 1748525, prix unitaire d’environ 5,250~€). \\
@@ -239,6 +178,9 @@ Après avoir sélectionné tous les composants, nous avons généré la nomencla
 \renewcommand{\refname}{}
 \vspace{-1cm}
 \begin{thebibliography}{}
+	\bibitem{Documentation ATMEGA32U4}
+		Documentation de l'ATMEGA32U4 : \\ \href{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr-atmega16u4-32u4_datasheet.pdf}{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr- \\ atmega16u4-32u4\_datasheet.pdf}
+
 	\bibitem{Lien BOM}
 		Fichier BOM format .csv à télecharger : \url{}
 		
@@ -255,6 +197,13 @@ Après avoir sélectionné tous les composants, nous avons généré la nomencla
 \end{center}
 \vfill
 \newpage
+
+\begin{sidewaysfigure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{Ressources/Schemas/Schema_electrique.png}
+	\caption{Schéma électrique du système.}
+	\label{Schéma - Schéma électrique}
+\end{sidewaysfigure}
 
 \begin{figure}[h!]
 	\centering
