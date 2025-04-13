@@ -110,7 +110,7 @@ Le port USB est simplement connecté comme indiqué dans le documentation du mic
 
 \paragraph{Points de test}
 
-Enfin, nous ajoutons des points de tests afin de pouvoir vérifier le fonctionnement du système lors de la conception. Nous choisissons cependant de ne pas en mettre dans le circuit du résonateur afin de ne pas le perturber.
+Enfin, nous ajoutons des points de tests afin de pouvoir vérifier le fonctionnement du système lors de la conception du programme du microcontrôleur. Nous choisissons cependant de ne pas en mettre dans le circuit du résonateur afin de ne pas le perturber.
 
 \section{Choix des composants}
 
@@ -291,6 +291,49 @@ On appliquera la même procédure pour d'autres valeurs de \(R\) et \(C\), comme
 
 On remarque alors que, selon nos observations, les meilleurs choix sont \(R = 5.1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\), ce qui représente le meilleur compromis entre temps de réponse et voltage.
 
+\section{Programmation}
+
+Une fois le circuit physique réalisé, il ne reste qu'à programmer le microcontrôleur afin que le système réalise ce qu'on attend de lui. Nous disposons d'un circuit quasiment complet afin qu'une partie du groupe puisse commencer la programmation pendant que l'autre partie assemble le PCB.
+
+% ??? Mettre le lien vers le dépôt et le rendre publique
+Tous les codes sont disponibles sur le dépôt Github.
+
+\subsection{Transfert du programme}
+
+Dans un premier temps, nous souhaitons démontrer notre capacité à programmer le microcontrôleur. En effet, il est vierge et nous ne pouvons pas utiliser avrdude comme nous le faisions pendant le cours de microcontrôleur cette année.
+
+\paragraph{Code}
+
+Le code (fichier Hello\_world) est simplement composé de la déclaration d'une LED en sortie (PORTF1), puis de sa commutation toutes les \SI{0.5}{\second} dans une boucle infinie. À noter que nous utilisons la bibliothèque LUFA car ses fonctions d'initialisation permettent d'indiquer au microcontrôleur d'utiliser l'oscillateur externe de \SI{16}{\mega\hertz} et non celui de \SI{1}{\mega\hertz} intégré.
+
+Nous ajoutons également la possibilité de communiquer par USB pour tester la bibliothèque LUFA, mais nous commentons cette partie du code le temps de réaliser les mesures de temps sur la LED qui clignote. En effet, la communication USB prend du temps et fausse les durées, notamment lorsque le port USB n'est pas sondé par l'ordinateur.
+
+\paragraph{Makefile}
+
+Nous réutilisons un Makefile que nous avons utilisé cette année en cours et nous l'adaptons à notre programme.
+
+Le plus gros changement se trouve dans le transfert du programme. Nous utilisons «~dfu-programmer~» pour cela. Nous réalisons donc le Makefile qui permet d'exécuter les commandes suivantes pour transférer le programme, comme nous l'avait indiqué M. FRIEDT lors des cours de préparation du projet : \nopagebreak
+\begin{itemize}
+	\item dfu-programmer atmega32u4 erase
+	\item dfu-programmer atmega32u4 Hello\_world.hex
+	\item dfu-programmer atmega32u4 reset
+\end{itemize}
+
+\paragraph{Test}
+
+Nous testons le programme avec son Makefile et on observe que la LED correspondant au port F1 clignote bien au rythme de \SI{1}{\hertz}. De plus, le message «~Hello world~» s'affiche bien dans la console lorsque nous utilisons le logiciel minicom.
+
+\bigskip
+
+Nous remercions M. FRIEDT qui nous a indiqué la nécessité d'inclure les fonctions d'initialisation de la bibliothèque LUFA afin que le microcontrôleur utilise l'horloge de \SI{16}{\mega\hertz}. En effet, lors de nos premiers tests, les délais étaient incorrects car nous avons indiqué que la fréquence est de \SI{16}{\mega\hertz} dans les programmes (notamment pour la fonction \_delay\_ms) alors qu'elle était en réalité de \SI{1}{\mega\hertz}.
+
+Maintenant que nous sommes capables de programmer le microcontrôleur, nous pouvons passer à la programmation de fonctionnalités utiles pour le projet.
+
+\subsection{PWM}
+
+\subsection{ICP}
+
+\subsection{Régulation}
 
 \section{Conclusion}
 
