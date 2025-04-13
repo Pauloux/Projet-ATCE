@@ -1,50 +1,49 @@
 \documentclass[12pt, a4paper]{article}
 
-\usepackage[utf8]{inputenc} %Pour l'encodage en utf-8
-\usepackage[T1]{fontenc} %Pour les accents
-\usepackage[french]{babel} %Pour les langues
+\usepackage[utf8]{inputenc} % Pour l'encodage en utf-8
+\usepackage[T1]{fontenc} % Pour les accents
+\usepackage[french]{babel} % Pour les langues
 
-\usepackage{siunitx} %Pour les unités
-\usepackage{fancyhdr} %Pour les entêtes et bas de page
-\usepackage{graphicx} %Pour les figures
-\usepackage{mathtools} %Pour les maths
-\usepackage[margin=2.5cm]{geometry} %Pour les marges de la page
-\usepackage{hyperref} %Pour les liens et les métadonnées
-\usepackage{rotating}
+\usepackage{siunitx} % Pour les unités
+\usepackage{fancyhdr} % Pour les entêtes et bas de page
+\usepackage{graphicx} % Pour les figures
+\usepackage{mathtools} % Pour les maths
+\usepackage[margin=2.5cm]{geometry} % Pour les marges de la page
+\usepackage{hyperref} % Pour les liens et les métadonnées
+\usepackage{rotating} % Pour les figures penchées
 
 \hypersetup{
-	colorlinks=true,
-	linkcolor=blue,
-	citecolor=blue,
-	urlcolor=blue,
-	pdfauthor={Maxime BELLAUD, Dalina CHABANE, Khalil FALAH, Paul ROUSSEAU},
-	pdftitle={ATCE - Compte rendu}
-} %Pour modifier la couleur des liens
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue,
+    pdfauthor={Maxime BELLAUD, Dalina CHABANE, Khalil FALAH, Paul ROUSSEAU},
+    pdftitle={ATCE - Compte rendu}
+} % Pour modifier la couleur des liens
 
-\allowdisplaybreaks %Pour avoir une suite d'équations sur plusieurs pages
+\allowdisplaybreaks % Pour avoir une suite d'équations sur plusieurs pages
 
-%Configuration du style de la page
+% Configuration du style de la page
 \pagestyle{fancy}
 \setlength{\headheight}{14.5pt}
 \lhead{ATCE}
 \rhead{Compte rendu}
 
+% Commandes personnalisées
+\newcommand{\Vcc}{\ensuremath{V_{\text{CC}}}}
+\newcommand{\GND}{\ensuremath{\text{GND}}}
+\newcommand{\HWB}{\ensuremath{\overline{\text{HWB}}}}
 \newcommand{\fc}{\ensuremath{f_c}}
-
 \newcommand{\LT}{\ensuremath{L_T}}
-
 \newcommand{\CT}{\ensuremath{C_T}}
 \newcommand{\Cosci}{\ensuremath{C_{\text{osci}}}}
-
 \newcommand{\XLT}{\ensuremath{X_{LT}}}
 \newcommand{\XCT}{\ensuremath{X_{CT}}}
 \newcommand{\XCosci}{\ensuremath{X_{C \text{osci}}}}
 
-\title{ATCE \\
-Asservissement numérique d'un oscillateur à quartz}
+\title{ATCE \\ Asservissement numérique d'un oscillateur à quartz}
 \author{Maxime BELLAUD, Dalina CHABANE,\\ Khalil FALAH, Paul ROUSSEAU}
-\date{L3 - S6 - 2025 \\
-Semaine du 7 au 11 avril 2025}
+\date{L3 - S6 - 2025 \\ Semaine du 7 au 11 avril 2025}
 
 \begin{document}
 
@@ -59,7 +58,7 @@ Semaine du 7 au 11 avril 2025}
 
 L'objectif de ce projet est de réguler la fréquence d'un oscillateur à quartz à l'aide d'un microcontrôleur. Autrement dit, un oscillateur à quartz est sensible à son environnement extérieur, notamment la température, et notre objectif est de faire en sorte que la fréquence de l'oscillateur reste stable malgré ces perturbations.
 
- L'intérêt pour nous est pédagogique car nous réaliserons toutes les étapes pour réaliser ce projet, c'est-à-dire créer le schéma, router le PCB, choisir les composants, souder le circuit, programmer le microcontrôleur, etc. Ce projet nous pousse donc à mettre en œuvre tout ce que nous avons appris pendant nos trois ans de licence, aussi bien en électronique analogique et numérique qu'en automatique.
+L'intérêt pour nous est pédagogique car nous réaliserons toutes les étapes pour réaliser ce projet, c'est-à-dire créer le schéma, router le PCB, choisir les composants, souder le circuit, programmer le microcontrôleur, etc. Ce projet nous pousse donc à mettre en œuvre tout ce que nous avons appris pendant nos trois ans de licence, aussi bien en électronique analogique et numérique qu'en automatique.
 
 Ce projet se déroule pendant le dernier semestre de notre licence. Nous réalisons la partie théorique pendant le semestre à l'aide de quelques séances pour nous guider. La réalisation pratique a ensuite lieu pendant une semaine dédiée à ce projet.
 
@@ -69,9 +68,51 @@ Les logiciels que nous utiliserons sont pour la plupart gratuits et libres. Pour
 
 Dans un premier temps, nous présenterons comment nous avons conçu le circuit, simulé, puis routé le PCB. Ensuite se trouvera l'estimation du prix des composants et du PCB en fonction des volumes. Après, nous montrerons comment nous avons assemblé le PCB et imprimé par méthode additive une boîte pour celui-ci. Nous aborderons ensuite la programmation du microcontrôleur avant de passer aux tests et à l'évaluation des performances du système.
 
-\section{Schéma du circuit}
+\section{Schéma électrique}
 
-% Ceci est un (très) brouillon
+Dans un premier temps, nous réalisons le schéma électrique avec le logiciel KiCAD. Il est représenté sur la figure \ref{Schéma - Schéma électrique} en annexe. On peut diviser le schéma en plusieurs sous-circuits : le filtre passe-bas, le suiveur, le résonateur et le port USB. Avant de passer à l'explication du schéma, notons que nous avons créé le composant du microcontrôleur sur KiCAD afin de voir clairement toutes ses broches.
+
+\paragraph{Alimentation et boutons}
+
+Nous commençons par alimenter les broches du microcontrôleur avec \Vcc\ et \GND. De plus, nous ajoutons les boutons RESET et \HWB. Un circuit de pull-up est intégré dans le microcontrôleur pour RESET mais pas pour \HWB\ donc nous en réalisons un avec une résistance de \SI{5}{\kilo\ohm}.
+
+\paragraph{Capacités de découplage}
+
+Pour calculer les valeurs des capacités de découplage, nous utilisons la formule $C = \frac{i \times \Delta t}{\Delta u}$. Nous identifions dans la documentation \cite{Documentation ATMEGA32U4} une consommation d'environ \SI{13}{\milli\ampere}\footnote{Figure 30-4}. De plus, à \SI{16}{\mega\hertz} et en choisissant $\Delta u = \SI{0.1}{\volt}$, on obtient $C = \SI{8.125}{\micro\farad}$, ce que nous arrondissons à $\boxed{C = \SI{10}{\micro\farad}}$.
+
+\paragraph{Entrées et sorties}
+
+Le signal \SI{1}{PPS} servant de référence de temps est connecté à la broche 32, ce qui permet d'utiliser la fonction «~input capture~» (ICP) du timer 3, offrant ainsi les avantages d'un compteur de 16 bits. La sortie PWM est quant à elle connectée à la broche 29 afin de profiter de la résolution de 16 bits du timer 1.
+
+\paragraph{Filtre}
+
+Le filtre passe-bas en sortie du signal PWM permet d'obtenir une tension continue proportionnelle au rapport de cycle (duty cycle) du PWM. Le suiveur permet ensuite que la suite du circuit n'influence pas cette tension continue qui doit rester la plus précise et stable possible.
+
+\paragraph{Résonateur}
+
+Le résonateur Y1 est connecté au broches XTAL1 et XTAL2 du microcontrôleur et on place les capacités de pieds C1 et C2. La Varicap (diode dont la capacité change en fonction de sa tension de polarisation) est placée en parallèle d'une capacité de pied, ce qui permet de faire varier la fréquence de résonance de Y1. Cependant, la tension de polarisation de la Varicap ne doit pas influencer le résonateur, et le résonateur ne doit pas influencer la polarisation de la Varicap. Nous utilisons pour cela un T de polarisation.
+
+\bigskip
+
+Pour le T de polarisation, on détermine les conditions suivantes : \nopagebreak
+\begin{align*}
+    \CT & \gg \Cosci \\
+    \LT & \gg \frac{1}{4 \pi f^2 \CT^2}
+\end{align*}
+
+\Cosci\ sont les capacités de pieds de l'oscillateur, qui sont de l'ordre de \SI{20}{\pico\farad}, donc nous choisissons $\boxed{\CT = \SI{1}{\micro\farad}}$. On en déduit alors $\boxed{\LT = \SI{10}{\micro\henry}}$.
+
+À très basse fréquence, c'est-à-dire en continu, on a $\XLT \to 0$ et $\XCT \to \infty$, ce qui confirme que la tension continue n'influence pas le résonateur. À \SI{16}{\mega\hertz}, on obtient $\XLT \approx \SI{1}{\kilo\ohm}$ et $\XCT \approx \SI{10}{\milli\ohm}$, ce qui indique que l'oscillateur «~voit~» bien la Varicap mais n'influence pas sa tension de polarisation continue car $\XCT \gg \XLT$.
+
+\paragraph{Port USB}
+
+Le port USB est simplement connecté comme indiqué dans le documentation du microcontrôleur \cite{Documentation ATMEGA32U4}. La broche ID est laissée déconnectée car cela a peu d'importance pour nous. Enfin, la résistance de \SI{0}{\ohm} nous permet de tester que l'alimentation de l'USB est correcte avant de connecter le reste du circuit lors de l'assemblage.
+
+\paragraph{Points de test}
+
+Enfin, nous ajoutons des points de tests afin de pouvoir vérifier le fonctionnement du système lors de la conception. Nous choisissons cependant de ne pas en mettre dans le circuit du résonateur afin de ne pas le perturber.
+
+\section{Schéma du circuit}
 
 Dans un premier temps, nous réalisons le schéma du circuit. L'objectif est de déterminer quels composants choisir et comment les connecter entre eux.
 
@@ -83,10 +124,10 @@ La documentation de l'ATMEGA32U4 peut se trouver à l'adresse suivante : \newlin
 \subsubsection{Broches}
 
 \begin{itemize}
-	\item VCC (alimentation du microcontrôleur) : broches 14, 24, 34 et 44
-	\item GND (masse de l'alimentation) : broches 15, 23, 35 et 43
-	\item UVCC (alimentation du port USB) : broche 2
-	\item UGND (masse du port USB) : broche 5
+    \item VCC (alimentation du microcontrôleur) : broches 14, 24, 34 et 44
+    \item GND (masse de l'alimentation) : broches 15, 23, 35 et 43
+    \item UVCC (alimentation du port USB) : broche 2
+    \item UGND (masse du port USB) : broche 5
 \end{itemize}
 
 \subsubsection{Découplage}
@@ -116,10 +157,10 @@ Le signal GPS générera un signal d'une impulsion par seconde (1PPS). Il faudra
 Connecteur de type mini-USB pour pouvoir utiliser le même câble que la Olimexino.
 
 \begin{itemize}
-	\item VBUS du microcontrôleur (broche 7) connecté au VBUS du connecteur USB. C'est l'alimentation \SI{5}{\volt}.
-	\item D+ et D- du microcontrôleur (broches 3 et 4) connectées au D+ et D- du connecteur USB. C'est une paire différentielle permettant de transmettre des données. Des résistances de \SI{22}{\ohm} sont placées entre les D+ et D- du microcontrôleur et du connecteur USB (partie 2.2.8 et 2.2.9 de la documentation de l'ATMEGA32U4).
-	\item Le blindage (shield) est connecté à la masse.
-	\item ID du connecteur USB laissé déconnecté pour indiquer que le microcontrôleur est un périphérique (\href{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}).
+    \item VBUS du microcontrôleur (broche 7) connecté au VBUS du connecteur USB. C'est l'alimentation \SI{5}{\volt}.
+    \item D+ et D- du microcontrôleur (broches 3 et 4) connectées au D+ et D- du connecteur USB. C'est une paire différentielle permettant de transmettre des données. Des résistances de \SI{22}{\ohm} sont placées entre les D+ et D- du microcontrôleur et du connecteur USB (partie 2.2.8 et 2.2.9 de la documentation de l'ATMEGA32U4).
+    \item Le blindage (shield) est connecté à la masse.
+    \item ID du connecteur USB laissé déconnecté pour indiquer que le microcontrôleur est un périphérique (\href{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}).
 \end{itemize}
 
 Ajout d'une résistance de \SI{0}{\ohm} entre VBUS et le reste du circuit. Cela permettra de s'assurer que l'on a bien \SI{5}{\volt} avant de connecter le reste du circuit.
@@ -150,7 +191,7 @@ La polarisation de la Varicap ne doit pas influencer le résonateur et le signal
 
 La capacité du T de polarisation notée \CT\ ne doit pas influencer la valeur des capacités de pied. Ainsi, on doit avoir $\XCT \ll \XCosci \Leftrightarrow \frac{1}{\CT \omega} \ll \frac{1}{\Cosci \omega} \Leftrightarrow \CT \gg \Cosci$.
 
-\Cosci\ dépendra du résonateur choisi mais est de l'ordre de \SI{20}{\pico\farad	}. Ainsi, on peut choisir $\CT = \SI{1}{\micro\farad}$.
+\Cosci\ dépendra du résonateur choisi mais est de l'ordre de \SI{20}{\pico\farad}. Ainsi, on peut choisir $\CT = \SI{1}{\micro\farad}$.
 
 Pour la bobine du T de polarisation, à \SI{16}{\mega\hertz}, il faut que $\XLT \gg \XCT \Leftrightarrow 2 \pi f \LT \gg \frac{1}{2 \pi f \CT} \Leftrightarrow \LT \gg \frac{1}{4 \pi f^2 \CT^2}$, avec $f$ la fréquence en \si{\hertz}. On choisit donc $\LT = \SI{10}{\micro\henry}$.
 
@@ -181,28 +222,28 @@ Nous ajoutons 3 points de test, un à la sortie PWM, un à la sortie du filtre p
 Nous choisissons de ne pas mettre de point de test vers le résonateur pour ne pas ajouter de bruit au signal.
 
 \section{Choix des composants}
+
 \subsection{Choix des composants principaux}
 
-\textbf{Microcontrôleur~:} L’Atmega32U4 a été sélectionné pour ses timers 16 bits, nécessaires à l’input capture pour mesurer précisément la fréquence de l’oscillateur, et sa capacité à générer une PWM 10 bits pour le signal de commande. Son boîtier TQFP-44 (SMD) est compatible avec un montage en surface et une soudure manuelle, et il est disponible chez Farnell (par exemple, référence 1748525, prix unitaire d’environ 5,250~€).
+\textbf{Microcontrôleur~:} L’Atmega32U4 a été sélectionné pour ses timers 16 bits, nécessaires à l’input capture pour mesurer précisément la fréquence de l’oscillateur, et sa capacité à générer une PWM 10 bits pour le signal de commande. Son boîtier TQFP-44 (SMD) est compatible avec un montage en surface et une soudure manuelle, et il est disponible chez Farnell (par exemple, référence 1748525, prix unitaire d’environ 5,250~€). \\
 
-\textbf{Connecteur USB~:} Un connecteur USB mini-B horizontal (référence \texttt{USB\allowbreak\_OTG\allowbreak\_SMD\allowbreak\_xxx}) a été choisi pour son faible encombrement et sa robustesse mécanique. Ce modèle SMD facilite le soudage et l’alignement sur la carte, et est largement disponible (par exemple, Molex sur Farnell, référence 3500674, environ 1,00~€). 
+\textbf{Connecteur USB~:} Un connecteur USB mini-B horizontal (référence \texttt{USB\_OTG\_SMD\_xxx} ) a été choisi pour son faible encombrement et sa robustesse mécanique. Ce modèle SMD facilite le soudage et l’alignement sur la carte, et est largement disponible (par exemple, Molex sur Farnell, référence 3500674, environ 1,00~€). \\
 
-\textbf{Résonateur à quartz~:} Un quartz SMD Abracon ABM3 à 16~MHz (5,0$\times$3,2~mm, empreinte \texttt{Crystal\_SMD\_Abracon\_ABM3}) a été retenu pour sa précision, son faible encombrement, et sa compatibilité avec l’asservissement GPS. Il est égelement disponible chez Farnell à 0,258~€.
+\textbf{Résonateur à quartz~:} Un quartz SMD Abracon ABM3 à 16~MHz (5,0$\times$3,2~mm, empreinte \texttt{Crystal\_SMD\_Abracon\_ABM3}) a été retenu pour sa précision, son faible encombrement, et sa compatibilité avec l’asservissement GPS. Il est également disponible chez Farnell à 0,258~€. \\
 
-\textbf{Varicap~:} La diode varicap BB833 a été remplacée par la BB857, plus disponible, avec une plage de capacité (5~pF à 10~pF) adaptée à la correction de la fréquence, une tension inverse compatible (jusqu’à 5~V), et un boîtier SMD 0805 (2012 Metric) facile à souder. Elle est disponible chez Farnell (référence 2725709, environ 0,172~€). 
+\textbf{Varicap~:} La diode varicap BB833 a été remplacée par la BB857, plus disponible, avec une plage de capacité (5~pF à 10~pF) adaptée à la correction de la fréquence, une tension inverse compatible (jusqu’à 5~V), et un boîtier SMD 0805 (2012 Metric) facile à souder. Elle est disponible chez Farnell (référence 2725709, environ 0,172~€). \\
 
 \textbf{Boîtiers des composants passifs~:} Les boîtiers SMD 0805 ont été privilégiés pour les résistances et condensateurs (par exemple, R5 à 5~k$\Omega$, C5 à 10~$\mu$F), offrant une taille réduite et une densité élevée sur le PCB, tout en restant maniables pour une soudure manuelle. Le format 1206 a été utilisé pour des composants nécessitant une meilleure dissipation de puissance (par exemple, R1 à 0~$\Omega$). Ces formats standards garantissent une disponibilité chez les fournisseurs comme Farnell.
 
-
 \subsection{Processus de sélection des composants}
+
 Pour chaque composant, nous avons suivi une méthodologie spécifique afin de garantir leur compatibilité avec notre design et nos contraintes de fabrication~:
 
 \begin{description}
-\item[Fixation de la taille des boîtiers et des empreintes~:] 
-Nous avons défini des boîtiers SMD (principalement 0805, avec quelques 1206 pour des besoins spécifiques) pour tous les composants passifs, car ils sont adaptés à un montage en surface et à une soudure manuelle. Les empreintes correspondantes ont été choisies dans la bibliothèque KiCad (par exemple, \texttt{Resistor\allowbreak\_SMD:R\allowbreak\_0805\allowbreak\_2012Metric} pour une résistance 0805, ou \texttt{Capacitor\allowbreak\_SMD:C\allowbreak\_0805\allowbreak\_2012Metric} pour un condensateur 0805). Pour les composants plus complexes comme le quartz ou la varicap, des empreintes spécifiques ont été sélectionnées (par exemple, \texttt{Crystal\allowbreak\_SMD\allowbreak\_Abracon\allowbreak\_ABM3} pour le quartz). 
-\medskip
+    \item[Fixation de la taille des boîtiers et des empreintes~:] 
+    Nous avons défini des boîtiers SMD (principalement 0805, avec quelques 1206 pour des besoins spécifiques) pour tous les composants passifs, car ils sont adaptés à un montage en surface et à une soudure manuelle. Les empreintes correspondantes ont été choisies dans la bibliothèque KiCad (par exemple, \texttt{Resistor\_SMD:R\_0805\_2012Metric} pour une résistance 0805, ou \texttt{Capacitor\_SMD:C\_0805\_2012Metric} pour un condensateur 0805). Pour les composants plus complexes comme le quartz ou la varicap, des empreintes spécifiques ont été sélectionnées (par exemple, \texttt{Crystal\_SMD\_Abracon\_ABM3} pour le quartz). \\
 
-\item[Sélection des composants sur Farnell~:] 
+    \item[Sélection des composants sur Farnell~:] 
     Les composants ont été choisis sur Farnell en fonction de plusieurs critères~:
     \begin{itemize}
         \item \textbf{Valeur électrique~:} Par exemple, un condensateur de 10~$\mu$F pour le découplage ou une résistance de 5~k$\Omega$ pour le filtre RC.
@@ -210,13 +251,13 @@ Nous avons défini des boîtiers SMD (principalement 0805, avec quelques 1206 po
         \item \textbf{Dimensions et boîtier~:} Les dimensions ont été vérifiées pour correspondre aux empreintes KiCad (par exemple, un boîtier 0805 mesure 2,0$\times$1,2~mm).
         \item \textbf{Prix unitaire et disponibilité~:} Les prix unitaires ont été comparés pour optimiser les coûts. Par exemple, pour un condensateur de 1~$\mu$F en boîtier 0805, nous avons comparé plusieurs références sur Farnell. La référence 4166923 a été retenue, avec un prix unitaire de 0,121~€, une tolérance de $\pm$5~\%, et une disponibilité en stock suffisante pour notre projet.
     \end{itemize}
-    \medskip
 
     \item[Exemple de sélection~:] 
     Prenons l’exemple du condensateur C5 (10~$\mu$F) utilisé dans le filtre RC avec R5. Nous avons d’abord fixé un boîtier 0805 pour ce condensateur, en raison de sa taille compacte et de sa compatibilité avec une soudure manuelle. Dans KiCad, l’empreinte \texttt{Capacitor\_SMD:C\_0805\_2012Metric} a été assignée. Sur Farnell, nous avons recherché des condensateurs SMD de 10~$\mu$F en boîtier 0805. Parmi les options, la référence 2470435 a été choisie~: elle offre une tolérance de $\pm$10~\%, une tension nominale de 16~V (supérieure à notre alimentation de 5~V), un prix unitaire de 0,118~€, et une disponibilité immédiate (plus de 10~000 unités en stock). Une alternative, la référence 2906022, était légèrement plus chère (1.180~€) pour des caractéristiques similaires, donc nous avons privilégié l'option de la réference 2581105 à 1.230~€.
 \end{description}
 
 \subsection{Liste des composants (BOM)}
+
 Après avoir sélectionné tous les composants, nous avons généré la nomenclature (BOM) dans KiCad pour regrouper et organiser les informations, qu'on peut retrouver en annexe Figure \ref{BOM} ou à telecharger en \cite{Lien BOM}. Voici les étapes suivies~:
 
 \begin{itemize}
@@ -226,23 +267,35 @@ Après avoir sélectionné tous les composants, nous avons généré la nomencla
     \item \textbf{La disponibilité du composant :} Sur Farnell, il faut verifier la disponibilité de notre besoin ainsi que la possibilité d’en commander en quantité suffisante ont également été prises en compte.
 \end{itemize}
 
-
-
-
 \section{Routage du PCB}
 
+Le routage commence par la récupération des empreintes, suivie du placement des composants selon une logique. L'Atmega est placé en premier, au centre de la carte. Le quartz est positionné au plus proche pour ne pas perturber la stabilité de l’oscillateur. Les capacités de découplage sont rapprochées des broches d’alimentation, tandis que le connecteur USB est disposé de façon à optimiser le routage des paires différentielles.
+
+Une fois que ces éléments importants sont positionnés, on dessine le contour du PCB avec la couche (Edge.Cuts). Les autres composants sont ensuite répartis de manière à limiter la longueur des pistes et à éviter les croisements.
+
+Le routage suit le même ordre précis : le groupe avec le quartz, les capacités de découplage, USB, puis le reste du circuit. Les empreintes sont déplacées pour faciliter le routage de certaines pistes. Le plan \SI{5}{\volt} est relié directement sur la couche du haut, tandis que le plan de masse, situé sur la deuxième couche, est connecté à l’aide de vias traversants.
+
+On effectue le contrôle de conception (DRC) pour corriger toutes les erreurs ou avertissements, notamment ceux liés à la sérigraphie (F.SilkScreen) que l’on repositionne.
+
+Cette méthode est celle du PCB double couche. Puis pour la version monocouche le principal défi consiste à superposer les plans \SI{5}{\volt} et de masse sur une même couche, ce qui impose de déplacer certaines empreintes.
+
+Les paramètres du routage sont faits pour respecter la classe 4, mais l’empreinte du connecteur BNC impose des vias traversants de classe 6. En dernier, on ajoute des perçages aux coins du PCB pour permettre sa fixation dans un boîtier.
+
+% mettre photos PCB 1 et 2 couches en annexe
+
 \section{Simulation}
-Le schéma en Figure \ref{schsimul} réalisé pour la simulation, représente un oscillateur à quartz avec une fréquence ajustable par une varicap, divisé en trois sections principales. La première section génère une tension de commande via une source PWM (B1, fréquence 10~kHz, rapport cyclique 0,5) filtrée par un RC passe-bas (R5 = 5~k$\Omega$, C5 = 1~$\mu$F), produisant une tension continue au nœud \texttt{PWM\_filtered}. Cette tension est appliquée à un suiveur de tension (E1, modèle idéal, gain 1), dont la sortie (\texttt{Follower\_output}) commande la varicap. La deuxième section est l’oscillateur à quartz, modélisé par un circuit Butterworth-van Dyke \cite{Modéle Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF, R1 = 50~$\Omega$, C7 = 7~pF), avec des condensateurs de charge C9 (15~pF) et C8 (10~pF) pour satisfaire les conditions de Barkhausen. Une source AC (B2, 1~V) est ajoutée pour l’analyse en fréquence. La troisième section ajuste la fréquence via une varicap (C11 = 2~pF à 10~pF), connectée entre \texttt{XTAL2} et \texttt{Follower\_output}, permettant un réglage fin de la fréquence de résonance. 
+
+Le schéma en Figure \ref{schsimul} réalisé pour la simulation, représente un oscillateur à quartz avec une fréquence ajustable par une varicap, divisé en trois sections principales. La première section génère une tension de commande via une source PWM (B1, fréquence 10~kHz, rapport cyclique 0,5) filtrée par un RC passe-bas (R5 = 5~k$\Omega$, C5 = 1~$\mu$F), produisant une tension continue au nœud \texttt{PWM\_filtered}. Cette tension est appliquée à un suiveur de tension (E1, modèle idéal, gain 1), dont la sortie (\texttt{Follower\_output}) commande la varicap. La deuxième section est l’oscillateur à quartz, modélisé par un circuit Butterworth-van Dyke \cite{Modéle Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF, R1 = 50~$\Omega$, C7 = 7~pF), avec des condensateurs de charge C9 (15~pF) et C8 (10~pF) pour satisfaire les conditions de Barkhausen. Une source AC (B2, 1~V) est ajoutée pour l’analyse en fréquence. La troisième section ajuste la fréquence via une varicap (C11 = 2~pF à 10~pF), connectée entre \texttt{XTAL2} et \texttt{Follower\_output}, permettant un réglage fin de la fréquence de résonance.
 
 \subsection{Analyse des résultats de la simulation AC}
+
 L'analyse AC, réalisée sur une plage de fréquences de 15,9~MHz à 16,1~MHz, a permis d'identifier la fréquence de résonance du quartz à 16,017200~MHz pour un rapport cyclique de 0,5 (tension de commande moyenne de 2,5~V) et une capacité de la varicap (C8 et C11) fixée à 2~pF. En faisant varier la capacité de la varicap de 2~pF à 10~pF, nous avons observé un décalage de la fréquence : à 6~pF, la fréquence est de 16,012000~MHz, et à 10~pF, elle descend à 16,009200~MHz comme on peut le voir en Figure \ref{simulAC}. Cette variation de 8~pF (de 2~pF à 10~pF) entraîne un décalage total de 8~kHz (de 16,017200~MHz à 16,009200~MHz), soit environ 1~kHz par pF. Ces résultats confirment que la varicap permet un ajustement fin de la fréquence, avec une plage de réglage suffisante pour compenser les dérives de l’oscillateur (de 30 à 50~ppm, soit 480 à 800~Hz pour un quartz à 16~MHz) dans le cadre de l’asservissement GPS.
 
 \subsection{Fréquence de résonance de l’oscillateur}
+
 Une analyse AC sur une plage de 15,9~MHz à 16,1~MHz a été réalisée pour déterminer la fréquence de résonance de l’oscillateur à quartz. Le gain maximal, mesuré à 15~dB sur le nœud \texttt{V(XTAL2)}, est atteint à 16,009200~MHz, ce qui correspond à la fréquence de résonance. Cette fréquence est associée à une capacité de la varicap (C11) de 10~pF, comme confirmé par les simulations précédentes (2~pF à 16,017200~MHz, 6~pF à 16,012000~MHz, et 10~pF à 16,009200~MHz).
 
-En comparaison avec la théorie, la fréquence de résonance attendue, calculée à partir du modèle Butterworth-van Dyke en annexe \cite{Modéle Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF), est de $f_0 = \frac{1}{2\pi \sqrt{L2 \cdot C6}} \approx 16,009190$~MHz. L’écart entre la valeur mesurée (16,009200~MHz) et la valeur théorique (16,009190~MHz) est de 0,6~ppm, ce qui est négligeable et probablement dû aux capacités parasites et à la précision numérique de ngspice. Ces résultats valident la conception de l’oscillateur pour une utilisation dans l’asservissement GPS.
-
-
+En comparaison avec la théorie, la fréquence de résonance attendue, calculée à partir du modèle Butterworth-van Dyke en annexe \cite{Modéle Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF), is de $f_0 = \frac{1}{2\pi \sqrt{L2 \cdot C6}} \approx 16,009190$~MHz. L’écart entre la valeur mesurée (16,009200~MHz) et la valeur théorique (16,009190~MHz) est de 0,6~ppm, ce qui est négligeable et probablement dû aux capacités parasites et à la précision numérique de ngspice. Ces résultats valident la conception de l’oscillateur pour une utilisation dans l’asservissement GPS.
 
 \section{Estimation du coût}
 
@@ -255,15 +308,20 @@ En comparaison avec la théorie, la fréquence de résonance attendue, calculée
 \renewcommand{\refname}{}
 \vspace{-1cm}
 \begin{thebibliography}{}
-	\bibitem{Lien BOM}
-		\href{Images/BOM_PCB.csv}{Télécharger le fichier CSV}
-		
-	\bibitem{Technique de soudure de composants CMS}
-		Technique de soudure de composants CMS : \url{https://youtu.be/us5zLlp1aV0?si=Flcb0uajIgZAhLWc}
-		
-	\bibitem{Modéle Butterworth}
-		Modéle de circuit Butterworth-Van Dyke : \url{https://demonstrations.wolfram.com/ButterworthVanDykeCircuit}
-	
+    \bibitem{Documentation ATMEGA32U4}
+        Documentation de l'ATMEGA32U4 : \\ \href{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr-atmega16u4-32u4_datasheet.pdf}{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr-atmega16u4-32u4\_datasheet.pdf}
+
+    \bibitem{Lien BOM}
+        Fichier BOM format .csv à télecharger : \href{Images/BOM_PCB.csv}{Télécharger le fichier CSV}
+
+    \bibitem{Technique de soudure de composants CMS}
+        Technique de soudure de composants CMS : \url{https://youtu.be/us5zLlp1aV0?si=Flcb0uajIgZAhLWc}
+
+    \bibitem{Modéle Butterworth}
+        Modéle de circuit Butterworth-Van Dyke : \url{https://demonstrations.wolfram.com/ButterworthVanDykeCircuit}
+
+    \bibitem{USB OTG}
+        USB OTG broche ID et câble : \url{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}
 \end{thebibliography}
 
 \newpage
@@ -275,21 +333,26 @@ En comparaison avec la théorie, la fréquence de résonance attendue, calculée
 \vfill
 \newpage
 
+\begin{sidewaysfigure}[htb!]
+    \centering
+    \includegraphics[width=\textwidth]{Ressources/Schemas/Schema_electrique.png}
+    \caption{Schéma électrique du système.}
+    \label{Schéma - Schéma électrique}
+\end{sidewaysfigure}
 
-\begin{sidewaysfigure}
+\begin{sidewaysfigure}[h!]
     \centering
     \includegraphics[width=0.9\linewidth]{Images/BOM.png}
-    \caption{Fichier .csv généré depuis la BOM du schéma.}
+    \caption{Fichier .csv généré depuis la BOM du schéma}
     \label{BOM}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}
     \centering
     \includegraphics[width=0.9\linewidth]{Images/Schema_simulation.png}
-	\caption{Schéma de l’oscillateur à quartz avec réglage de fréquence par varicap.}
+    \caption{Schéma de l’oscillateur à quartz avec réglage de fréquence par varicap.}
     \label{schsimul}
 \end{sidewaysfigure}
-
 
 \begin{sidewaysfigure}
     \centering
