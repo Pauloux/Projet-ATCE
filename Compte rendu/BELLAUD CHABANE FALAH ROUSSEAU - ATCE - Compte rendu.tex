@@ -187,7 +187,7 @@ Les paramètres du routage sont faits pour respecter la classe 4, mais l’empre
 
 \section{Simulation}
 
-Le schéma en Figure \ref{schsimul} réalisé pour la simulation, représente un oscillateur à quartz avec une fréquence ajustable par une varicap, divisé en trois sections principales. La première section génère une tension de commande via une source PWM (B1, fréquence 10~kHz, rapport cyclique 0,5) filtrée par un RC passe-bas (R5 = 5~k$\Omega$, C5 = 1~$\mu$F), produisant une tension continue au nœud \texttt{PWM\_filtered}. Cette tension est appliquée à un suiveur de tension (E1, modèle idéal, gain 1), dont la sortie (\texttt{Follower\_output}) commande la varicap. La deuxième section est l’oscillateur à quartz, modélisé par un circuit Butterworth-van Dyke \cite{Modèle Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF, R1 = 50~$\Omega$, C7 = 7~pF), avec des condensateurs de charge C9 (15~pF) et C8 (10~pF) pour satisfaire les conditions de Barkhausen. Une source AC (B2, 1~V) est ajoutée pour l’analyse en fréquence. La troisième section ajuste la fréquence via une varicap (C11 = 2~pF à 10~pF), connectée entre \texttt{XTAL2} et \texttt{Follower\_output}, permettant un réglage fin de la fréquence de résonance.
+Le schéma en Figure \ref{schsimul} réalisé pour la simulation, représente un oscillateur à quartz avec une fréquence ajustable par une varicap, divisé en trois sections principales. La première section génère une tension de commande via une source PWM (B1, fréquence 10~kHz, rapport cyclique 0,5) filtrée par un RC passe-bas (R5 = 5~k$\Omega$, C5 = 1~$\mu$F), produisant une tension continue au nœud \texttt{PWM\_filtered}. Cette tension est appliquée à un suiveur de tension (E1, modèle idéal, gain 1), dont la sortie (\texttt{Follower\_output}) commande la varicap. La deuxième section est l’oscillateur à quartz, modélisé par un circuit Butterworth-van Dyke \cite{Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF, R1 = 50~$\Omega$, C7 = 7~pF), avec des condensateurs de charge C9 (15~pF) et C8 (10~pF) pour satisfaire les conditions de Barkhausen. Une source AC (B2, 1~V) est ajoutée pour l’analyse en fréquence. La troisième section ajuste la fréquence via une varicap (C11 = 2~pF à 10~pF), connectée entre \texttt{XTAL2} et \texttt{Follower\_output}, permettant un réglage fin de la fréquence de résonance.
 
 \subsection{Analyse des résultats de la simulation AC}
 
@@ -197,7 +197,37 @@ L'analyse AC, réalisée sur une plage de fréquences de 15,9~MHz à 16,1~MHz, a
 
 Une analyse AC sur une plage de 15,9~MHz à 16,1~MHz a été réalisée pour déterminer la fréquence de résonance de l’oscillateur à quartz. Le gain maximal, mesuré à 15~dB sur le nœud \texttt{V(XTAL2)}, est atteint à 16,009200~MHz, ce qui correspond à la fréquence de résonance. Cette fréquence est associée à une capacité de la varicap (C11) de 10~pF, comme confirmé par les simulations précédentes (2~pF à 16,017200~MHz, 6~pF à 16,012000~MHz, et 10~pF à 16,009200~MHz).
 
-En comparaison avec la théorie, la fréquence de résonance attendue, calculée à partir du modèle Butterworth-van Dyke en annexe \cite{Modèle Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF), is de $f_0 = \frac{1}{2\pi \sqrt{L2 \cdot C6}} \approx 16,009190$~MHz. L’écart entre la valeur mesurée (16,009200~MHz) et la valeur théorique (16,009190~MHz) est de 0,6~ppm, ce qui est négligeable et probablement dû aux capacités parasites et à la précision numérique de ngspice. Ces résultats valident la conception de l’oscillateur pour une utilisation dans l’asservissement GPS.
+En comparaison avec la théorie, la fréquence de résonance attendue, calculée à partir du modèle Butterworth-van Dyke en annexe \cite{Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF), is de $f_0 = \frac{1}{2\pi \sqrt{L2 \cdot C6}} \approx 16,009190$~MHz. L’écart entre la valeur mesurée (16,009200~MHz) et la valeur théorique (16,009190~MHz) est de 0,6~ppm, ce qui est négligeable et probablement dû aux capacités parasites et à la précision numérique de ngspice. Ces résultats valident la conception de l’oscillateur pour une utilisation dans l’asservissement GPS.
+
+\subsection{Simulation du circuit RC}
+
+Pour ce qui est de la simulation du circuit RC afin de déterminer les meilleurs choix pour la résistance et la capacité, on procèdera de la façon suivante :
+
+Exemple avec \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\). On simulera toujours avec une fréquence de \(7812\,\mathrm{Hz}\) et un rapport cyclique de 50\%. Grâce à notre simulation, on relève la constante de temps \(\tau\). Pour ce faire, on utilisera la méthode des 95\% de la valeur finale, puis par projection à partir de \(t = 0\) on observe et on relève, dans le cas de la figure en annexe (voir Figure~\ref{fig:tauR5C1}), \(\tau = 16,4\,\mathrm{ms}\). Cela paraît cohérent si l'on considère que \(\tau = RC = 5,1 \times 10^3 \times 1 \times 10^{-6}\) et que \(3\,\tau\) correspond à l'atteinte de 100\% de la réponse.
+
+Une fois \(\tau\) relevé, on relève également la différence de voltage lorsque la réponse se stabilise. Comme on peut le voir dans la figure en annexe (voir Figure~\ref{fig:voltageR5C1}), il suffit d'utiliser les curseurs pour relever environ \(24\,\mathrm{mV}\).
+
+On appliquera la même procédure pour d'autres valeurs de \(R\) et \(C\), comme présenté dans le tableau ci-dessous :
+
+\begin{center}
+\begin{tabular}{| m{3cm} | m{3cm} | m{3cm} | m{3cm} |}
+\hline
+\(R\) & \(C\) & \(\tau\) & \(\Delta V\) \\
+\hline
+\(5.1\,\mathrm{k}\Omega\) & \(0.1\,\mu\mathrm{F}\) & \(2.27\,\mathrm{ms}\) & \(286\,\mathrm{mV}\) \\
+\hline
+\(5.1\,\mathrm{k}\Omega\) & \(10\,\mu\mathrm{F}\) & \(150\,\mathrm{ms}\) & \(3.09\,\mathrm{mV}\) \\
+\hline
+\(3\,\mathrm{k}\Omega\) & \(0.1\,\mu\mathrm{F}\) & \(2.35\,\mathrm{ms}\) & \(312\,\mathrm{mV}\) \\
+\hline
+\(3\,\mathrm{k}\Omega\) & \(1\,\mu\mathrm{F}\) & \(16.4\,\mathrm{ms}\) & \(30.8\,\mathrm{mV}\) \\
+\hline
+\(3\,\mathrm{k}\Omega\) & \(10\,\mu\mathrm{F}\) & \(153\,\mathrm{ms}\) & \(3.09\,\mathrm{mV}\) \\
+\hline
+\end{tabular}
+\end{center}
+
+On remarque alors que, selon nos observations, les meilleurs choix sont \(R = 5.1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\), ce qui représente le meilleur compromis entre temps de réponse et voltage.
 
 \section{Estimation du coût}
 
@@ -261,35 +291,6 @@ D'après le site Eurocircuits (voir Figure~\ref{fig:prix}), pour un prototype de
 \noindent
 La matrice de prix montre clairement comment le coût varie en fonction du délai de fabrication et de la quantité commandée. Chaque case présente le prix unitaire ainsi que le montant total pour la commande. Par exemple, pour une commande d’un seul PCB, le tarif passe de 100,53~€ avec un délai de 2 jours à 40,99~€ dès que le délai atteint 3 jours, où il se stabilise. Pour une commande de 5 PCB, le même phénomène se produit avec une forte réduction du prix unitaire entre 2 et 3 jours, puis une stabilité dès 3 jours. En revanche, pour des commandes plus importantes comme 10, 15 ou 20 PCB, le prix unitaire continue de baisser jusqu’à atteindre un délai de fabrication de 5 jours, après quoi il se fixe. Cela montre qu’en choisissant un délai de fabrication légèrement plus long, on peut réduire significativement le coût unitaire, en particulier pour des commandes groupées. Ainsi, commander 5 PCB par exemple s'avère être une option intéressante, permettant de bénéficier d'un tarif avantageux tout en obtenant suffisamment d'exemplaires pour divers besoins (plusieurs test ou autre).
 
-\section{Simulation circuit RC}
-
-Pour ce qui est de la simulation du circuit RC afin de déterminer les meilleurs choix pour la résistance et la capacité, on procèdera de la façon suivante :
-
-Exemple avec \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\). On simulera toujours avec une fréquence de \(7812\,\mathrm{Hz}\) et un rapport cyclique de 50\%. Grâce à notre simulation, on relève la constante de temps \(\tau\). Pour ce faire, on utilisera la méthode des 95\% de la valeur finale, puis par projection à partir de \(t = 0\) on observe et on relève, dans le cas de la figure en annexe (voir Figure~\ref{fig:tauR5C1}), \(\tau = 16,4\,\mathrm{ms}\). Cela paraît cohérent si l'on considère que \(\tau = RC = 5,1 \times 10^3 \times 1 \times 10^{-6}\) et que \(3\,\tau\) correspond à l'atteinte de 100\% de la réponse.
-
-Une fois \(\tau\) relevé, on relève également la différence de voltage lorsque la réponse se stabilise. Comme on peut le voir dans la figure en annexe (voir Figure~\ref{fig:voltageR5C1}), il suffit d'utiliser les curseurs pour relever environ \(24\,\mathrm{mV}\).
-
-On appliquera la même procédure pour d'autres valeurs de \(R\) et \(C\), comme présenté dans le tableau ci-dessous :
-
-\begin{center}
-\begin{tabular}{| m{3cm} | m{3cm} | m{3cm} | m{3cm} |}
-\hline
-\(R\) & \(C\) & \(\tau\) & \(\Delta V\) \\
-\hline
-\(5.1\,\mathrm{k}\Omega\) & \(0.1\,\mu\mathrm{F}\) & \(2.27\,\mathrm{ms}\) & \(286\,\mathrm{mV}\) \\
-\hline
-\(5.1\,\mathrm{k}\Omega\) & \(10\,\mu\mathrm{F}\) & \(150\,\mathrm{ms}\) & \(3.09\,\mathrm{mV}\) \\
-\hline
-\(3\,\mathrm{k}\Omega\) & \(0.1\,\mu\mathrm{F}\) & \(2.35\,\mathrm{ms}\) & \(312\,\mathrm{mV}\) \\
-\hline
-\(3\,\mathrm{k}\Omega\) & \(1\,\mu\mathrm{F}\) & \(16.4\,\mathrm{ms}\) & \(30.8\,\mathrm{mV}\) \\
-\hline
-\(3\,\mathrm{k}\Omega\) & \(10\,\mu\mathrm{F}\) & \(153\,\mathrm{ms}\) & \(3.09\,\mathrm{mV}\) \\
-\hline
-\end{tabular}
-\end{center}
-
-On remarque alors que, selon nos observations, les meilleurs choix sont \(R = 5.1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\), ce qui représente le meilleur compromis entre temps de réponse et voltage.
 
 \section{Programmation}
 
@@ -393,11 +394,12 @@ Nous visualisons alors le signal en sortie du port D7 à l'oscilloscope à l'aid
     \bibitem{Lien BOM}
         Fichier BOM format .csv à télecharger : \href{Images/BOM_PCB.csv}{Télécharger le fichier CSV}
 
+    \bibitem{Butterworth}
+        Modèle de circuit Butterworth-Van Dyke : \\ \url{https://demonstrations.wolfram.com/ButterworthVanDykeCircuit}
+        
     \bibitem{Technique de soudure de composants CMS}
         Technique de soudure de composants CMS : \\ \url{https://youtu.be/us5zLlp1aV0?si=Flcb0uajIgZAhLWc}
 
-    \bibitem{Modèle Butterworth}
-        Modèle de circuit Butterworth-Van Dyke : \\ \url{https://demonstrations.wolfram.com/ButterworthVanDykeCircuit}
 
     \bibitem{USB OTG}
         USB OTG broche ID et câble : \\ \href{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}
@@ -411,27 +413,6 @@ Nous visualisons alors le signal en sortie du port D7 à l'oscilloscope à l'aid
 \end{center}
 \vfill
 \newpage
-
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=\linewidth]{Ressources/Images/Prix_PCB.png}
-    \caption{Interface du calculateur de coûts d'Eurocircuits.}
-    \label{fig:prix}
-\end{figure}
-
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=0.5\textwidth]{Ressources/Images/Simulation-Filtre-Tau.png}
-    \caption{Simulation de la constante de temps \(\tau\) pour \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\).}
-    \label{fig:tauR5C1}
-\end{figure}
-
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=0.5\textwidth]{Ressources/Images/Simulation-Filtre-Valeur_finale.png}
-    \caption{Mesure de la différence de voltage dans la réponse stabilisée du circuit RC.}
-    \label{fig:voltageR5C1}
-\end{figure}
 
 \begin{sidewaysfigure}[htb!]
     \centering
@@ -459,6 +440,27 @@ Nous visualisons alors le signal en sortie du port D7 à l'oscilloscope à l'aid
     \includegraphics[width=0.9\linewidth]{Ressources/Images/Simulation-Resonateur.png}
     \caption{Résultat de l’analyse AC de l’oscillateur à quartz dans KiCad/ngspice.}
     \label{simulAC}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}[htb!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{Ressources/Images/Prix_PCB.png}
+    \caption{Interface du calculateur de coûts d'Eurocircuits.}
+    \label{fig:prix}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}[htb!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Ressources/Images/Simulation-Filtre-Tau.png}
+    \caption{Simulation de la constante de temps \(\tau\) pour \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\).}
+    \label{fig:tauR5C1}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}[htb!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Ressources/Images/Simulation-Filtre-Valeur_finale.png}
+    \caption{Mesure de la différence de voltage dans la réponse stabilisée du circuit RC.}
+    \label{fig:voltageR5C1}
 \end{sidewaysfigure}
 
 \begin{figure}[htb!]
