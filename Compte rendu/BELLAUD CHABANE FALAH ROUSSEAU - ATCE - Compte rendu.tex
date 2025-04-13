@@ -310,7 +310,7 @@ Nous ajoutons également la possibilité de communiquer par USB pour tester la b
 
 \paragraph{Makefile}
 
-Nous réutilisons un Makefile que nous avons utilisé cette année en cours et nous l'adaptons à notre programme.
+Nous réutilisons un Makefile que nous avons utilisé cette année en cours et nous l'adaptons à notre programme. De plus, c'est ce Makefile qui sera utilisé pour tous les autres programmes réalisés dans ce projet.
 
 Le plus gros changement se trouve dans le transfert du programme. Nous utilisons «~dfu-programmer~» pour cela. Nous réalisons donc le Makefile qui permet d'exécuter les commandes suivantes pour transférer le programme, comme nous l'avait indiqué M. FRIEDT lors des cours de préparation du projet : \nopagebreak
 \begin{itemize}
@@ -330,6 +330,49 @@ Nous remercions M. FRIEDT qui nous a indiqué la nécessité d'inclure les fonct
 Maintenant que nous sommes capables de programmer le microcontrôleur, nous pouvons passer à la programmation de fonctionnalités utiles pour le projet.
 
 \subsection{PWM}
+
+Le microcontrôleur ATMEGA32U4 ne comporte par de convertisseur numérique-analogique (DAC). Ainsi, afin de pouvoir générer une tension continue dont on peut contrôler l'amplitude, nous utilisons un signal à rapport cyclique variable suivi d'un filtre passe-bas afin d'extraire la valeur moyenne de ce signal. Concrètement, nous voulons générer un signal créneau en pouvant modifier le temps passé à l'état haut par rapport au temps passé à l'état bas, ce qui permet de modifier la valeur moyenne.
+
+\paragraph{Identification du timer}
+
+Sur le schéma KiCAD fourni par nos enseignants, nous observons que le filtre passe-bas est connecté au port D7 du microcontrôleur, ce qui correspond à une sortie du timer 4 (OC4D). Nous devrons donc utiliser le timer 4, qui a la spécificité d'être sur 10 bits.
+
+\paragraph{Fonctionnement et registres}
+
+Un schéma représentant le fonctionnement du timer en mode PWM est représenté sur la figure \ref{Schéma - PWM} en annexe.
+
+Deux registres sont importants pour contrôler le signal : OCR4C permet de modifier la fréquence du signal et OCR4D permet de changer le rapport cyclique.
+
+OCR4C permet de changer la fréquence car il permet de contrôler jusqu'à quelle valeur le compteur va compter avant de redescendre. Ainsi, si OCR4C diminue, alors le compteur atteindra plus vite sa valeur maximale et fera des allers-retours plus vite. S'il fait des allers-retours plus vite alors la fréquence augmente.
+
+On observe sur le schéma que le port D7 change d'état lorsque la valeur du timer 4 est égale à la valeur de OCR4D. Plus précisément, PORTD7 passe à l'état bas lorsque cet événement se produit et que le compteur compte vers le haut, et PORTD7 passe à l'état haut lorsque cet événement se produit et que le compteur compte vers le bas. Ainsi, si OCR4D est proche de 0, alors le port D7 sera la plupart du temps à l'état bas. Au contraire, si OCR4D est proche de OCR4C, alors le port D7 sera la plupart du temps à l'état haut.
+
+En jouant sur les valeurs de OCR4D, on peut alors modifier le rapport cyclique du signal sans modifier sa fréquence (contrôlée par OCR4C). À noter que si OCR4D = 0, alors le signal est toujours à l'état bas, et si OCR4D = OCR4C, alors le signal est toujours à l'état haut.
+
+\paragraph{Utilisation en mode 10 bits}
+
+La spécificité du timer 4 est qu'il utilise 10 bits tandis que le microcontrôleur utilise des registres de 8 bits. Pour stocker des valeurs sur 10 bits, on utilise le registre TC4H. Pour enregistrer une valeur de 10 bits dans un registre (OCR4C pour l'exemple), il suffit alors d'assigner les 2 bits de poids forts dans le registre TC4H puis d'assigner les 8 bits de poids faibles dans le registre dont on veut assigner la valeur de 10 bits (ici OCR4C). Lorsque ce dernier registre est assigné (ici OCR4C), le microcontrôleur place les bits de poids forts stockés dans TC4H et les sauvegardes dans le registre voulu (ici OCR4C). L'ordre d'assignation des registres est donc important et il faut toujours commencer par assigner TC4H. 
+
+C'est un fonctionnement simple et astucieux même s'il peut être contre-intuitif, notamment car nous ne comprenons pas exactement où sont stockés les bits de poids forts une fois l'assignation réalisée.
+
+\paragraph{Valeurs des registres}
+
+Nous souhaitons pouvoir être le plus précis possible au niveau du rapport cyclique. De par le fonctionnement du système, OCR4D est forcément inférieur à OCR4C. Ainsi, pour avoir le plus de valeurs possibles pour OCR4D, alors OCR4C doit être le plus élevé possible, c'est-à-dire 1023.
+
+La fréquence du signal PWM est donné par : \nopagebreak
+\[f = \frac{\SI{16}{\mega\hertz}}{N \times 2 \times (1 + OCR4C)}\]
+
+En utilisant le plus petit prescaler, c'est-à-dire 1, cela nous donne une fréquence du signal de $\boxed{f = \SI{7812.5}{\hertz}}$.
+
+\paragraph{Fonctions}
+
+Pour contrôler le plus simplement possible le signal PWM, nous créons deux fonctions. La première sert à initialiser la fonction PWM tandis que la deuxième permet de changer le rapport cyclique du signal. Cette deuxième fonction prendre simplement un nombre entre 0 et 1023 et l'assigne au registre OCR4D.
+
+\paragraph{Test}
+
+Afin de tester la fonction qui permet de modifier le rapport cyclique, nous réalisons un algorithme qui le fait varier de 0 à \SI{100}{\percent} puis recommence de 0. De plus, le rapport cyclique reste à \SI{0}{\percent} et \SI{100}{\percent} quelques secondes afin de vérifier que les valeurs extrêmes se comportent comme attendu.
+
+Nous visualisons alors le signal en sortie du port D7 à l'oscilloscope à l'aide du point de test sur le PCB. Nous observons que le signal a bien une fréquence de \SI{7812.5}{\hertz} et que le rapport cyclique varie de \SI{0}{\percent} à \SI{100}{\percent}. De plus, on a bien une tension continue de \SI{0}{\volt} lorsque le rapport cyclique est de \SI{0}{\percent} et une tension continue de \SI{5}{\volt} lorsque le rapport cyclique est de \SI{100}{\percent}.
 
 \subsection{ICP}
 
@@ -417,5 +460,12 @@ Maintenant que nous sommes capables de programmer le microcontrôleur, nous pouv
     \caption{Résultat de l’analyse AC de l’oscillateur à quartz dans KiCad/ngspice.}
     \label{simulAC}
 \end{sidewaysfigure}
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{Ressources/Schemas/PWM.png}
+	\caption{Principe de fonctionnement du PWM et contrôle du rapport cyclique (duty cycle)}
+	\label{Schéma - PWM}
+\end{figure}
 
 \end{document}
