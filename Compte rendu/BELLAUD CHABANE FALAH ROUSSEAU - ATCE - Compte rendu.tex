@@ -112,115 +112,6 @@ Le port USB est simplement connecté comme indiqué dans le documentation du mic
 
 Enfin, nous ajoutons des points de tests afin de pouvoir vérifier le fonctionnement du système lors de la conception. Nous choisissons cependant de ne pas en mettre dans le circuit du résonateur afin de ne pas le perturber.
 
-\section{Schéma du circuit}
-
-Dans un premier temps, nous réalisons le schéma du circuit. L'objectif est de déterminer quels composants choisir et comment les connecter entre eux.
-
-La documentation de l'ATMEGA32U4 peut se trouver à l'adresse suivante : \newline \nopagebreak
-\href{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr-atmega16u4-32u4_datasheet.pdf}{https://ww1.microchip.com/downloads/en/devicedoc/atmel-7766-8-bit-avr-atmega16u4- \\ 32u4\_datasheet.pdf}
-
-\subsection{Alimentation}
-
-\subsubsection{Broches}
-
-\begin{itemize}
-    \item VCC (alimentation du microcontrôleur) : broches 14, 24, 34 et 44
-    \item GND (masse de l'alimentation) : broches 15, 23, 35 et 43
-    \item UVCC (alimentation du port USB) : broche 2
-    \item UGND (masse du port USB) : broche 5
-\end{itemize}
-
-\subsubsection{Découplage}
-
-Ces 5 broches doivent être découplées afin d'avoir une alimentation la plus stable possible. Il nous faut donc calculer la valeur de ces condensateurs.
-
-On sait que $q = C \times U$, donc en dérivant, on obtient $\frac{dq}{dt} = C \times \frac{du}{dt}$. De plus, on sait que $\frac{dq}{dt} = i$ donc $i = C \times \frac{du}{dt}$, que l'on peut aussi écrire $i = C \times \frac{\Delta u}{\Delta t}$ donc $C = \frac{i \Delta t}{\Delta u}$.
-
-Sur la figure 30-4 de la documentation de l'ATMEGA32U4, on lit une consommation de courant du microcontrôleur de \SI{13}{\milli\ampere} pour \SI{5}{\volt} et \SI{16}{\mega\hertz}. De plus, $\Delta t = \frac{1}{\SI{16}{\mega\hertz}} = \SI{62}{\nano\second}$. Enfin, on choisit une fluctuation de tension $\Delta u = \SI{0.1}{\volt}$.
-
-On obtient alors $C = \SI{8.125}{\micro\farad}$. Nous choisissons alors d'arrondir à $\boxed{C = \SI{10}{\micro\farad}}$, ce qui correspond alors à un courant de \SI{16}{\milli\ampere}, toujours pour $\Delta V = \SI{0.1}{\volt}$
-
-\subsection{Bouton de reset}
-
-Le signal pour réinitialisé le microcontrôleur se trouve sur la broche 13. De plus, on voit sur la figure 8-1 de la documentation de l'ATMEGA32U4 qu'une résistance de pull-up est déjà placée dans le microcontrôleur. Il suffit donc de placer un bouton entre la broche 13 et GND.
-
-\subsection{Bouton d'activation du bootloader}
-
-Le signal d'activation du bootloader est noté HWB et est actif à l'état bas. Contrairement à la broche reset, il n'y a pas de circuit de pull-up intégré. On réalise alors un circuit pull-up standard afin que la broche soit à l'état haut lorsque le bouton est relâché et qu'il ne reste pas dans un état flottant. Nous choisissons une résistance de \SI{5}{\kilo\ohm}, qui est une valeur standard pour ces circuits.
-
-\subsection{Connecteur coaxial pour signal GPS}
-
-Le signal GPS générera un signal d'une impulsion par seconde (1PPS). Il faudra mesurer cette période à l'aide d'un Input Capture (IC). Nous choisissons le timer 3, qui est un timer sur 16 bits afin d'avoir le plus grand nombre de bits possibles. Ainsi, l'ICP3 correspond à la broche 32. Nous pensons également à raccorder le blindage du connecteur à la masse.
-
-\subsection{Connecteur USB}
-
-Connecteur de type mini-USB pour pouvoir utiliser le même câble que la Olimexino.
-
-\begin{itemize}
-    \item VBUS du microcontrôleur (broche 7) connecté au VBUS du connecteur USB. C'est l'alimentation \SI{5}{\volt}.
-    \item D+ et D- du microcontrôleur (broches 3 et 4) connectées au D+ et D- du connecteur USB. C'est une paire différentielle permettant de transmettre des données. Des résistances de \SI{22}{\ohm} sont placées entre les D+ et D- du microcontrôleur et du connecteur USB (partie 2.2.8 et 2.2.9 de la documentation de l'ATMEGA32U4).
-    \item Le blindage (shield) est connecté à la masse.
-    \item ID du connecteur USB laissé déconnecté pour indiquer que le microcontrôleur est un périphérique (\href{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}).
-\end{itemize}
-
-Ajout d'une résistance de \SI{0}{\ohm} entre VBUS et le reste du circuit. Cela permettra de s'assurer que l'on a bien \SI{5}{\volt} avant de connecter le reste du circuit.
-
-\subsection{Convertisseur numérique-analogique}
-
-Pour réaliser un DAC, nous utilisons un signal PWM suivi d'un filtre passe-bas.
-
-\subsubsection{PWM}
-
-Utilisation du timer 1 car il a une taille de 16 bits. Cela permettra d'avoir plus de liberté qu'un compteur sur 8 bits. La sortie du PWM sera donc le OC1A (broche 29).
-
-\subsubsection{Filtre passe-bas}
-
-La fréquence de coupure d'un filtre passe-bas est donnée par $\fc = \frac{1}{2 \pi R C}$. En prenant les valeurs des composants les plus utilisés, c'est-à-dire $C = \SI{10}{\micro\farad}$ et $R = \SI{5}{\kilo\ohm}$, on obtient $\fc = \SI{3.18}{\hertz}$. Ainsi, en générant un signal PWM d'au moins \SI{1}{\kilo\hertz}, le signal devrait être filtré correctement et seule la composante continue sera conservée. La fréquence du PWM peut être augmentée pour réduire l'oscillation de la tension en sortie du filtre (voir avec les simulations).
-
-\subsection{Résonateur}
-
-Connexion de l'oscillateur entre XTAL1 et XTAL2 comme indiqué sur la figure 6-2 de la documentation de l'ATMEGA32U4.
-
-\subsubsection{Varicap}
-
-Afin de modifier la fréquence de résonance de l'oscillateur à quartz, on utilise une Varicap pour modifier la valeur des capacités de pied C1 et C2.
-
-\subsubsection{T de polarisation}
-
-La polarisation de la Varicap ne doit pas influencer le résonateur et le signal de l'oscillateur ne doit pas perturber le circuit de polarisation de la Varicap. Pour cela, on utilise un T de polarisation.
-
-La capacité du T de polarisation notée \CT\ ne doit pas influencer la valeur des capacités de pied. Ainsi, on doit avoir $\XCT \ll \XCosci \Leftrightarrow \frac{1}{\CT \omega} \ll \frac{1}{\Cosci \omega} \Leftrightarrow \CT \gg \Cosci$.
-
-\Cosci\ dépendra du résonateur choisi mais est de l'ordre de \SI{20}{\pico\farad}. Ainsi, on peut choisir $\CT = \SI{1}{\micro\farad}$.
-
-Pour la bobine du T de polarisation, à \SI{16}{\mega\hertz}, il faut que $\XLT \gg \XCT \Leftrightarrow 2 \pi f \LT \gg \frac{1}{2 \pi f \CT} \Leftrightarrow \LT \gg \frac{1}{4 \pi f^2 \CT^2}$, avec $f$ la fréquence en \si{\hertz}. On choisit donc $\LT = \SI{10}{\micro\henry}$.
-
-Pour vérifier, à très basse fréquence, on a bien $\XLT \to 0$ et $\XCT \to \infty$. À \SI{16}{\mega\hertz}, on a $\XLT \approx \SI{1005}{\ohm}$ et $\XCT \approx \SI{10}{\milli\ohm}$.
-
-\subsubsection{Suiveur}
-
-Afin de s'assurer que la tension de polarisation de la diode est imposée par le DAC, on place un amplificateur monté en suiveur entre la sortie du filtre passe-bas et le T de polarisation de la Varicap (du côté de la bobine). Le suiveur est un rail-to-rail afin de pouvoir exploiter la plage de valeur complète de 0 à \SI{5}{\volt}.
-
-\subsection{Autres}
-
-\subsubsection{UCAP}
-
-La documentation du microcontrôleur (partie 2.2.12) indique de connecter UCAP à la masse via un condensateur de \SI{1}{\micro\farad}.
-
-\subsubsection{AREF}
-
-Étant donné que le projet ne nécessite pas de conversion analogique-numérique, l'ADC ne sera pas utilisé et AREF (broche 42) peut être laissée déconnectée.
-
-\subsection{Points de test}
-
-Afin de vérifier que le circuit fonctionne comme prévu, nous plaçons des points de test qui permettront de visualiser la tension à ces points.
-
-La résistance de \SI{0}{\ohm} fait office de point de tests pour l'alimentation. La résistance de \SI{0}{\ohm} sera placée une fois que l'on aura vérifié qu'un potentiel de \SI{5}{\volt} est bien présent à cet endroit.
-
-Nous ajoutons 3 points de test, un à la sortie PWM, un à la sortie du filtre passe-bas, et un à la sortie du suiveur. Ainsi, cela nous permettra de vérifier que le signal PWM est correct, que le signal est ensuite bien filtré, et enfin que l'amplificateur suiveur fonctionne.
-
-Nous choisissons de ne pas mettre de point de test vers le résonateur pour ne pas ajouter de bruit au signal.
-
 \section{Choix des composants}
 
 \subsection{Choix des composants principaux}
@@ -310,16 +201,11 @@ En comparaison avec la théorie, la fréquence de résonance attendue, calculée
 
 \section{Estimation du coût}
 
-D'après le site Eurocircuits (voir Figure~\ref{fig:prix}), pour un prototype de PCB à 2 couches, le prix est de 40,99\euro{} (net) avec un délai de 3 jours. De plus, l'éditeur de classification indique que notre PCB est conçu en classe 6, ce qui correspond à des largeurs de pistes et des espacements plus exigeants.
+D'après le site Eurocircuits (voir Figure~\ref{fig:prix}), pour un prototype de PCB à 2 couches, le prix est de 40,99~€ (net) avec un délai de 3 jours. De plus, l'éditeur de classification indique que notre PCB est conçu en classe 6, ce qui correspond à des largeurs de pistes et des espacements plus exigeants.
 
-
-
-
-\newpage
-% Tableau complet avec toutes les données fournies
 \begin{table}[ht]
 \centering
-\caption{Prix unitaire et total (en \euro{}) pour différentes quantités et délais}
+\caption{Prix unitaire et total (en €) pour différentes quantités et délais}
 \label{tab:fullPriceMatrix}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
@@ -373,7 +259,7 @@ D'après le site Eurocircuits (voir Figure~\ref{fig:prix}), pour un prototype de
 \bigskip
 
 \noindent
-La matrice de prix montre clairement comment le coût varie en fonction du délai de fabrication et de la quantité commandée. Chaque case présente le prix unitaire ainsi que le montant total pour la commande. Par exemple, pour une commande d’un seul PCB, le tarif passe de 100,53\euro{} avec un délai de 2 jours à 40,99\euro{} dès que le délai atteint 3 jours, où il se stabilise. Pour une commande de 5 PCB, le même phénomène se produit avec une forte réduction du prix unitaire entre 2 et 3 jours, puis une stabilité dès 3 jours. En revanche, pour des commandes plus importantes comme 10, 15 ou 20 PCB, le prix unitaire continue de baisser jusqu’à atteindre un délai de fabrication de 5 jours, après quoi il se fixe. Cela montre qu’en choisissant un délai de fabrication légèrement plus long, on peut réduire significativement le coût unitaire, en particulier pour des commandes groupées. Ainsi, commander 5 PCB par exemple s'avère être une option intéressante, permettant de bénéficier d'un tarif avantageux tout en obtenant suffisamment d'exemplaires pour divers besoins (plusieurs test ou autre).
+La matrice de prix montre clairement comment le coût varie en fonction du délai de fabrication et de la quantité commandée. Chaque case présente le prix unitaire ainsi que le montant total pour la commande. Par exemple, pour une commande d’un seul PCB, le tarif passe de 100,53~€ avec un délai de 2 jours à 40,99~€ dès que le délai atteint 3 jours, où il se stabilise. Pour une commande de 5 PCB, le même phénomène se produit avec une forte réduction du prix unitaire entre 2 et 3 jours, puis une stabilité dès 3 jours. En revanche, pour des commandes plus importantes comme 10, 15 ou 20 PCB, le prix unitaire continue de baisser jusqu’à atteindre un délai de fabrication de 5 jours, après quoi il se fixe. Cela montre qu’en choisissant un délai de fabrication légèrement plus long, on peut réduire significativement le coût unitaire, en particulier pour des commandes groupées. Ainsi, commander 5 PCB par exemple s'avère être une option intéressante, permettant de bénéficier d'un tarif avantageux tout en obtenant suffisamment d'exemplaires pour divers besoins (plusieurs test ou autre).
 
 \section{Simulation circuit RC}
 
@@ -436,56 +322,55 @@ On remarque alors que, selon nos observations, les meilleurs choix sont \(R = 5.
 \vfill
 \begin{center}
 \section{Annexes}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\linewidth]{prix.png}
-    \caption{Interface du calculateur de coûts d'Eurocircuits.}
-    \label{fig:prix}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.5\textwidth]{tauR5C1.png}
-    \caption{Simulation de la constante de temps \(\tau\) pour \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\).}
-    \label{fig:tauR5C1}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.5\textwidth]{voltageR5C1.png}
-    \caption{Mesure de la différence de voltage dans la réponse stabilisée du circuit RC.}
-    \label{fig:voltageR5C1}
-\end{figure}
-
 \end{center}
 \vfill
 \newpage
 
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=\linewidth]{Ressources/Images/Prix_PCB.png}
+    \caption{Interface du calculateur de coûts d'Eurocircuits.}
+    \label{fig:prix}
+\end{figure}
+
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Ressources/Images/Simulation-Filtre-Tau.png}
+    \caption{Simulation de la constante de temps \(\tau\) pour \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\).}
+    \label{fig:tauR5C1}
+\end{figure}
+
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Ressources/Images/Simulation-Filtre-Valeur_finale.png}
+    \caption{Mesure de la différence de voltage dans la réponse stabilisée du circuit RC.}
+    \label{fig:voltageR5C1}
+\end{figure}
+
 \begin{sidewaysfigure}[htb!]
     \centering
-    \includegraphics[width=\textwidth]{Ressources/Schemas/Schema_electrique.png}
+    \includegraphics[width=0.9\textwidth]{Ressources/Schemas/PCB.png}
     \caption{Schéma électrique du système.}
     \label{Schéma - Schéma électrique}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}[htb!]
     \centering
-    \includegraphics[width=0.9\linewidth]{Images/BOM.png}
+    \includegraphics[width=0.9\linewidth]{Ressources/Images/BOM.png}
     \caption{Fichier .csv généré depuis la BOM du schéma}
     \label{BOM}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}
     \centering
-    \includegraphics[width=0.9\linewidth]{Images/Schema_simulation.png}
+    \includegraphics[width=0.9\linewidth]{Ressources/Schemas/Simulation.png}
     \caption{Schéma de l’oscillateur à quartz avec réglage de fréquence par varicap.}
     \label{schsimul}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}
     \centering
-    \includegraphics[width=0.9\linewidth]{Images/Simulation_AC.png}
+    \includegraphics[width=0.9\linewidth]{Ressources/Images/Simulation-Resonateur.png}
     \caption{Résultat de l’analyse AC de l’oscillateur à quartz dans KiCad/ngspice.}
     \label{simulAC}
 \end{sidewaysfigure}
