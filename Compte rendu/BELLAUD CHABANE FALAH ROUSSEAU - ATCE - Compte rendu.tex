@@ -10,6 +10,7 @@
 \usepackage{mathtools} %Pour les maths
 \usepackage[margin=2.5cm]{geometry} %Pour les marges de la page
 \usepackage{hyperref} %Pour les liens et les métadonnées
+\usepackage{rotating}
 
 \hypersetup{
 	colorlinks=true,
@@ -182,13 +183,13 @@ Nous choisissons de ne pas mettre de point de test vers le résonateur pour ne p
 \section{Choix des composants}
 \subsection{Choix des composants principaux}
 
-\textbf{Microcontrôleur~:} L’Atmega32U4 a été sélectionné pour ses timers 16 bits, nécessaires à l’input capture pour mesurer précisément la fréquence de l’oscillateur, et sa capacité à générer une PWM 10 bits pour le signal de commande. Son boîtier TQFP-44 (SMD) est compatible avec un montage en surface et une soudure manuelle, et il est disponible chez Farnell (par exemple, référence 1748525, prix unitaire d’environ 5,250~€). \\
+\textbf{Microcontrôleur~:} L’Atmega32U4 a été sélectionné pour ses timers 16 bits, nécessaires à l’input capture pour mesurer précisément la fréquence de l’oscillateur, et sa capacité à générer une PWM 10 bits pour le signal de commande. Son boîtier TQFP-44 (SMD) est compatible avec un montage en surface et une soudure manuelle, et il est disponible chez Farnell (par exemple, référence 1748525, prix unitaire d’environ 5,250~€).
 
-\textbf{Connecteur USB~:} Un connecteur USB mini-B horizontal (référence \texttt{USB\_OTG\_SMD\_xxx} ) a été choisi pour son faible encombrement et sa robustesse mécanique. Ce modèle SMD facilite le soudage et l’alignement sur la carte, et est largement disponible (par exemple, Molex sur Farnell, référence 3500674, environ 1,00~€). \\
+\textbf{Connecteur USB~:} Un connecteur USB mini-B horizontal (référence \texttt{USB\allowbreak\_OTG\allowbreak\_SMD\allowbreak\_xxx}) a été choisi pour son faible encombrement et sa robustesse mécanique. Ce modèle SMD facilite le soudage et l’alignement sur la carte, et est largement disponible (par exemple, Molex sur Farnell, référence 3500674, environ 1,00~€). 
 
-\textbf{Résonateur à quartz~:} Un quartz SMD Abracon ABM3 à 16~MHz (5,0$\times$3,2~mm, empreinte \texttt{Crystal\_SMD\_Abracon\_ABM3}) a été retenu pour sa précision, son faible encombrement, et sa compatibilité avec l’asservissement GPS. Il est égelement disponible chez Farnell à 0,258~€. \\
+\textbf{Résonateur à quartz~:} Un quartz SMD Abracon ABM3 à 16~MHz (5,0$\times$3,2~mm, empreinte \texttt{Crystal\_SMD\_Abracon\_ABM3}) a été retenu pour sa précision, son faible encombrement, et sa compatibilité avec l’asservissement GPS. Il est égelement disponible chez Farnell à 0,258~€.
 
-\textbf{Varicap~:} La diode varicap BB833 a été remplacée par la BB857, plus disponible, avec une plage de capacité (5~pF à 10~pF) adaptée à la correction de la fréquence, une tension inverse compatible (jusqu’à 5~V), et un boîtier SMD 0805 (2012 Metric) facile à souder. Elle est disponible chez Farnell (référence 2725709, environ 0,172~€). \\
+\textbf{Varicap~:} La diode varicap BB833 a été remplacée par la BB857, plus disponible, avec une plage de capacité (5~pF à 10~pF) adaptée à la correction de la fréquence, une tension inverse compatible (jusqu’à 5~V), et un boîtier SMD 0805 (2012 Metric) facile à souder. Elle est disponible chez Farnell (référence 2725709, environ 0,172~€). 
 
 \textbf{Boîtiers des composants passifs~:} Les boîtiers SMD 0805 ont été privilégiés pour les résistances et condensateurs (par exemple, R5 à 5~k$\Omega$, C5 à 10~$\mu$F), offrant une taille réduite et une densité élevée sur le PCB, tout en restant maniables pour une soudure manuelle. Le format 1206 a été utilisé pour des composants nécessitant une meilleure dissipation de puissance (par exemple, R1 à 0~$\Omega$). Ces formats standards garantissent une disponibilité chez les fournisseurs comme Farnell.
 
@@ -197,10 +198,11 @@ Nous choisissons de ne pas mettre de point de test vers le résonateur pour ne p
 Pour chaque composant, nous avons suivi une méthodologie spécifique afin de garantir leur compatibilité avec notre design et nos contraintes de fabrication~:
 
 \begin{description}
-    \item[Fixation de la taille des boîtiers et des empreintes~:] 
-    Nous avons défini des boîtiers SMD (principalement 0805, avec quelques 1206 pour des besoins spécifiques) pour tous les composants passifs, car ils sont adaptés à un montage en surface et à une soudure manuelle. Les empreintes correspondantes ont été choisies dans la bibliothèque KiCad (par exemple, \texttt{Resistor\_SMD:R\_0805\_2012Metric} pour une résistance 0805, ou \texttt{Capacitor\_SMD:C\_0805\_2012Metric} pour un condensateur 0805). Pour les composants plus complexes comme le quartz ou la varicap, des empreintes spécifiques ont été sélectionnées (par exemple, \texttt{Crystal\_SMD\_Abracon\_ABM3} pour le quartz). \\
+\item[Fixation de la taille des boîtiers et des empreintes~:] 
+Nous avons défini des boîtiers SMD (principalement 0805, avec quelques 1206 pour des besoins spécifiques) pour tous les composants passifs, car ils sont adaptés à un montage en surface et à une soudure manuelle. Les empreintes correspondantes ont été choisies dans la bibliothèque KiCad (par exemple, \texttt{Resistor\allowbreak\_SMD:R\allowbreak\_0805\allowbreak\_2012Metric} pour une résistance 0805, ou \texttt{Capacitor\allowbreak\_SMD:C\allowbreak\_0805\allowbreak\_2012Metric} pour un condensateur 0805). Pour les composants plus complexes comme le quartz ou la varicap, des empreintes spécifiques ont été sélectionnées (par exemple, \texttt{Crystal\allowbreak\_SMD\allowbreak\_Abracon\allowbreak\_ABM3} pour le quartz). 
+\medskip
 
-    \item[Sélection des composants sur Farnell~:] 
+\item[Sélection des composants sur Farnell~:] 
     Les composants ont été choisis sur Farnell en fonction de plusieurs critères~:
     \begin{itemize}
         \item \textbf{Valeur électrique~:} Par exemple, un condensateur de 10~$\mu$F pour le découplage ou une résistance de 5~k$\Omega$ pour le filtre RC.
@@ -208,6 +210,7 @@ Pour chaque composant, nous avons suivi une méthodologie spécifique afin de ga
         \item \textbf{Dimensions et boîtier~:} Les dimensions ont été vérifiées pour correspondre aux empreintes KiCad (par exemple, un boîtier 0805 mesure 2,0$\times$1,2~mm).
         \item \textbf{Prix unitaire et disponibilité~:} Les prix unitaires ont été comparés pour optimiser les coûts. Par exemple, pour un condensateur de 1~$\mu$F en boîtier 0805, nous avons comparé plusieurs références sur Farnell. La référence 4166923 a été retenue, avec un prix unitaire de 0,121~€, une tolérance de $\pm$5~\%, et une disponibilité en stock suffisante pour notre projet.
     \end{itemize}
+    \medskip
 
     \item[Exemple de sélection~:] 
     Prenons l’exemple du condensateur C5 (10~$\mu$F) utilisé dans le filtre RC avec R5. Nous avons d’abord fixé un boîtier 0805 pour ce condensateur, en raison de sa taille compacte et de sa compatibilité avec une soudure manuelle. Dans KiCad, l’empreinte \texttt{Capacitor\_SMD:C\_0805\_2012Metric} a été assignée. Sur Farnell, nous avons recherché des condensateurs SMD de 10~$\mu$F en boîtier 0805. Parmi les options, la référence 2470435 a été choisie~: elle offre une tolérance de $\pm$10~\%, une tension nominale de 16~V (supérieure à notre alimentation de 5~V), un prix unitaire de 0,118~€, et une disponibilité immédiate (plus de 10~000 unités en stock). Une alternative, la référence 2906022, était légèrement plus chère (1.180~€) pour des caractéristiques similaires, donc nous avons privilégié l'option de la réference 2581105 à 1.230~€.
@@ -228,6 +231,19 @@ Après avoir sélectionné tous les composants, nous avons généré la nomencla
 
 \section{Routage du PCB}
 
+\section{Simulation}
+Le schéma en Figure \ref{schsimul} réalisé pour la simulation, représente un oscillateur à quartz avec une fréquence ajustable par une varicap, divisé en trois sections principales. La première section génère une tension de commande via une source PWM (B1, fréquence 10~kHz, rapport cyclique 0,5) filtrée par un RC passe-bas (R5 = 5~k$\Omega$, C5 = 1~$\mu$F), produisant une tension continue au nœud \texttt{PWM\_filtered}. Cette tension est appliquée à un suiveur de tension (E1, modèle idéal, gain 1), dont la sortie (\texttt{Follower\_output}) commande la varicap. La deuxième section est l’oscillateur à quartz, modélisé par un circuit Butterworth-van Dyke \cite{Modéle Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF, R1 = 50~$\Omega$, C7 = 7~pF), avec des condensateurs de charge C9 (15~pF) et C8 (10~pF) pour satisfaire les conditions de Barkhausen. Une source AC (B2, 1~V) est ajoutée pour l’analyse en fréquence. La troisième section ajuste la fréquence via une varicap (C11 = 2~pF à 10~pF), connectée entre \texttt{XTAL2} et \texttt{Follower\_output}, permettant un réglage fin de la fréquence de résonance. 
+
+\subsection{Analyse des résultats de la simulation AC}
+L'analyse AC, réalisée sur une plage de fréquences de 15,9~MHz à 16,1~MHz, a permis d'identifier la fréquence de résonance du quartz à 16,017200~MHz pour un rapport cyclique de 0,5 (tension de commande moyenne de 2,5~V) et une capacité de la varicap (C8 et C11) fixée à 2~pF. En faisant varier la capacité de la varicap de 2~pF à 10~pF, nous avons observé un décalage de la fréquence : à 6~pF, la fréquence est de 16,012000~MHz, et à 10~pF, elle descend à 16,009200~MHz comme on peut le voir en Figure \ref{simulAC}. Cette variation de 8~pF (de 2~pF à 10~pF) entraîne un décalage total de 8~kHz (de 16,017200~MHz à 16,009200~MHz), soit environ 1~kHz par pF. Ces résultats confirment que la varicap permet un ajustement fin de la fréquence, avec une plage de réglage suffisante pour compenser les dérives de l’oscillateur (de 30 à 50~ppm, soit 480 à 800~Hz pour un quartz à 16~MHz) dans le cadre de l’asservissement GPS.
+
+\subsection{Fréquence de résonance de l’oscillateur}
+Une analyse AC sur une plage de 15,9~MHz à 16,1~MHz a été réalisée pour déterminer la fréquence de résonance de l’oscillateur à quartz. Le gain maximal, mesuré à 15~dB sur le nœud \texttt{V(XTAL2)}, est atteint à 16,009200~MHz, ce qui correspond à la fréquence de résonance. Cette fréquence est associée à une capacité de la varicap (C11) de 10~pF, comme confirmé par les simulations précédentes (2~pF à 16,017200~MHz, 6~pF à 16,012000~MHz, et 10~pF à 16,009200~MHz).
+
+En comparaison avec la théorie, la fréquence de résonance attendue, calculée à partir du modèle Butterworth-van Dyke en annexe \cite{Modéle Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF), est de $f_0 = \frac{1}{2\pi \sqrt{L2 \cdot C6}} \approx 16,009190$~MHz. L’écart entre la valeur mesurée (16,009200~MHz) et la valeur théorique (16,009190~MHz) est de 0,6~ppm, ce qui est négligeable et probablement dû aux capacités parasites et à la précision numérique de ngspice. Ces résultats valident la conception de l’oscillateur pour une utilisation dans l’asservissement GPS.
+
+
+
 \section{Estimation du coût}
 
 \section{Conclusion}
@@ -240,10 +256,13 @@ Après avoir sélectionné tous les composants, nous avons généré la nomencla
 \vspace{-1cm}
 \begin{thebibliography}{}
 	\bibitem{Lien BOM}
-		Fichier BOM format .csv à télecharger : \url{}
+		\href{Images/BOM_PCB.csv}{Télécharger le fichier CSV}
 		
 	\bibitem{Technique de soudure de composants CMS}
 		Technique de soudure de composants CMS : \url{https://youtu.be/us5zLlp1aV0?si=Flcb0uajIgZAhLWc}
+		
+	\bibitem{Modéle Butterworth}
+		Modéle de circuit Butterworth-Van Dyke : \url{https://demonstrations.wolfram.com/ButterworthVanDykeCircuit}
 	
 \end{thebibliography}
 
@@ -256,11 +275,27 @@ Après avoir sélectionné tous les composants, nous avons généré la nomencla
 \vfill
 \newpage
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics[scale=0.6]{BOM.png}
-	\caption{Fichier .csv généré depuis la BOM du schéma}
-	\label{BOM}
-\end{figure}
+
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{Images/BOM.png}
+    \caption{Fichier .csv généré depuis la BOM du schéma.}
+    \label{BOM}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{Images/Schema_simulation.png}
+	\caption{Schéma de l’oscillateur à quartz avec réglage de fréquence par varicap.}
+    \label{schsimul}
+\end{sidewaysfigure}
+
+
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{Images/Simulation_AC.png}
+    \caption{Résultat de l’analyse AC de l’oscillateur à quartz dans KiCad/ngspice.}
+    \label{simulAC}
+\end{sidewaysfigure}
 
 \end{document}

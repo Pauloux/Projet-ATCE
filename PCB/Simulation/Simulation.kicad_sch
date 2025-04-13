@@ -2201,7 +2201,7 @@
 				)
 			)
 		)
-		(property "Value" "2.52p"
+		(property "Value" "2p"
 			(at 184.15 43.18 90)
 			(effects
 				(font
