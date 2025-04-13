@@ -332,7 +332,9 @@ Maintenant que nous sommes capables de programmer le microcontrôleur, nous pouv
 
 \subsection{PWM}
 
-Le microcontrôleur ATMEGA32U4 ne comporte par de convertisseur numérique-analogique (DAC). Ainsi, afin de pouvoir générer une tension continue dont on peut contrôler l'amplitude, nous utilisons un signal à rapport cyclique variable suivi d'un filtre passe-bas afin d'extraire la valeur moyenne de ce signal. Concrètement, nous voulons générer un signal créneau en pouvant modifier le temps passé à l'état haut par rapport au temps passé à l'état bas, ce qui permet de modifier la valeur moyenne.
+Le microcontrôleur ATMEGA32U4 ne comporte pas directement de convertisseur numérique-analogique (DAC). Ainsi, afin de pouvoir générer une tension continue dont on peut contrôler l'amplitude, nous utilisons un signal à rapport cyclique variable suivi d'un filtre passe-bas afin d'extraire la valeur moyenne de ce signal. Concrètement, nous voulons générer un signal créneau en pouvant modifier le temps passé à l'état haut par rapport au temps passé à l'état bas, ce qui permet de modifier la valeur moyenne.
+
+Ce programme s'appelle «~PWM.c~» sur le dépôt Github.
 
 \paragraph{Identification du timer}
 
@@ -361,9 +363,9 @@ C'est un fonctionnement simple et astucieux même s'il peut être contre-intuiti
 Nous souhaitons pouvoir être le plus précis possible au niveau du rapport cyclique. De par le fonctionnement du système, OCR4D est forcément inférieur à OCR4C. Ainsi, pour avoir le plus de valeurs possibles pour OCR4D, alors OCR4C doit être le plus élevé possible, c'est-à-dire 1023.
 
 La fréquence du signal PWM est donné par : \nopagebreak
-\[f = \frac{\SI{16}{\mega\hertz}}{N \times 2 \times (1 + OCR4C)}\]
+\[f_{\text{PWM}} = \frac{\SI{16}{\mega\hertz}}{N \times 2 \times (1 + OCR4C)}\]
 
-En utilisant le plus petit prescaler, c'est-à-dire 1, cela nous donne une fréquence du signal de $\boxed{f = \SI{7812.5}{\hertz}}$.
+En utilisant le plus petit prescaler, c'est-à-dire 1, cela nous donne une fréquence du signal de $\boxed{f_{\text{PWM}} = \SI{7812.5}{\hertz}}$.
 
 \paragraph{Fonctions}
 
@@ -377,7 +379,52 @@ Nous visualisons alors le signal en sortie du port D7 à l'oscilloscope à l'aid
 
 \subsection{ICP}
 
+Nous souhaitons maintenant pourvoir mesurer la fréquence de l'oscillateur. Pour cela, nous utilisons la fonction «~input capture~» (ICP) d'un timer.
+
+Ce programme s'appelle «~ICP.c~» sur le dépôt Github.
+
+\paragraph{Identification du timer}
+
+Le signal 1 PPS (1 impulsion par seconde) est connecté à la broche correspondant au port D4, c'est-à-dire à l'entrée ICP du timer 1.
+
+\paragraph{Fonctionnement}
+
+Un schéma représentant le fonctionnement du timer en mode ICP est représenté sur la figure \ref{Schéma - ICP} en annexe.
+
+Le timer 1 compte continuellement vers le haut et, lorsqu'il atteint sa valeur maximale ($2^{16}$ car il est sur 16 bits), il recommence à compter à 0. À l'aide d'une interruption, nous pouvons détecter lorsque cela se produit (overflow) et ainsi compter le nombre de cycles réalisés.
+
+Lorsqu'un front montant intervient sur le signal 1PPS, une interruption se déclenche et nous permet de lire l'état du compteur (ICR1). Nous prenons ensuite soin de sauvegarder le nombre de cycles réalisés ainsi que l'état du compteur lorsque cela survient, puis nous remettons à 0 le compteur ainsi que la variable correspondant au nombre de cycle réalisé. Cela permet au compteur de toujours commencer dans les mêmes conditions et donc simplifier le traitement de l'information ensuite. Enfin, nous activons un drapeau qui permettra à la boucle principale infinie de traiter l'information lorsqu'elle en a le temps et ainsi ne pas ralentir l'exécution de l'interruption.
+
+En sélectionnant un prescaler de 1, cela signifie que le timer 1 compte à \SI{16}{\mega\hertz} et doit donc normalement avoir compté jusqu'à \num{16e6} lorsque le signal 1 PPS s'active. Si l'oscillateur est en réalité plus rapide, alors le compteur aura le temps de compter plus de fois pendant \SI{1}{\second}, et le même raisonnement s'applique si l'oscillateur est plus lent. Ainsi, on peut écrire la formule : \nopagebreak
+\[
+f_{\text{mesuree}} = 2^{16} \times \text{nbr cycles} + \text{ICR1}
+\]
+
+\paragraph{Valeurs attendues}
+
+À \SI{16}{\mega\hertz}, on a 244 cycles + 9216 (ICR1). De plus, en considérant dans le pire cas que l'oscillateur a une précision de \SI{50}{ppm}, cela fait un écart de fréquence de $\num{16e6} \times \num{50e-6} = \SI{800}{\hertz}$, ce qui est largement inférieur à \SI{9216}{\hertz}. En effet, \SI{9216}{\hertz} correspond à un écart de \SI{576}{ppm} dans notre cas, ce qui n'arrivera normalement pas. On peut donc considérer que le nombre de cycle n'est pas important car il sera normalement toujours égal à 244, et seule la valeur lue dans ICR1 lorsque l'interruption se déclenche est intéressante pour nous.
+
+\paragraph{Fonctions et interruptions}
+
+Comme expliqué précédemment, nous utilisons deux interruptions : une pour gérer le débordement (overflow) du timer, tandis que l'autre intervient lorsque le front montant du signal 1 PPS est détecté. À noter qu'il faut utiliser des variables préfixées de «~volatile~» afin qu'elles ne soient pas optimisées et que l'on puisse modifier leur valeur à l'intérieur des interruptions. De plus, nous créons une fonction permettant de simplement initialiser le timer 1.
+
+\paragraph{Code de test}
+
+Pour tester si le code fonctionne correctement, nous envoyons simplement par USB les mesures prises (nombre de cycles et ICR1) toutes les secondes. Nous ne faisons évidemment pas cela dans l'interruption mais dans la boucle principale infinie. Ce code ne s'exécute que si le drapeau indiquant qu'une mesure a été faite est actif, ce qui assure que chaque mesure n'est envoyée qu'une fois et toute les secondes.
+
+\paragraph{Test}
+
+Afin de simuler le signal 1 PPS, nous utilisons un générateur de signaux réglé à \SI{1}{\hertz} dont l'amplitude varie entre 0 et \SI{3.3}{\volt}. De plus, nous réglons son rapport cyclique au minimum, c'est-à-dire \SI{20}{\percent} pour se rapprocher au maximum d'un véritable signal 1 PPS, même si cela n'a normalement pas d'importance.
+
+Lorsque l'on exécute le programme, les valeurs observées sont cohérentes, c'est-à-dire que le nombre de cycle est toujours égal à 244 et la valeur de ICR1 est autour de 8500, ce qui correspond alors à une fréquence de \SI{15999284}{\hertz}. De plus, nous faisons chauffer le résonateur à l'aide d'un fer à souder afin de voir l'impact de la température sur la fréquence de l'oscillateur. Nous enregistrons les valeurs dans un fichier à l'aide de la commande «~minicom -D /dev/ttyACM0 -C frequence.dat~» et nous traçons l'évolution de la fréquence mesurée en fonction du temps. Pour cela, nous utilisons un script MATLAB qui trace simplement l'évolution de ICR1. Nous obtenons alors le graphique de la figure \ref{Graphique - ICP} en annexe.
+
+On voit clairement le moment où le fer à souder est posé sur le résonateur car la fréquence diminue d'abord légèrement puis augmente drastiquement. Autrement dit, «~avant la montagne se trouve le fossé~». L'écart de fréquence observé est d'environ \SI{400}{\hertz}, ce qui est l'ordre de grandeur que l'on attendais.
+
+Nous considérons que cette partie est fonctionnelle et que l'on peut mesurer précisément la fréquence de l'oscillateur. De plus, nous sommes capable de tracer l'évolution de la fréquence et de vérifier que la température l'influence bel et bien.
+
 \subsection{Régulation}
+
+\subsection{Watchdog}
 
 \section{Conclusion}
 
@@ -399,7 +446,6 @@ Nous visualisons alors le signal en sortie du port D7 à l'oscilloscope à l'aid
         
     \bibitem{Technique de soudure de composants CMS}
         Technique de soudure de composants CMS : \\ \url{https://youtu.be/us5zLlp1aV0?si=Flcb0uajIgZAhLWc}
-
 
     \bibitem{USB OTG}
         USB OTG broche ID et câble : \\ \href{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}{https://www.astuces-pratiques.fr/informatique/usb-otg-broche-id-et-cable}
@@ -466,8 +512,22 @@ Nous visualisons alors le signal en sortie du port D7 à l'oscilloscope à l'aid
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=\textwidth]{Ressources/Schemas/PWM.png}
-	\caption{Principe de fonctionnement du PWM et contrôle du rapport cyclique (duty cycle)}
+	\caption{Principe de fonctionnement du PWM et contrôle du rapport cyclique (duty cycle).}
 	\label{Schéma - PWM}
+\end{figure}
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{Ressources/Schemas/ICP.png}
+	\caption{Principe de fonctionnement de l'input capture (ICP) pour mesurer la fréquence de l'oscillateur.}
+	\label{Schéma - ICP}
+\end{figure}
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{Ressources/Graphiques/ICP.png}
+	\caption{Graphique représentant l'évolution de la valeur de mesurée par l'input capture (ICP) en fonction du temps. L'ICP peut également être interprétée comme la fréquence de l'oscillateur modulo $2^16$ en \si{\hertz}.}
+	\label{Graphique - ICP}
 \end{figure}
 
 \end{document}
