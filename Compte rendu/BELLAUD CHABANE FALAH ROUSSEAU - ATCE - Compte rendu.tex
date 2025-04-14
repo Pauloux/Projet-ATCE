@@ -447,7 +447,7 @@ Nous considérons que cette partie est fonctionnelle et que l'on peut mesurer pr
 
 \subsection{Régulation}
 
-Maintenant que nous pouvons contrôler le procédé (la fréquence de résonance du résonateur) avec le programme PWM et le mesurer avec le programme ICP, nous pouvons réguler le système. L'objectif est de mesurer la fréquence de l'oscillateur et de polariser la Varicap correctement afin que la fréquence reste stable et devienne insensible aux perturbations comme la température par exemple.
+Maintenant que nous pouvons contrôler le procédé (la fréquence de résonance du résonateur) avec le programme PWM et le mesurer avec le programme ICP, nous pouvons réguler le système. L'objectif est de mesurer la fréquence de l'oscillateur et de polariser la Varicap correctement afin que la fréquence reste stable et devienne insensible aux perturbations comme la température par exemple. Ce programme s'appelle «~Asservissement\_PI.c~» sur le dépôt Github.
 
 Nous utilisons pour cela un régulateur PID et en calculant les coefficients avec la méthode de Takahashi \cite{Cours automatique Gonzalo}. Nous avons pour cela besoin d'informations tirées de la réponse indicielle du système.
 
@@ -470,7 +470,7 @@ Nous enregistrons les valeurs d'un certain nombre (24 mesures retenues) de répo
 	\Aboxed{\Ki & \approx 0.025}
 \end{align*}
 
-\subsection{Implémentation du régulateur}
+\subsubsection{Implémentation du régulateur}
 
 Pour implémenter facilement le régulateur PI, nous utilisons la formule suivante : \nopagebreak
 \[
@@ -484,6 +484,8 @@ En effet, cette formule permet de ne pas avoir besoin de stocker le résultat d'
 
 Notons que le rapport cyclique appliqué est $512 + \text{cmd}$ afin de se placer autour du point de fonctionnement choisi qui est de 512 sur 1023. De plus, afin de rester dans ce domaine, nous limitons la commande cmd à $\pm 50$ (après la division par 1000 donc $\pm 50 000$ dans la véritable variable). Lors des premiers tests, nous avons remarqué que le système fonctionnait mal car la commande était trop faible (1 ou 2). Nous avons donc divisé la commande lors de l'application par 100 ou lieu de 1000 (ce qui fait une commande multipliée par 10), ce qui donne des performances satisfaisantes.
 
+De plus, nous avons vu que le nombre de cycles réalisés par le système d'input capture est constant et égal à 244, ce qui fait que nous n'utilisons pas cette information. Nous décidons alors de retirer la routine qui intervient lors du débordement du timer 1 et qui permet de compter le nombre de cycle réalisé. Cela permet de réduire la taille du code et d'éviter un grand nombre d'interruptions inutiles, ce qui ralenti le code.
+
 À noter que cette commande n'est calculée et appliquée qu'une fois par seconde, ce qui correspond à notre période d'échantillonnage. La valeur de consigne est prise comme étant la fréquence mesurée \SI{5}{\second} après le démarrage du système afin de laisser le temps à la fréquence de se stabiliser avec un rapport cyclique du PWM de \SI{50}{\percent} (512/1023). C'est ensuite cette fréquence qui sera maintenue grâce à la régulation.
 
 On voit sur la figure \ref{Graphique - Comparaison} en annexe que le régulateur permet d'avoir un système beaucoup moins sensible aux perturbations. De plus, nous avons remarqué que sans régulation, lorsque le résonateur refroidi, la fréquence tend parfois vers une autre valeur que celle avant le chauffage. C'est un effet que l'on ne retrouve pas avec le régulateur puisqu'une commande est appliquée afin que la fréquence retrouve rapidement sa valeur de consigne (on peut observer la consigne sur le graphique du bas).
@@ -494,6 +496,23 @@ Nous avons démontré que le système est capable de suivre une consigne et de r
 
 \subsection{Watchdog}
 
+Nous souhaitons utiliser un chien de garde (watchdog) pour s'assurer que le système ne reste pas bloqué indéfiniment en cas de problème. Cela n'arrive normalement pas, surtout avec un programme si simple et petit que nous avons, mais cela constitue une sécurité. Le programme test de cette fonctionnalité est «~Watchdog.c~» sur le dépôt Github, même si on le retrouve également implémenté dans «~Asservissement\_PI.c~».
+
+\paragraph{Fonctionnement}
+
+Le chien de garde utilise un circuit résonnant peu précis mais indépendant de l'oscillateur du microcontrôleur. Il suffit de simplement appeler régulièrement une fonction qui indique au chien de garde que le microcontrôleur fonctionne normalement. Si cette fonction n'est pas appelée dans le délai imposé par le chien de garde (on peut choisir une valeur entre quelques millisecondes et quelques secondes), alors le microcontrôleur considère que le système s'est bloqué et il redémarre.
+
+\paragraph{Implémentation}
+
+Il suffit d'inclure le fichier d'entête «~avr/wtd.h~», puis d'initialiser le chien de garde avec «~wtd\_enable()~». L'argument de cette fonction indique le temps que met le chien de garde à se déclencher, par exemple \SI{15}{\milli\second}. Il suffit ensuite d'appeler la fonction «~wtd\_reset()~» dans la boucle infinie pour indiquer que le programme n'a pas planté.
+
+\paragraph{Test}
+
+Nous testons ce programme seul, puis directement intégré au programme «~Asservissement\_PI.c~». La valeur d'un délai d'attente maximale de \SI{15}{\milli\second} est choisie car c'est la valeur la plus faible disponible et est normalement largement suffisante compte tenu du faible nombre de calculs que nécessite notre programme.
+
+Pour vérifier que le chien de garde fonctionne et fait redémarrer le microcontrôleur, nous ajoutons une partie de code provisoire qui permet de forcer une attente de \SI{100}{\milli\second} (donc supérieure à \SI{15}{\milli\second}) lorsque le programme a enregistré 5 valeurs.
+
+Lors de nos tests, on voit que le microcontrôleur dès que 5 mesures ont étés réalisées et envoyées par USB. On considère donc que le chien de garde fonctionne pour éviter que le système reste bloqué. Nous pensons évidemment à commenter le code qui permet de forcer l'activation du chien de garde afin que le système fonctionne normalement.
 
 \section{Boîtier en impression 3D}
 
