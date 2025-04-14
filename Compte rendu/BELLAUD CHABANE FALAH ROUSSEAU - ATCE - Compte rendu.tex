@@ -205,26 +205,38 @@ En comparaison avec la théorie, la fréquence de résonance attendue, calculée
 
 Pour ce qui est de la simulation du circuit RC et afin de déterminer les meilleurs choix pour la résistance et la capacité, on procédera de la façon suivante :
 
-Exemple avec \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\). On simulera toujours avec une fréquence de \(7812\,\mathrm{Hz}\) (voir le calcul de cette fréquence à la partie \ref{Section - Programmation - PWM}) et un rapport cyclique de 50\%. Grâce à notre simulation, on relève la constante de temps \(\tau\). Pour ce faire, on utilisera la méthode des 95\% de la valeur finale, puis par projection à partir de \(t = 0\) on observe et on relève, dans le cas de la figure en annexe (voir figure~\ref{fig:tauR5C1}), \(\tau = 16,4\,\mathrm{ms}\). Cela paraît cohérent si l'on considère que \(\tau = RC = 5,1 \times 10^3 \times 1 \times 10^{-6}\) et que \(3\,\tau\) correspond à l'atteinte de 95\% de la réponse.
+Exemple avec \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\). On simulera toujours avec une fréquence de \(7812\,\mathrm{Hz}\) (voir le calcul de cette fréquence à la partie \ref{Section - Programmation - PWM}) et un rapport cyclique de 50\%. Grâce à notre simulation, on relève la constante de temps \(\tau\). Pour ce faire, on utilisera la méthode des 95\% de la valeur finale, puis par projection à partir de \(t = 0\) on observe et on relève, dans le cas de la figure en annexe (voir figure~\ref{fig:tauR5C1}), \(\tau = 16,4\,\mathrm{ms}\). 
+
+On peut comparer ce résultat avec le calcul théorique. En effet, le produit \(RC\) donne la constante de temps :
+\[
+\tau_{\text{th}} = R \times C = 5,1 \times 10^3 \times 1 \times 10^{-6} = 5,1\,\mathrm{ms}.
+\]
+Or, dans un circuit RC, le temps pour atteindre environ 95\% de la valeur finale est approximativement donné par :
+\[
+T_{95\%} \approx 3\,\tau_{\text{th}} = 3 \times 5,1\,\mathrm{ms} = 15,3\,\mathrm{ms},
+\]
+ce qui est proche de la valeur mesurée.
 
 Une fois \(\tau\) relevé, on relève également la variation de tension lorsque la réponse se stabilise. Comme on peut le voir dans la figure en annexe (voir figure~\ref{fig:voltageR5C1}), il suffit d'utiliser les curseurs pour relever environ \(24\,\mathrm{mV}\).
 
 On appliquera la même procédure pour d'autres valeurs de \(R\) et \(C\), comme présenté dans le tableau ci-dessous :
 
 \begin{center}
-\begin{tabular}{| m{3cm} | m{3cm} | m{3cm} | m{3cm} |}
+\begin{tabular}{| m{3cm} | m{3cm} | m{4cm} | m{3cm} |}
 \hline
-\(R\) & \(C\) & \(\tau\) & \(\Delta V\) \\
+\(R\) & \(C\) & $T_{95\%}$ & \(\Delta V\) \\
 \hline
-\(5.1\,\mathrm{k}\Omega\) & \(0.1\,\mu\mathrm{F}\) & \(2.27\,\mathrm{ms}\) & \(286\,\mathrm{mV}\) \\
+\(5.1\,\mathrm{k}\Omega\) & \(0.1\,\mu\mathrm{F}\) & \(2.27\,\mathrm{ms}\)  & \(286\,\mathrm{mV}\) \\
 \hline
-\(5.1\,\mathrm{k}\Omega\) & \(10\,\mu\mathrm{F}\) & \(150\,\mathrm{ms}\) & \(3.09\,\mathrm{mV}\) \\
+\(5.1\,\mathrm{k}\Omega\) & \(1\,\mu\mathrm{F}\)   & \(16.4\,\mathrm{ms}\) & \(24\,\mathrm{mV}\) \\
 \hline
-\(3\,\mathrm{k}\Omega\) & \(0.1\,\mu\mathrm{F}\) & \(2.35\,\mathrm{ms}\) & \(312\,\mathrm{mV}\) \\
+\(5.1\,\mathrm{k}\Omega\) & \(10\,\mu\mathrm{F}\)  & \(150\,\mathrm{ms}\)  & \(3.09\,\mathrm{mV}\) \\
 \hline
-\(3\,\mathrm{k}\Omega\) & \(1\,\mu\mathrm{F}\) & \(16.4\,\mathrm{ms}\) & \(30.8\,\mathrm{mV}\) \\
+\(3\,\mathrm{k}\Omega\)   & \(0.1\,\mu\mathrm{F}\) & \(2.35\,\mathrm{ms}\)  & \(312\,\mathrm{mV}\) \\
 \hline
-\(3\,\mathrm{k}\Omega\) & \(10\,\mu\mathrm{F}\) & \(153\,\mathrm{ms}\) & \(3.09\,\mathrm{mV}\) \\
+\(3\,\mathrm{k}\Omega\)   & \(1\,\mu\mathrm{F}\)   & \(16.4\,\mathrm{ms}\) & \(30.8\,\mathrm{mV}\) \\
+\hline
+\(3\,\mathrm{k}\Omega\)   & \(10\,\mu\mathrm{F}\)  & \(153\,\mathrm{ms}\)  & \(3.09\,\mathrm{mV}\) \\
 \hline
 \end{tabular}
 \end{center}
