@@ -4095,7 +4095,7 @@
 		(descr "https://www.molex.com/webdocs/datasheets/pdf/en-us/0732512200_RF_COAX_CONNECTORS.pdf")
 		(tags "SMA THT Female Jack Horizontal")
 		(property "Reference" "J2"
-			(at 0.46 4.96 90)
+			(at 1.03 4.23 90)
 			(layer "F.SilkS")
 			(uuid "5d1aac08-e212-46af-9f8e-317054752615")
 			(effects
@@ -8664,6 +8664,14 @@
 		(uuid "16559b2e-93ef-40df-93a5-9c71f9754ae2")
 	)
 	(segment
+		(start 126.5 94.5)
+		(end 122 94.5)
+		(width 0.2)
+		(layer "F.Cu")
+		(net 7)
+		(uuid "1a22a313-a737-4bb5-b42f-760d985c4745")
+	)
+	(segment
 		(start 122 95)
 		(end 119.96 97.04)
 		(width 0.2)
@@ -8896,14 +8904,6 @@
 		(uuid "9eb9c72f-fd76-40a6-b506-47e6f117b35c")
 	)
 	(segment
-		(start 122 94.5)
-		(end 125.5 94.5)
-		(width 0.2)
-		(layer "F.Cu")
-		(net 7)
-		(uuid "9fd34536-e04a-4b06-8bec-5fdda2b28e70")
-	)
-	(segment
 		(start 133.8517 86.5)
 		(end 133.6517 86.3)
 		(width 0.2)
@@ -8926,14 +8926,6 @@
 		(layer "F.Cu")
 		(net 7)
 		(uuid "a43cdc9b-5eca-413b-b2a6-40657714ae8e")
-	)
-	(segment
-		(start 125.5 94.5)
-		(end 122.5 94.5)
-		(width 0.2)
-		(layer "F.Cu")
-		(net 7)
-		(uuid "a88a8d22-fb6e-40d3-a855-5afe1028355a")
 	)
 	(segment
 		(start 124.599 95.81484)
@@ -9070,14 +9062,6 @@
 		(layer "F.Cu")
 		(net 7)
 		(uuid "e7af568d-1636-4a18-8981-34bc6fce53c0")
-	)
-	(segment
-		(start 126.5 94.5)
-		(end 125.5 94.5)
-		(width 0.2)
-		(layer "F.Cu")
-		(net 7)
-		(uuid "efaf7050-36dd-4a14-adce-3098a0327280")
 	)
 	(segment
 		(start 135.9 96.35)
