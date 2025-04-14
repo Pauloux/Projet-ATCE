@@ -181,7 +181,7 @@ Le routage suit le même ordre : le groupe avec le quartz, les capacités de dé
 
 On effectue le contrôle de conception (DRC) pour corriger toutes les erreurs ou avertissements, notamment ceux liés à la sérigraphie (F.SilkScreen) que l’on repositionne.
 
-Cette méthode est celle du PCB double couche. Puis pour la version monocouche le principal défi consiste à superposer les plans \SI{5}{\volt} et de masse sur une même couche, ce qui impose de déplacer certaines empreintes.
+Cette méthode est celle pour obtenir un PCB double couche (voir figure \ref{PCB-2couches}). Puis pour la version monocouche le principal défi consiste à superposer les plans \SI{5}{\volt} et de masse sur une même couche, ce qui impose de déplacer certaines empreintes (voir figure \ref{PCB-1couche}).
 
 Les paramètres du routage sont faits pour respecter la classe 4, mais l’empreinte du connecteur BNC impose des vias traversants de classe 6. En dernier, on ajoute des perçages aux coins du PCB pour permettre sa fixation dans un boîtier.
 
@@ -313,13 +313,11 @@ Au début de la semaine de projet nous avons un PCB nu, l'objectif est de souder
 
 Dans un premier temps, nous définissons l’ordre des composants à souder. Le connecteur USB est placé en premier pour vérifier la présence du \SI{5}{\volt} et de la masse, suivi des composants les plus petits (diodes, résistances, condensateurs), puis de l’Atmega, et enfin des composants traversants (boutons, connecteur BNC). Cet ordre nous permet d'avoir le plus d'espace de travail maximal pour les composants les plus délicats à souder.
 
-La soudure de l’USB s’avère complexe et nécessite plusieurs essais. Un court-circuit se produit lorsqu’une bille d’étain retombe sur les broches du connecteur, les reliant entre elles. On essaye une première fois de le dessouder à la tresse, sans succès. Nous avons donc demandé de l'aide au technicien qui a retiré le connecteur avec un pistolet à air chaud. Le vernis à donc fondu dans cette partie du PCB. Après nettoyage de l'étain sur l’USB et la suppression d’une plaque métallique à l’arrière du connecteur, qui était la source du court-circuit. On a pu ressouder le port USB correctement (voir la figure ?????). La suite de la soudure se déroule sans problème.
+La soudure de l’USB s’avère complexe et nécessite plusieurs essais. Un court-circuit se produit lorsqu’une bille d’étain retombe sur les broches du connecteur, les reliant entre elles. On essaye une première fois de le dessouder à la tresse, sans succès. Nous avons donc demandé de l'aide au technicien qui a retiré le connecteur avec un pistolet à air chaud. Le vernis à donc fondu dans cette partie du PCB. Après nettoyage de l'étain sur l’USB et la suppression d’une plaque métallique à l’arrière du connecteur, qui était la source du court-circuit. On a pu ressouder le port USB correctement (voir la figure \ref{Soudures}). La suite de la soudure se déroule sans problème.
 
-%% mettre image du connecteur
 
 Pour conclure, l’utilisation de la loupe binoculaire nous a demandé un temps d’adaptation, chaque membre du groupe a eu l’occasion de participer à l’assemblage, à l’exception d’un membre qui préfère ne pas intervenir. Tout au long de l'assemblage du PCB, nous avons vérifié au multimètre pour détecter d’éventuels courts-circuits et contrôler la présence de la tension d’alimentation. La soudure est achevée dès le mardi midi. Nous avons pu vérifier le fonctionnement de la carte, ce qui nous a permis d’aborder les étapes suivantes du projet rapidement.
 
-%% mettre image du pcb terminer
 
 
 
@@ -545,9 +543,7 @@ Une première version est imprimée mais a plusieurs défauts, notamment l’enc
 
 Le couvercle est conçu aux mêmes dimensions que la boîte. Il comporte des chanfreins sur ces contours qui permettent de le fermer correctement sur la boite. Les boutons, étant légèrement en retrait dans la boite ils sont donc difficilement accessibles. Pour y remédier, on modélise des rallonges qui viennent se fixer directement sur la surface ronde des boutons.
 
-L’impression s'est bien passé, cependant nous avons eu des difficultés lors du retrait des supports. L’un d’eux nécessite l’usage d’une fraiseuse puis d’une lame chauffée pour être retiré proprement. Malgré cela, le boîtier final (voir figure ??????) est fonctionnel et conforme au cahier des charges que nous nous sommes fixés.
-
-%% mettre photos du boitiers 
+L’impression s'est bien passé, cependant nous avons eu des difficultés lors du retrait des supports. L’un d’eux nécessite l’usage d’une fraiseuse puis d’une lame chauffée pour être retiré proprement. Malgré cela, le boîtier final (voir figure \ref{Boite-3D}) est fonctionnel et conforme au cahier des charges que nous nous sommes fixés.
 
 \section{Conclusion}
 
@@ -623,6 +619,24 @@ Nous profitons de ce compte rendu pour remercier chaleureusement nos enseignants
     \label{BOM}
 \end{sidewaysfigure}
 
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{Ressources/Images/PCB-2couches.png}
+	\caption{Résultat de la conception du PCB qui utilise 2 couches.}
+	\label{PCB-2couches}
+\end{figure}
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{Ressources/Images/PCB-1couche.png}
+	\caption{Résultat de la conception du PCB qui utilise une couche.}
+	\label{PCB-1couche}
+\end{figure}
+
+
+
+
 \begin{sidewaysfigure}
     \centering
     \includegraphics[width=0.9\linewidth]{Ressources/Schemas/Simulation.png}
@@ -657,6 +671,17 @@ Nous profitons de ce compte rendu pour remercier chaleureusement nos enseignants
     \caption{Simulation du filtre RC et visualisation de l'évolution de la tension finale pour \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\).}
     \label{fig:voltageR5C1}
 \end{sidewaysfigure}
+
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Ressources/Images/Soudures.png}
+	\caption{Images du PCB soudé par le groupe, avec un zoom sur le connecteur USB ainsi que l'ensemble qui entour le quartz.}
+	\label{Soudures}
+\end{figure}
+
+
+
 
 \begin{figure}[htb!]
 	\centering
@@ -699,5 +724,13 @@ Nous profitons de ce compte rendu pour remercier chaleureusement nos enseignants
 	\caption{Graphique comparant l'évolution de la fréquence de l'oscillateur avec et sans régulation (graphique du haut). On peut voir la commande sur le graphique du bas qui permet de compenser l'effet de la température.}
 	\label{Graphique - Comparaison}
 \end{sidewaysfigure}
+
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{Ressources/Images/Boite-3D.png}
+	\caption{Images du boîtier contenant le PCB.}
+	\label{Boite-3D}
+\end{figure}
 
 \end{document}
