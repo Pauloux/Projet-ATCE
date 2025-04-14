@@ -120,11 +120,11 @@ Enfin, nous ajoutons des points de tests afin de pouvoir vérifier le fonctionne
 
 \paragraph{Microcontrôleur :}
 
-L’Atmega32U4 a été sélectionné pour ses timers 16 bits, nécessaires à l’input capture pour mesurer précisément la fréquence de l’oscillateur, et sa capacité à générer une PWM 10 bits pour le signal de commande. Son boîtier TQFP-44 (SMD) est compatible avec un montage en surface et une soudure manuelle, et il est disponible chez Farnell (par exemple, référence 1748525, prix unitaire d’environ 5,250~€).
+L’Atmega32U4 a été imposé pour ce projet, notamment parce que nous l'avons déjà beaucoup utilisé, ce qui facilitera le développement du programme. De plus, ses timers 16 bits pouvant générer un signal PWM et utiliser la fonction «~input capture~» sont intéressants. Son boîtier TQFP-44 (SMD) est compatible avec un montage en surface et une soudure manuelle, et il est disponible chez Farnell (par exemple, référence 1748525, prix unitaire d’environ 5,250~€).
 
 \paragraph{Connecteur USB :}
 
-Un connecteur USB mini-B horizontal (ref \texttt{USB\_OTG\_SMD\_xxx} ) a été choisi pour son faible encombrement et sa robustesse mécanique. Ce modèle SMD facilite le soudage et l’alignement sur la carte, et est largement disponible (par exemple, Molex sur Farnell, référence 3500674, environ 1,00~€).
+Un connecteur USB mini-B horizontal (ref \texttt{USB\_OTG\_SMD\_xxx} ) a été choisi pour son faible encombrement et sa robustesse mécanique. De plus, c'est le connecteur standard des cartes électroniques que l'on utilise, ce qui signifie que nous n'avons pas besoin d'acheter de câble. Ce modèle SMD facilite le soudage et l’alignement sur la carte, et est largement disponible (par exemple, Molex sur Farnell, référence 3500674, environ 1,00~€).
 
 \paragraph{Résonateur à quartz :}
 
@@ -197,7 +197,7 @@ L'analyse AC, réalisée sur une plage de fréquences de 15,9~MHz à 16,1~MHz, a
 
 \subsection{Fréquence de résonance de l’oscillateur}
 
-L'analyse a été réalisée pour déterminer la fréquence de résonance de l’oscillateur à quartz. Le gain maximal, mesuré à 15~dB sur le nœud \texttt{V(XTAL2)}, est atteint à 16,009200~MHz, ce qui correspond à la fréquence de résonance. Cette fréquence est associée à une capacité de la varicap (C11) de 10~pF, comme confirmé par les simulations précédentes (2~pF à 16,017200~MHz, 6~pF à 16,012000~MHz, et 10~pF à 16,009200~MHz).
+L'analyse a été réalisée pour déterminer la fréquence de résonance de l’oscillateur à quartz. Le gain maximal, mesuré à 15~dB sur le nœud \texttt{V(XTAL2)}, est atteint pour une fréquence de  \SI{16,009200}{\mega\hertz}, ce qui correspond à la fréquence de résonance. Cette fréquence est associée à une capacité de la varicap (C11) de 10~pF, comme confirmé par les simulations précédentes (2~pF à 16,017200~MHz, 6~pF à 16,012000~MHz, et 10~pF à 16,009200~MHz).
 
 En comparaison avec la théorie, la fréquence de résonance attendue, calculée à partir du modèle Butterworth-van Dyke en annexe \cite{Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF), est de $f_0 = \frac{1}{2\pi \sqrt{L2 \cdot C6}} \approx 16,009190$~MHz. L’écart entre la valeur mesurée (16,009200~MHz) et la valeur théorique (16,009190~MHz) est de 0,6~ppm, ce qui est négligeable et probablement dû aux capacités parasites et à la précision numérique de ngspice. Ces résultats valident la conception de l’oscillateur pour une utilisation dans l’asservissement GPS.
 
@@ -247,9 +247,12 @@ On remarque alors que, selon nos observations, les meilleurs choix sont \(R = 5.
 
 D'après le site Eurocircuits (voir Figure~\ref{fig:prix}), pour un prototype de PCB à 2 couches, le prix est de 40,99~€ (net) avec un délai de 3 jours. De plus, l'éditeur de classification indique que notre PCB est conçu en classe 6, ce qui correspond à des largeurs de pistes et des espacements plus exigeants.
 
+{
+% Pour modifier la hauteur des lignes des tableaux
+\renewcommand{\arraystretch}{2.2}
 \begin{table}[ht]
 \centering
-\caption{Prix unitaire et total (en €) pour différentes quantités et délais}
+\caption{Prix unitaire (valeur en haut de la case) et total (valeur en bas de la case) en € pour différentes quantités et délais}
 \label{tab:fullPriceMatrix}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
@@ -299,6 +302,7 @@ D'après le site Eurocircuits (voir Figure~\ref{fig:prix}), pour un prototype de
 \hline
 \end{tabular}
 \end{table}
+}
 
 \bigskip
 
@@ -315,13 +319,21 @@ Dans un premier temps, nous définissons l’ordre des composants à souder. Le 
 
 La soudure de l’USB s’avère complexe et nécessite plusieurs essais. Un court-circuit se produit lorsqu’une bille d’étain retombe sur les broches du connecteur, les reliant entre elles. On essaye une première fois de le dessouder à la tresse, sans succès. Nous avons donc demandé de l'aide au technicien qui a retiré le connecteur avec un pistolet à air chaud. Le vernis à donc fondu dans cette partie du PCB. Après nettoyage de l'étain sur l’USB et la suppression d’une plaque métallique à l’arrière du connecteur, qui était la source du court-circuit. On a pu ressouder le port USB correctement (voir la figure \ref{Soudures}). La suite de la soudure se déroule sans problème.
 
-
 Pour conclure, l’utilisation de la loupe binoculaire nous a demandé un temps d’adaptation, chaque membre du groupe a eu l’occasion de participer à l’assemblage, à l’exception d’un membre qui préfère ne pas intervenir. Tout au long de l'assemblage du PCB, nous avons vérifié au multimètre pour détecter d’éventuels courts-circuits et contrôler la présence de la tension d’alimentation. La soudure est achevée dès le mardi midi. Nous avons pu vérifier le fonctionnement de la carte, ce qui nous a permis d’aborder les étapes suivantes du projet rapidement.
 
+\section{Boîtier en impression 3D}
 
+Pour compléter le projet, nous décidons de concevoir un boîtier pour accueillir le PCB. Les contraintes principales sont de respecter les dimensions de la carte, de permettre sa fixation tout en assurant de pouvoir le mettre et l'enlever facilement, et de conserver l’accessibilité aux deux boutons, au port USB et au connecteur BNC.
 
+Le modèle 3D du PCB est exporté depuis KiCad, puis importé dans FreeCAD qui est le logiciel que nous avons utilisé pour modéliser. La boîte est pensée pour être imprimée en 3D et se compose de trois parties distinctes : le corps principal, un couvercle clipsable et des rallonges de boutons. Pour l'impression 3D, on utilise une PRUSA MK3+ qui nous est mis à disposition en salle CMI.
 
+Le corps de la boîte est rectangulaire aux dimensions du PCB. Quatre supports sont modélisés au fond pour maintenir la carte en place. Des ouvertures spécifiques sont prévues pour permettre l’accès au connecteur BNC, aux boutons et au port USB. Des aérations sont ajoutés pour limiter la chaleur à l'intérieur. Au-dessus des boutons, on ajoute des marquages pour distinguer les boutons « Reset » et « HWB ».
 
+Une première version est imprimée mais a plusieurs défauts, notamment l’encombrement du connecteur BNC qui empêche d’insérer correctement le PCB, et la fixation n’est pas satisfaisante. Une seconde version corrige ces problèmes en modifiants le type de fixation tout en améliorant certains détails.
+
+Le couvercle est conçu aux mêmes dimensions que la boîte. Il comporte des chanfreins sur ces contours qui permettent de le fermer correctement sur la boite. Les boutons, étant légèrement en retrait dans la boite ils sont donc difficilement accessibles. Pour y remédier, on modélise des rallonges qui viennent se fixer directement sur la surface ronde des boutons.
+
+L’impression s'est bien passé, cependant nous avons eu des difficultés lors du retrait des supports. L’un d’eux nécessite l’usage d’une fraiseuse puis d’une lame chauffée pour être retiré proprement. Malgré cela, le boîtier final (voir figure \ref{Boite-3D}) est fonctionnel et conforme au cahier des charges que nous nous sommes fixés.
 
 \section{Programmation}
 
@@ -531,20 +543,6 @@ Pour vérifier que le chien de garde fonctionne et fait redémarrer le microcont
 
 Lors de nos tests, on voit que le microcontrôleur dès que 5 mesures ont étés réalisées et envoyées par USB. On considère donc que le chien de garde fonctionne pour éviter que le système reste bloqué. Nous pensons évidemment à commenter le code qui permet de forcer l'activation du chien de garde afin que le système fonctionne normalement.
 
-\section{Boîtier en impression 3D}
-
-Pour compléter le projet, nous décidons de concevoir un boîtier pour accueillir le PCB. Les contraintes principales sont de respecter les dimensions de la carte, de permettre sa fixation tout en assurant de pouvoir le mettre et l'enlever facilement, et de conserver l’accessibilité aux deux boutons, au port USB et au connecteur BNC.
-
-Le modèle 3D du PCB est exporté depuis KiCad, puis importé dans FreeCAD qui est le logiciel que nous avons utilisé pour modéliser. La boîte est pensée pour être imprimée en 3D et se compose de trois parties distinctes : le corps principal, un couvercle clipsable et des rallonges de boutons. Pour l'impression 3D, on utilise une PRUSA MK3+ qui nous est mis à disposition en salle CMI.
-
-Le corps de la boîte est rectangulaire aux dimensions du PCB. Quatre supports sont modélisés au fond pour maintenir la carte en place. Des ouvertures spécifiques sont prévues pour permettre l’accès au connecteur BNC, aux boutons et au port USB. Des aérations sont ajoutés pour limiter la chaleur à l'intérieur. Au-dessus des boutons, on ajoute des marquages pour distinguer les boutons « Reset » et « HWB ».
-
-Une première version est imprimée mais a plusieurs défauts, notamment l’encombrement du connecteur BNC qui empêche d’insérer correctement le PCB, et la fixation n’est pas satisfaisante. Une seconde version corrige ces problèmes en modifiants le type de fixation tout en améliorant certains détails.
-
-Le couvercle est conçu aux mêmes dimensions que la boîte. Il comporte des chanfreins sur ces contours qui permettent de le fermer correctement sur la boite. Les boutons, étant légèrement en retrait dans la boite ils sont donc difficilement accessibles. Pour y remédier, on modélise des rallonges qui viennent se fixer directement sur la surface ronde des boutons.
-
-L’impression s'est bien passé, cependant nous avons eu des difficultés lors du retrait des supports. L’un d’eux nécessite l’usage d’une fraiseuse puis d’une lame chauffée pour être retiré proprement. Malgré cela, le boîtier final (voir figure \ref{Boite-3D}) est fonctionnel et conforme au cahier des charges que nous nous sommes fixés.
-
 \section{Conclusion}
 
 Ce projet est pour nous une réussite. En effet, nous avons atteint l'objectif d'asservir la fréquence de l'oscillateur d'un microcontrôleur comprenant un résonateur à quartz à l'aide d'un signal 1 PPS.
@@ -672,16 +670,12 @@ Nous profitons de ce compte rendu pour remercier chaleureusement nos enseignants
     \label{fig:voltageR5C1}
 \end{sidewaysfigure}
 
-
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=0.8\textwidth]{Ressources/Images/Soudures.png}
 	\caption{Images du PCB soudé par le groupe, avec un zoom sur le connecteur USB ainsi que l'ensemble qui entour le quartz.}
 	\label{Soudures}
 \end{figure}
-
-
-
 
 \begin{figure}[htb!]
 	\centering
@@ -724,7 +718,6 @@ Nous profitons de ce compte rendu pour remercier chaleureusement nos enseignants
 	\caption{Graphique comparant l'évolution de la fréquence de l'oscillateur avec et sans régulation (graphique du haut). On peut voir la commande sur le graphique du bas qui permet de compenser l'effet de la température.}
 	\label{Graphique - Comparaison}
 \end{sidewaysfigure}
-
 
 \begin{figure}[htb!]
 	\centering
