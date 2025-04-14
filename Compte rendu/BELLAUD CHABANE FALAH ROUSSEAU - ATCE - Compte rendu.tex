@@ -92,7 +92,7 @@ Le filtre passe-bas en sortie du signal PWM permet d'obtenir une tension continu
 
 \paragraph{Résonateur}
 
-Le résonateur Y1 est connecté au broches XTAL1 et XTAL2 du microcontrôleur et on place les capacités de pieds C1 et C2. La Varicap (diode dont la capacité change en fonction de sa tension de polarisation) est placée en parallèle d'une capacité de pied, ce qui permet de faire varier la fréquence de résonance de Y1. Cependant, la tension de polarisation de la Varicap ne doit pas influencer le résonateur, et le résonateur ne doit pas influencer la polarisation de la Varicap. Nous utilisons pour cela un T de polarisation.
+Le résonateur Y1 est connecté aux broches XTAL1 et XTAL2 du microcontrôleur et on place les capacités de pieds C1 et C2. La varicap (diode dont la capacité change en fonction de sa tension de polarisation) est placée en parallèle d'une capacité de pied, ce qui permet de faire varier la fréquence de résonance de Y1. Cependant, la tension de polarisation de la varicap ne doit pas influencer le résonateur, et le résonateur ne doit pas influencer la polarisation de la varicap. Nous utilisons pour cela un T de polarisation.
 
 \bigskip
 
@@ -104,7 +104,7 @@ Pour le T de polarisation, on détermine les conditions suivantes : \nopagebreak
 
 \Cosci\ sont les capacités de pieds de l'oscillateur, qui sont de l'ordre de \SI{20}{\pico\farad}, donc nous choisissons $\boxed{\CT = \SI{1}{\micro\farad}}$. On en déduit alors $\boxed{\LT = \SI{10}{\micro\henry}}$.
 
-À très basse fréquence, c'est-à-dire en continu, on a $\XLT \to 0$ et $\XCT \to \infty$, ce qui confirme que la tension continue n'influence pas le résonateur. À \SI{16}{\mega\hertz}, on obtient $\XLT \approx \SI{1}{\kilo\ohm}$ et $\XCT \approx \SI{10}{\milli\ohm}$, ce qui indique que l'oscillateur «~voit~» bien la Varicap mais n'influence pas sa tension de polarisation continue car $\XCT \gg \XLT$.
+À très basse fréquence, c'est-à-dire en continu, on a $\XLT \to 0$ et $\XCT \to \infty$, ce qui confirme que la tension continue n'influence pas le résonateur. À \SI{16}{\mega\hertz}, on obtient $\XLT \approx \SI{1}{\kilo\ohm}$ et $\XCT \approx \SI{10}{\milli\ohm}$, ce qui indique que l'oscillateur «~voit~» bien la varicap mais n'influence pas sa tension de polarisation continue car $\XCT \gg \XLT$.
 
 \paragraph{Port USB}
 
@@ -153,7 +153,7 @@ Les composants ont été choisis sur Farnell en fonction de plusieurs critères~
 	\item \textbf{Valeur électrique~:} Par exemple, un condensateur de 10~$\mu$F pour le découplage ou une résistance de 5~k$\Omega$ pour le filtre RC.
 	\item \textbf{Capacité et tolérance~:} Pour les condensateurs, une tolérance de $\pm$5~\% a été privilégiée pour les applications de découplage et de circuits de filtrage. Pour les résistances, une tolérance de $\pm$1~\% a été choisie pour plus de précision.
 	\item \textbf{Dimensions et boîtier~:} Les dimensions ont été vérifiées pour correspondre aux empreintes KiCad (par exemple, un boîtier 0805 mesure 2,0$\times$1,2~mm).
-	\item \textbf{Prix unitaire et disponibilité~:} Les prix unitaires ont été comparés pour optimiser les coûts. Par exemple, pour un condensateur de 1~$\mu$F en boîtier 0805, nous avons comparé plusieurs références sur Farnell. La référence 4166923 a été retenue, avec un prix unitaire de 0,121~€, une tolérance de $\pm$5~\%, et une disponibilité en stock suffisante pour notre projet.
+	\item \textbf{Prix unitaire et disponibilité~:} Les prix unitaires ont été comparés pour optimiser les coûts. Par exemple, pour un condensateur de 1~$\mu$F en boîtier 0805, nous avons comparé plusieurs références sur Farnell. La référence 4166923 a été retenue, avec un prix unitaire de 0,121~€, une tolérance de $\pm$5~\%, et une disponibilité suffisante pour notre projet.
 \end{itemize}
 
 \paragraph{Exemple de sélection :}
@@ -162,13 +162,13 @@ Prenons l’exemple du condensateur C5 (10~$\mu$F) utilisé dans le filtre RC av
 
 \subsection{Liste des composants (BOM)}
 
-Après avoir sélectionné tous les composants, nous avons généré la nomenclature (BOM) dans KiCad pour regrouper et organiser les informations, qu'on peut retrouver en annexe Figure \ref{BOM} ou à telecharger en \cite{Lien BOM}. Voici les étapes suivies~:
+Après avoir sélectionné tous les composants, nous avons généré la nomenclature (BOM) dans KiCad pour regrouper et organiser les informations, qu'on peut retrouver en annexe Figure \ref{BOM} ou à télécharger en \cite{Lien BOM}. Voici les étapes suivies~:
 
 \begin{itemize}
     \item \textbf{Ajout des prix à la BOM~:} Pour chaque composant, le prix unitaire (obtenu sur Farnell) a été ajouté manuellement dans les champs personnalisés de KiCad (via Eeschema, en éditant les propriétés des composants). Par exemple, pour le condensateur 4166923, le champ ``Prix'' a été rempli avec ``0,121~€''.
     \item \textbf{Groupement par valeur~:} Dans l’outil de génération de BOM de KiCad (accessible via ``Fabriquer > Liste des composants''), nous avons configuré le script pour regrouper les composants par valeur. Par exemple, tous les condensateurs de 1~$\mu$F en boîtier 0805 ont été regroupés sous une seule ligne, avec une quantité totale (par exemple, 3 unités pour C5, C10, etc.).
     \item \textbf{Exportation de la BOM~:} La BOM a été exportée au format CSV pour faciliter son utilisation lors de la commande des composants. Le fichier inclut les colonnes suivantes~: référence, valeur, empreinte, quantité, prix unitaire, et lien vers la fiche technique sur Farnell. Cela permet une commande rapide et une vérification finale avant achat.
-    \item \textbf{La disponibilité du composant :} Sur Farnell, il faut verifier la disponibilité de notre besoin ainsi que la possibilité d’en commander en quantité suffisante ont également été prises en compte.
+    \item \textbf{La disponibilité du composant :} Sur Farnell, il faut vérifier la disponibilité de notre besoin ainsi que la possibilité d’en commander en quantité suffisante ont également été prises en compte.
 \end{itemize}
 
 \section{Routage du PCB}
@@ -203,7 +203,7 @@ En comparaison avec la théorie, la fréquence de résonance attendue, calculée
 
 \subsection{Simulation du circuit RC}
 
-Pour ce qui est de la simulation du circuit RC afin de déterminer les meilleurs choix pour la résistance et la capacité, on procèdera de la façon suivante :
+Pour ce qui est de la simulation du circuit RC afin de déterminer les meilleurs choix pour la résistance et la capacité, on procédera de la façon suivante :
 
 Exemple avec \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\). On simulera toujours avec une fréquence de \(7812\,\mathrm{Hz}\) et un rapport cyclique de 50\%. Grâce à notre simulation, on relève la constante de temps \(\tau\). Pour ce faire, on utilisera la méthode des 95\% de la valeur finale, puis par projection à partir de \(t = 0\) on observe et on relève, dans le cas de la figure en annexe (voir Figure~\ref{fig:tauR5C1}), \(\tau = 16,4\,\mathrm{ms}\). Cela paraît cohérent si l'on considère que \(\tau = RC = 5,1 \times 10^3 \times 1 \times 10^{-6}\) et que \(3\,\tau\) correspond à l'atteinte de 100\% de la réponse.
 
@@ -307,7 +307,7 @@ La soudure de l’USB s’avère complexe et nécessite plusieurs essais. Un cou
 
 %% mettre image du connecteur
 
-Pour conclure, l’utilisation de la loupe binoculaire nous a demandé un temps d’adaptation, chaque membre du groupe a eu l’occasion de participer à l’assemblage, à l’exception d’un membre qui préfère ne pas intervenir. Tout au long de l'assemblage du PCB, nous avons vérifié au multimètre pour détecter d’éventuels courts-circuits et contrôler la présence de la tension d’alimentation. La soudure est achevée dès le mardi midi. Nous avons pu vérifier le fonctionnement de la carte, ce qui nous as permis d’aborder les étapes suivantes du projet rapidement.
+Pour conclure, l’utilisation de la loupe binoculaire nous a demandé un temps d’adaptation, chaque membre du groupe a eu l’occasion de participer à l’assemblage, à l’exception d’un membre qui préfère ne pas intervenir. Tout au long de l'assemblage du PCB, nous avons vérifié au multimètre pour détecter d’éventuels courts-circuits et contrôler la présence de la tension d’alimentation. La soudure est achevée dès le mardi midi. Nous avons pu vérifier le fonctionnement de la carte, ce qui nous a permis d’aborder les étapes suivantes du projet rapidement.
 
 %% mettre image du pcb terminer
 
@@ -441,9 +441,9 @@ Afin de simuler le signal 1 PPS, nous utilisons un générateur de signaux régl
 
 Lorsque l'on exécute le programme, les valeurs observées sont cohérentes, c'est-à-dire que le nombre de cycle est toujours égal à 244 et la valeur de ICR1 est autour de 8500, ce qui correspond alors à une fréquence de \SI{15999284}{\hertz}. De plus, nous faisons chauffer le résonateur à l'aide d'un fer à souder afin de voir l'impact de la température sur la fréquence de l'oscillateur. Nous enregistrons les valeurs dans un fichier à l'aide de la commande «~minicom -D /dev/ttyACM0 -C frequence.dat~» et nous traçons l'évolution de la fréquence mesurée en fonction du temps. Pour cela, nous utilisons un script MATLAB qui trace simplement l'évolution de ICR1. Nous obtenons alors le graphique de la figure \ref{Graphique - ICP} en annexe.
 
-On voit clairement le moment où le fer à souder est posé sur le résonateur car la fréquence diminue d'abord légèrement puis augmente drastiquement. Autrement dit, «~avant la montagne se trouve le fossé~». L'écart de fréquence observé est d'environ \SI{400}{\hertz}, ce qui est l'ordre de grandeur que l'on attendais.
+On voit clairement le moment où le fer à souder est posé sur le résonateur car la fréquence diminue d'abord légèrement puis augmente drastiquement. Autrement dit, «~avant la montagne se trouve le fossé~». L'écart de fréquence observé est d'environ \SI{400}{\hertz}, ce qui est l'ordre de grandeur que l'on attendait.
 
-Nous considérons que cette partie est fonctionnelle et que l'on peut mesurer précisément la fréquence de l'oscillateur. De plus, nous sommes capable de tracer l'évolution de la fréquence et de vérifier que la température l'influence bel et bien.
+Nous considérons que cette partie est fonctionnelle et que l'on peut mesurer précisément la fréquence de l'oscillateur. De plus, nous sommes capables de tracer l'évolution de la fréquence et de vérifier que la température l'influence bel et bien.
 
 \subsection{Régulation}
 
@@ -520,13 +520,13 @@ Pour compléter le projet, nous décidons de concevoir un boîtier pour accueill
 
 Le modèle 3D du PCB est exporté depuis KiCad, puis importé dans FreeCAD qui est le logiciel que nous avons utilisé pour modéliser. La boîte est pensée pour être imprimée en 3D et se compose de trois parties distinctes : le corps principal, un couvercle clipsable et des rallonges de boutons. Pour l'impression 3D, on utilise une PRUSA MK3+ qui nous est mis à disposition en salle CMI.
 
-Le corps de la boîte est rectangulaire aux dimensions du PCB. Quatre supports sont modélisés au fond pour maintenir la carte en place. Des ouvertures spécifiques sont prévues pour permettre l’accès au connecteur BNC, aux boutons et au port USB. Des aérations sont ajoutés pour limiter la chaleur à l'intérieur. Au dessus des boutons, on ajoute des marquages pour distinguer les boutons « Reset » et « HWB ».
+Le corps de la boîte est rectangulaire aux dimensions du PCB. Quatre supports sont modélisés au fond pour maintenir la carte en place. Des ouvertures spécifiques sont prévues pour permettre l’accès au connecteur BNC, aux boutons et au port USB. Des aérations sont ajoutés pour limiter la chaleur à l'intérieur. Au-dessus des boutons, on ajoute des marquages pour distinguer les boutons « Reset » et « HWB ».
 
 Une première version est imprimée mais a plusieurs défauts, notamment l’encombrement du connecteur BNC qui empêche d’insérer correctement le PCB, et la fixation n’est pas satisfaisante. Une seconde version corrige ces problèmes en modifiants le type de fixation tout en améliorant certains détails.
 
 Le couvercle est conçu aux mêmes dimensions que la boîte. Il comporte des chanfreins sur ces contours qui permettent de le fermer correctement sur la boite. Les boutons, étant légèrement en retrait dans la boite ils sont donc difficilement accessibles. Pour y remédier, on modélise des rallonges qui viennent se fixer directement sur la surface ronde des boutons.
 
-L’impression s'est bien passé, cependant nous avons eu des difficultés lors du retrait des supports. L’un d’eux nécessite l’usage d’une fraiseuse puis d’une lame chauffée pour être retiré proprement. Malgré cela, le boîtier final (voirfigure ??????) est fonctionnel et conforme au cahier des charges que nous nous sommes fixés.
+L’impression s'est bien passé, cependant nous avons eu des difficultés lors du retrait des supports. L’un d’eux nécessite l’usage d’une fraiseuse puis d’une lame chauffée pour être retiré proprement. Malgré cela, le boîtier final (voir figure ??????) est fonctionnel et conforme au cahier des charges que nous nous sommes fixés.
 
 %% mettre photos du boitiers 
 
@@ -544,14 +544,18 @@ Lors de la réalisation de ce projet, nous avons appris beaucoup de choses : \no
 	\item Soudage de composants montés en surface
 	\item Programmation du microcontrôleur (PWM, ICP, Watchdog)
 	\item Synthèse et implémentation d'une loi de commande (Takahashi)
+	\item Visualisation des données (MATLAB)
 	\item Conception d'une boite pour le PCB (FreeCAD)
+	\item Outils de gestion de projet (Git/Github)
 \end{itemize}
 
 \bigskip
 
-De plus, cela nous a permis de réaliser un travail en groupe, avec les avantages et contraintes que cela implique. Globalement, nous n'avons pas eu de problème de relations humaines mais nous avons remarqué que nous étions parfois trop par rapport à la quantité de travail à réaliser. Peut-être qu'une meilleure gestion des ressources humaine est à envisager, mais nous sommes plutôt satisfait du travail réalisé et de l'ambiance dans laquelle cela s'est fait, surtout pour une première fois. Cela nous a également montré qu'être beaucoup à travailler sur un projet ne le fait pas forcément avancer plus vite.
+De plus, cela nous a permis de réaliser un travail en groupe, avec les avantages et contraintes que cela implique. Globalement, nous n'avons pas eu de problème de relations humaines mais nous avons remarqué que nous étions parfois trop par rapport à la quantité de travail à réaliser. Peut-être qu'une meilleure gestion des ressources humaine est à envisager, mais nous sommes plutôt satisfaits du travail réalisé et de l'ambiance dans laquelle cela s'est fait, surtout pour une première fois. Cela nous a également montré qu'être beaucoup à travailler sur un projet ne le fait pas forcément avancer plus vite.
 
-Enfin, nous n'avons pas rencontré de grandes difficultés lors de la réalisation de ce projet hormis la soudure du port USB. En effet, la partie qui aurait pu ralentir le projet est la programmation, mais les programmes on presque tous fonctionné dès le premier essai. Cela nous a permis de prendre de l'avance et de pouvoir perfectionner notre projet avec l'implémentation d'un chien de garde ou encore de la réalisation d'une boite en impression 3D.
+Enfin, nous n'avons pas rencontré de grandes difficultés lors de la réalisation de ce projet hormis la soudure du port USB. En effet, la partie qui aurait pu ralentir le projet est la programmation, mais les programmes ont presque tous fonctionné dès le premier essai. Cela nous a permis de prendre de l'avance et de pouvoir perfectionner notre projet avec l'implémentation d'un chien de garde ou encore de la réalisation d'une boite en impression 3D. Cela vient aussi du fait que nos enseignants nous ont aidé dès que nécessaire, et nous nous a évité de perdre du temps. De plus, l'utilisation de Git et Github nous ont permis de travailler ensemble efficacement.
+
+Nous profitons de ce compte rendu pour remercier chaleureusement nos enseignants, M. FRIEDT et M. CARRY qui nous ont permis de réaliser ce projet dans de bonnes conditions. Cela nous a permis d'apprendre beaucoup de choses et nous a fait passer une agréable semaine.
 
 \newpage
 \section{Bibliographie}
