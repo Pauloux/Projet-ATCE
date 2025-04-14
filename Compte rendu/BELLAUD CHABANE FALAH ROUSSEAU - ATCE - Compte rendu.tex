@@ -1,4 +1,4 @@
-\documentclass[12pt, a4paper]{article}
+\documentclass[12pt, a4paper, titlepage]{article}
 
 \usepackage[utf8]{inputenc} % Pour l'encodage en utf-8
 \usepackage[T1]{fontenc} % Pour les accents
@@ -49,12 +49,18 @@
 
 \begin{document}
 
+{
+\hypersetup{pageanchor=false}
 \maketitle
+\hypersetup{pageanchor=true}
+}
 
 {
 \hypersetup{hidelinks}
 \tableofcontents
 }
+
+\newpage
 
 \section{Introduction}
 
@@ -476,7 +482,7 @@ En traçant l'évolution de la fréquence mesurée en fonction du rapport cycliq
 
 Pour tracer la réponse indicielle, nous réalisons un programme qui utilise les fonctions précédemment créées afin de générer un signal PWM et de mesurer la fréquence de l'oscillateur. L'algorithme dans la boucle principale infinie permet de générer un signal créneau pour la valeur du rapport cyclique du PWM. Concrètement, le rapport cyclique est de 462 sur 1023 pendant \SI{5}{\second}, puis il passe à 562 sur 1023 pendant \SI{5}{\second} avant que le cycle ne recommence. Cela permet de rester dans une gamme de $\pm 50$ sur 1023 de rapport cyclique.
 
-Nous enregistrons les valeurs d'un certain nombre (24 mesures retenues) de réponse indicielle et nous réalisons une moyenne (\ref{Graphique - Réponse indicielle}). À partir de ce graphique, nous déterminons : \nopagebreak
+Nous enregistrons les valeurs d'un certain nombre (24 mesures retenues) de réponse indicielle et nous réalisons une moyenne (\ref{Graphique - Réponse indicielle}). À partir de ce graphique, nous déterminons : \nopagebreak \vspace{-0.3cm}
 \begin{itemize}
 	\item La période d'échantillonnage $T$ est de \SI{1}{\second}. C'est un paramètre qui nous est imposé par la nature du signal 1 PPS. On a donc $\boxed{T = \SI{1}{\second}}$
 	\item Un retard $L$ nul. En effet, le système est échantillonné toutes les secondes et le système réagit beaucoup plus rapidement qu'une seconde. On considère donc $\boxed{L = \SI{0}{\second}}$.
