@@ -68,7 +68,7 @@ Pour réaliser ce projet, nous avons à disposition un PCB routé par nos enseig
 
 Les logiciels que nous utiliserons sont pour la plupart gratuits et libres. Pour réaliser le schéma, la simulation de circuits analogiques et le routage du PCB, nous utilisons KiCAD 9.0. Nous utilisons le langage C pour programmer le microcontrôleur et nous utilisons avr-gcc pour compiler les programmes. De plus, le traitement des informations acquises est réalisé avec MATLAB car c'est un logiciel qui nous est familier. Enfin, nous utilisons FreeCAD pour faire de la modélisation mécanique 3D.
 
-Dans un premier temps, nous présenterons comment nous avons conçu le circuit, simulé, puis routé le PCB. Ensuite se trouvera l'estimation du prix des composants et du PCB en fonction des volumes. Après, nous montrerons comment nous avons assemblé le PCB et imprimé par méthode additive une boîte pour celui-ci. Nous aborderons ensuite la programmation du microcontrôleur avant de passer aux tests et à l'évaluation des performances du système.
+Dans un premier temps, nous présenterons comment nous avons conçu et simulé le circuit, puis routé le PCB. Ensuite se trouvera l'estimation du prix des composants et du PCB en fonction des volumes. Après, nous montrerons comment nous avons assemblé le PCB et imprimé par méthode additive une boîte pour celui-ci. Nous aborderons ensuite la programmation du microcontrôleur avant de passer aux tests et à l'évaluation des performances du système.
 
 \section{Schéma électrique}
 
@@ -136,7 +136,7 @@ La diode varicap BB833 a été remplacée par la BB857, plus disponible, avec un
 
 \paragraph{Boîtiers des composants passifs :}
 
-Les boîtiers SMD 0805 ont été privilégiés pour les résistances et condensateurs (par exemple, R5 à 5~k$\Omega$, C5 à 10~$\mu$F), offrant une taille réduite et une densité élevée sur le PCB, tout en restant maniables pour une soudure manuelle. Le format 1206 a été utilisé pour des composants nécessitant une meilleure dissipation de puissance (par exemple, R1 à 0~$\Omega$). Ces formats standards garantissent une disponibilité chez les fournisseurs comme Farnell.
+Les boîtiers SMD 0805 ont été privilégiés pour les résistances et condensateurs (par exemple, R5 à 5~k$\Omega$, C5 à 10~$\mu$F), offrant une taille réduite et une densité élevée sur le PCB, tout en restant maniables pour une soudure manuelle. Le format 1206 a été utilisé pour des composants nécessitant une dissipation de puissance minimale (par exemple, R1 à 0~$\Omega$). Ces formats standards garantissent une disponibilité chez les fournisseurs comme Farnell.
 
 \subsection{Processus de sélection des composants}
 
@@ -173,11 +173,11 @@ Après avoir sélectionné tous les composants, nous avons généré la nomencla
 
 \section{Routage du PCB}
 
-Le routage commence par la récupération des empreintes, suivie du placement des composants selon une logique. L'Atmega est placé en premier, au centre de la carte. Le quartz est positionné au plus proche pour ne pas perturber la stabilité de l’oscillateur. Les capacités de découplage sont rapprochées des broches d’alimentation, tandis que le connecteur USB est disposé de façon à optimiser le routage des paires différentielles.
+Le routage commence par la récupération des empreintes, suivie du placement des composants selon la logique suivante : l'Atmega est placé en premier, au centre de la carte. Le quartz est positionné au plus proche pour ne pas perturber la stabilité de l’oscillateur. Les capacités de découplage sont rapprochées des broches d’alimentation, tandis que le connecteur USB est disposé de façon à optimiser le routage des paires différentielles.
 
 Une fois que ces éléments importants sont positionnés, on dessine le contour du PCB avec la couche (Edge.Cuts). Les autres composants sont ensuite répartis de manière à limiter la longueur des pistes et à éviter les croisements.
 
-Le routage suit le même ordre précis : le groupe avec le quartz, les capacités de découplage, USB, puis le reste du circuit. Les empreintes sont déplacées pour faciliter le routage de certaines pistes. Le plan \SI{5}{\volt} est relié directement sur la couche du haut, tandis que le plan de masse, situé sur la deuxième couche, est connecté à l’aide de vias traversants.
+Le routage suit le même ordre : le groupe avec le quartz, les capacités de découplage, USB, puis le reste du circuit. Les empreintes sont déplacées pour faciliter le routage de certaines pistes. Le plan \SI{5}{\volt} est relié directement sur la couche du haut, tandis que le plan de masse, situé sur la deuxième couche, est connecté à l’aide de vias traversants.
 
 On effectue le contrôle de conception (DRC) pour corriger toutes les erreurs ou avertissements, notamment ceux liés à la sérigraphie (F.SilkScreen) que l’on repositionne.
 
@@ -189,11 +189,11 @@ Les paramètres du routage sont faits pour respecter la classe 4, mais l’empre
 
 \section{Simulation}
 
-Le schéma en Figure \ref{schsimul} réalisé pour la simulation, représente un oscillateur à quartz avec une fréquence ajustable par une varicap, divisé en trois sections principales. La première section génère une tension de commande via une source PWM (B1, fréquence 10~kHz, rapport cyclique 0,5) filtrée par un RC passe-bas (R5 = 5~k$\Omega$, C5 = 1~$\mu$F), produisant une tension continue au nœud \texttt{PWM\_filtered}. Cette tension est appliquée à un suiveur de tension (E1, modèle idéal, gain 1), dont la sortie (\texttt{Follower\_output}) commande la varicap. La deuxième section est l’oscillateur à quartz, modélisé par un circuit Butterworth-van Dyke \cite{Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF, R1 = 50~$\Omega$, C7 = 7~pF), avec des condensateurs de charge C9 (15~pF) et C8 (10~pF) pour satisfaire les conditions de Barkhausen. Une source AC (B2, 1~V) est ajoutée pour l’analyse en fréquence. La troisième section ajuste la fréquence via une varicap (C11 = 2~pF à 10~pF), connectée entre \texttt{XTAL2} et \texttt{Follower\_output}, permettant un réglage fin de la fréquence de résonance.
+Le schéma en figure \ref{schsimul} réalisé pour la simulation, représente un oscillateur à quartz avec une fréquence ajustable par une varicap, divisé en trois sections principales. La première section génère une tension de commande via une source PWM (B1, fréquence 10~kHz, rapport cyclique 0,5) filtrée par un RC passe-bas (R5 = 5~k$\Omega$, C5 = 1~$\mu$F), produisant une tension continue au nœud \texttt{PWM\_filtered}. Cette tension est appliquée à un suiveur de tension (E1, modèle idéal, gain 1), dont la sortie (\texttt{Follower\_output}) polarise la varicap. La deuxième section est l’oscillateur à quartz, modélisé par un circuit Butterworth-van Dyke \cite{Butterworth} (L2 = 5~mH, C6 = 19,78929368~fF, R1 = 50~$\Omega$, C7 = 7~pF), avec des condensateurs de charge C9 (15~pF) et C8 (10~pF) pour satisfaire les conditions de Barkhausen. Une source AC (B2, 1~V) est ajoutée pour l’analyse en fréquence. La troisième section ajuste la fréquence via une varicap (C11 = 2~pF à 10~pF), connectée entre \texttt{XTAL2} et \texttt{Follower\_output}, permettant un réglage fin de la fréquence de résonance.
 
 \subsection{Analyse des résultats de la simulation AC}
 
-L'analyse AC, réalisée sur une plage de fréquences de 15,9~MHz à 16,1~MHz, a permis d'identifier la fréquence de résonance du quartz à 16,017200~MHz pour un rapport cyclique de 0,5 (tension de commande moyenne de 2,5~V) et une capacité de la varicap (C8 et C11) fixée à 2~pF. En faisant varier la capacité de la varicap de 2~pF à 10~pF, nous avons observé un décalage de la fréquence : à 6~pF, la fréquence est de 16,012000~MHz, et à 10~pF, elle descend à 16,009200~MHz comme on peut le voir en Figure \ref{simulAC}. Cette variation de 8~pF (de 2~pF à 10~pF) entraîne un décalage total de 8~kHz (de 16,017200~MHz à 16,009200~MHz), soit environ 1~kHz par pF. Ces résultats confirment que la varicap permet un ajustement fin de la fréquence, avec une plage de réglage suffisante pour compenser les dérives de l’oscillateur (de 30 à 50~ppm, soit 480 à 800~Hz pour un quartz à 16~MHz) dans le cadre de l’asservissement GPS.
+L'analyse AC, réalisée sur une plage de fréquences de 15,9~MHz à 16,1~MHz, a permis d'identifier la fréquence de résonance du quartz à 16,017200~MHz pour un rapport cyclique de 0,5 (tension de commande moyenne de 2,5~V) et une capacité de la varicap (C8 et C11) fixée à 2~pF. En faisant varier la capacité de la varicap de 2~pF à 10~pF, nous avons observé un décalage de la fréquence : à 6~pF, la fréquence est de 16,012000~MHz, et à 10~pF, elle descend à 16,009200~MHz comme on peut le voir en figure \ref{simulAC}. Cette variation de 8~pF (de 2~pF à 10~pF) entraîne un décalage total de 8~kHz (de 16,017200~MHz à 16,009200~MHz), soit environ 1~kHz par pF. Ces résultats confirment que la varicap permet un ajustement fin de la fréquence, avec une plage de réglage suffisante pour compenser les dérives de l’oscillateur (de 30 à 50~ppm, soit 480 à 800~Hz pour un quartz à 16~MHz) dans le cadre de l’asservissement GPS.
 
 \subsection{Fréquence de résonance de l’oscillateur}
 
@@ -203,11 +203,11 @@ En comparaison avec la théorie, la fréquence de résonance attendue, calculée
 
 \subsection{Simulation du circuit RC}
 
-Pour ce qui est de la simulation du circuit RC afin de déterminer les meilleurs choix pour la résistance et la capacité, on procédera de la façon suivante :
+Pour ce qui est de la simulation du circuit RC et afin de déterminer les meilleurs choix pour la résistance et la capacité, on procédera de la façon suivante :
 
-Exemple avec \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\). On simulera toujours avec une fréquence de \(7812\,\mathrm{Hz}\) et un rapport cyclique de 50\%. Grâce à notre simulation, on relève la constante de temps \(\tau\). Pour ce faire, on utilisera la méthode des 95\% de la valeur finale, puis par projection à partir de \(t = 0\) on observe et on relève, dans le cas de la figure en annexe (voir Figure~\ref{fig:tauR5C1}), \(\tau = 16,4\,\mathrm{ms}\). Cela paraît cohérent si l'on considère que \(\tau = RC = 5,1 \times 10^3 \times 1 \times 10^{-6}\) et que \(3\,\tau\) correspond à l'atteinte de 100\% de la réponse.
+Exemple avec \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\). On simulera toujours avec une fréquence de \(7812\,\mathrm{Hz}\) (voir le calcul de cette fréquence à la partie \ref{Section - Programmation - PWM}) et un rapport cyclique de 50\%. Grâce à notre simulation, on relève la constante de temps \(\tau\). Pour ce faire, on utilisera la méthode des 95\% de la valeur finale, puis par projection à partir de \(t = 0\) on observe et on relève, dans le cas de la figure en annexe (voir figure~\ref{fig:tauR5C1}), \(\tau = 16,4\,\mathrm{ms}\). Cela paraît cohérent si l'on considère que \(\tau = RC = 5,1 \times 10^3 \times 1 \times 10^{-6}\) et que \(3\,\tau\) correspond à l'atteinte de 95\% de la réponse.
 
-Une fois \(\tau\) relevé, on relève également la différence de voltage lorsque la réponse se stabilise. Comme on peut le voir dans la figure en annexe (voir Figure~\ref{fig:voltageR5C1}), il suffit d'utiliser les curseurs pour relever environ \(24\,\mathrm{mV}\).
+Une fois \(\tau\) relevé, on relève également la variation de tension lorsque la réponse se stabilise. Comme on peut le voir dans la figure en annexe (voir figure~\ref{fig:voltageR5C1}), il suffit d'utiliser les curseurs pour relever environ \(24\,\mathrm{mV}\).
 
 On appliquera la même procédure pour d'autres valeurs de \(R\) et \(C\), comme présenté dans le tableau ci-dessous :
 
@@ -229,7 +229,7 @@ On appliquera la même procédure pour d'autres valeurs de \(R\) et \(C\), comme
 \end{tabular}
 \end{center}
 
-On remarque alors que, selon nos observations, les meilleurs choix sont \(R = 5.1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\), ce qui représente le meilleur compromis entre temps de réponse et voltage.
+On remarque alors que, selon nos observations, les meilleurs choix sont \(R = 5.1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\), ce qui représente le meilleur compromis entre temps de réponse et stabilité de la tension.
 
 \section{Estimation du coût}
 
@@ -293,17 +293,15 @@ D'après le site Eurocircuits (voir Figure~\ref{fig:prix}), pour un prototype de
 \noindent
 La matrice de prix montre clairement comment le coût varie en fonction du délai de fabrication et de la quantité commandée. Chaque case présente le prix unitaire ainsi que le montant total pour la commande. Par exemple, pour une commande d’un seul PCB, le tarif passe de 100,53~€ avec un délai de 2 jours à 40,99~€ dès que le délai atteint 3 jours, où il se stabilise. Pour une commande de 5 PCB, le même phénomène se produit avec une forte réduction du prix unitaire entre 2 et 3 jours, puis une stabilité dès 3 jours. En revanche, pour des commandes plus importantes comme 10, 15 ou 20 PCB, le prix unitaire continue de baisser jusqu’à atteindre un délai de fabrication de 5 jours, après quoi il se fixe. Cela montre qu’en choisissant un délai de fabrication légèrement plus long, on peut réduire significativement le coût unitaire, en particulier pour des commandes groupées. Ainsi, commander 5 PCB par exemple s'avère être une option intéressante, permettant de bénéficier d'un tarif avantageux tout en obtenant suffisamment d'exemplaires pour divers besoins (plusieurs test ou autre).
 
-
-
 \section{Soudure des composants}
 
-AU début de la semaine de projet nous avons un PCB nu, l'objectif est de souder les composants afin d'obtenir une carte fonctionnelle. C'est un moyen pour nous de découvrir la soudure de composants montés en surface, notre expérience était limitée aux composants traversants.
+Au début de la semaine de projet nous avons un PCB nu, l'objectif est de souder les composants afin d'obtenir une carte fonctionnelle. C'est un moyen pour nous de découvrir la soudure de composants montés en surface, notre expérience était limitée aux composants traversants.
 
  Pour faciliter l’implantation des composants sur le PCB, le plug-in  «~Interactive HTML BOM~»  dans KiCad nous permet de localiser précisément chaque composant sur la carte.
 
-Dans un premier temps, on a défini l’ordre des composants à souder. Le connecteur USB est placé en premier pour vérifier la présence du \SI{5}{\volt} et de la masse, suivi des composants les plus petits (diodes, résistances, condensateurs), puis de l’Atmega, et enfin des composants traversants (boutons, connecteur BNC). Cet ordre nous permet d'avoir le plus d'espace de travail maximal pour les composants les plus délicats à souder.
+Dans un premier temps, nous définissons l’ordre des composants à souder. Le connecteur USB est placé en premier pour vérifier la présence du \SI{5}{\volt} et de la masse, suivi des composants les plus petits (diodes, résistances, condensateurs), puis de l’Atmega, et enfin des composants traversants (boutons, connecteur BNC). Cet ordre nous permet d'avoir le plus d'espace de travail maximal pour les composants les plus délicats à souder.
 
-La soudure de l’USB s’avère complexe et nécessite plusieurs essais. Un court-circuit se produit lorsqu’une bille d’étain retombe sur les broches du connecteur, les reliant entre elles. On essaye une première fois de le dessouder à la tresse échoue, cependant on a eu besoin du technicien qui a retirer le connecteur avec un pistolet à air chaud. Le vernis à donc fondu dans cette partie du PCB. Après nettoyage de l'éteint sur l’USB et la suppression d’une plaque métallique à l’arrière du connecteur, qui était la source du court-circuit. On a pu ressoudé le port USB correctement (voir la figure ?????). La suite de la soudure se déroule sans problème.
+La soudure de l’USB s’avère complexe et nécessite plusieurs essais. Un court-circuit se produit lorsqu’une bille d’étain retombe sur les broches du connecteur, les reliant entre elles. On essaye une première fois de le dessouder à la tresse, sans succès. Nous avons donc demandé de l'aide au technicien qui a retiré le connecteur avec un pistolet à air chaud. Le vernis à donc fondu dans cette partie du PCB. Après nettoyage de l'étain sur l’USB et la suppression d’une plaque métallique à l’arrière du connecteur, qui était la source du court-circuit. On a pu ressouder le port USB correctement (voir la figure ?????). La suite de la soudure se déroule sans problème.
 
 %% mettre image du connecteur
 
@@ -327,7 +325,7 @@ Dans un premier temps, nous souhaitons démontrer notre capacité à programmer 
 
 \paragraph{Code}
 
-Le code (fichier Hello\_world) est simplement composé de la déclaration d'une LED en sortie (PORTF1), puis de sa commutation toutes les \SI{0.5}{\second} dans une boucle infinie. À noter que nous utilisons la bibliothèque LUFA car ses fonctions d'initialisation permettent d'indiquer au microcontrôleur d'utiliser l'oscillateur externe de \SI{16}{\mega\hertz} et non celui de \SI{1}{\mega\hertz} intégré.
+Le code (fichier Hello\_world.c) est simplement composé de la déclaration d'une LED en sortie (PORTF1), puis de sa commutation toutes les \SI{0.5}{\second} dans une boucle infinie. À noter que nous utilisons la bibliothèque LUFA car ses fonctions d'initialisation permettent d'indiquer au microcontrôleur d'utiliser l'oscillateur externe de \SI{16}{\mega\hertz} et non celui de \SI{1}{\mega\hertz} intégré.
 
 Nous ajoutons également la possibilité de communiquer par USB pour tester la bibliothèque LUFA, mais nous commentons cette partie du code le temps de réaliser les mesures de temps sur la LED qui clignote. En effet, la communication USB prend du temps et fausse les durées, notamment lorsque le port USB n'est pas sondé par l'ordinateur.
 
@@ -335,7 +333,7 @@ Nous ajoutons également la possibilité de communiquer par USB pour tester la b
 
 Nous réutilisons un Makefile que nous avons utilisé cette année en cours et nous l'adaptons à notre programme. De plus, c'est ce Makefile qui sera utilisé pour tous les autres programmes réalisés dans ce projet.
 
-Le plus gros changement se trouve dans le transfert du programme. Nous utilisons «~dfu-programmer~» pour cela. Nous réalisons donc le Makefile qui permet d'exécuter les commandes suivantes pour transférer le programme, comme nous l'avait indiqué M. FRIEDT lors des cours de préparation du projet : \nopagebreak
+Le plus gros changement se trouve dans le transfert du programme. Nous utilisons «~dfu-programmer~» (qu'il faut installer sur nos machines) pour cela. Nous réalisons donc le Makefile qui permet d'exécuter les commandes suivantes pour transférer le programme, comme nous l'avait indiqué M. FRIEDT lors des cours de préparation du projet : \nopagebreak
 \begin{itemize}
 	\item dfu-programmer atmega32u4 erase
 	\item dfu-programmer atmega32u4 Hello\_world.hex
@@ -352,9 +350,9 @@ Nous remercions M. FRIEDT qui nous a indiqué la nécessité d'inclure les fonct
 
 Maintenant que nous sommes capables de programmer le microcontrôleur, nous pouvons passer à la programmation de fonctionnalités utiles pour le projet.
 
-\subsection{PWM}
+\subsection{PWM} \label{Section - Programmation - PWM}
 
-Le microcontrôleur ATMEGA32U4 ne comporte pas directement de convertisseur numérique-analogique (DAC). Ainsi, afin de pouvoir générer une tension continue dont on peut contrôler l'amplitude, nous utilisons un signal à rapport cyclique variable suivi d'un filtre passe-bas afin d'extraire la valeur moyenne de ce signal. Concrètement, nous voulons générer un signal créneau en pouvant modifier le temps passé à l'état haut par rapport au temps passé à l'état bas, ce qui permet de modifier la valeur moyenne.
+Le microcontrôleur ATMEGA32U4 ne comporte pas directement de convertisseur numérique-analogique (DAC). Ainsi, afin de pouvoir générer une tension continue dont on peut contrôler l'amplitude, nous utilisons un signal à rapport cyclique variable (PWM) suivi d'un filtre passe-bas afin d'extraire la valeur moyenne de ce signal. Concrètement, nous voulons générer un signal créneau en pouvant modifier le temps passé à l'état haut par rapport au temps passé à l'état bas, ce qui permet de modifier la valeur moyenne.
 
 Ce programme s'appelle «~PWM.c~» sur le dépôt Github.
 
@@ -368,7 +366,7 @@ Un schéma représentant le fonctionnement du timer en mode PWM est représenté
 
 Deux registres sont importants pour contrôler le signal : OCR4C permet de modifier la fréquence du signal et OCR4D permet de changer le rapport cyclique.
 
-OCR4C permet de changer la fréquence car il permet de contrôler jusqu'à quelle valeur le compteur va compter avant de redescendre. Ainsi, si OCR4C diminue, alors le compteur atteindra plus vite sa valeur maximale et fera des allers-retours plus vite. S'il fait des allers-retours plus vite alors la fréquence augmente.
+OCR4C permet de changer la fréquence car il permet de contrôler jusqu'à quelle valeur le compteur va compter avant de redescendre. Ainsi, si OCR4C diminue, alors le compteur atteindra plus vite sa valeur maximale et fera des allers-retours plus vite. S'il fait des allers-retours plus vite, alors la fréquence du signal de sortie augmente.
 
 On observe sur le schéma que le port D7 change d'état lorsque la valeur du timer 4 est égale à la valeur de OCR4D. Plus précisément, PORTD7 passe à l'état bas lorsque cet événement se produit et que le compteur compte vers le haut, et PORTD7 passe à l'état haut lorsque cet événement se produit et que le compteur compte vers le bas. Ainsi, si OCR4D est proche de 0, alors le port D7 sera la plupart du temps à l'état bas. Au contraire, si OCR4D est proche de OCR4C, alors le port D7 sera la plupart du temps à l'état haut.
 
@@ -446,11 +444,11 @@ Nous considérons que cette partie est fonctionnelle et que l'on peut mesurer pr
 
 \subsection{Régulation}
 
-Maintenant que nous pouvons contrôler le procédé (la fréquence de résonance du résonateur) avec le programme PWM et le mesurer avec le programme ICP, nous pouvons réguler le système. L'objectif est de mesurer la fréquence de l'oscillateur et de polariser la Varicap correctement afin que la fréquence reste stable et devienne insensible aux perturbations comme la température par exemple. Ce programme s'appelle «~Asservissement\_PI.c~» sur le dépôt Github.
+Maintenant que nous pouvons contrôler le procédé (la fréquence de résonance du résonateur) avec le programme PWM et le mesurer avec le programme ICP, nous pouvons réguler le système. L'objectif est de mesurer la fréquence de l'oscillateur et de polariser la varicap correctement afin que la fréquence reste stable et devienne insensible aux perturbations comme la température par exemple. Ce programme s'appelle «~Asservissement\_PI.c~» sur le dépôt Github.
 
 Nous utilisons pour cela un régulateur PID et en calculant les coefficients avec la méthode de Takahashi \cite{Cours automatique Gonzalo}. Nous avons pour cela besoin d'informations tirées de la réponse indicielle du système.
 
-En traçant l'évolution de la fréquence mesurée en fonction du rapport cyclique du signal PWM, et donc de la tension de polarisation de la Varicap (figure \ref{Graphique - Influence Varicap} en annexe), on observe que la caractéristique n'est pas linéaire. Nous travaillerons donc au milieu de la courbe pour la régulation.
+En traçant l'évolution de la fréquence mesurée en fonction du rapport cyclique du signal PWM, et donc de la tension de polarisation de la varicap (figure \ref{Graphique - Influence Varicap} en annexe), on observe que la caractéristique n'est pas linéaire. Nous travaillerons donc au milieu de la courbe pour la régulation.
 
 \subsubsection{Réponse indicielle}
 
@@ -479,13 +477,23 @@ Avec cmd la commande et $\varepsilon$ l'erreur telle que $\varepsilon = \text{co
 
 En effet, cette formule permet de ne pas avoir besoin de stocker le résultat d'une intégrale ou de la somme des erreurs qui pourrait éventuellement déborder de la capacité de la mémoire d'une variable. Cela se fait naturellement en prenant en compte la commande à l'état précédent pour calculer la prochaine commande.
 
-Étant donné que nous sommes sur un microcontrôleur, nous souhaitons éviter d'utiliser des nombres flottants et donc utiliser exclusivement des entiers. Nous multiplions donc les coefficients \Kp\ et \Ki\ par 1000, ce qui nous donne $\Kp = 29$ et $\Ki = 25$. Il faut ensuite simplement diviser la commande par 1000 pour contrebalancer l'effet de la multiplication par 1000 des coefficients.
+\paragraph{Utilisation de nombres entiers}
+
+Étant donné que nous sommes sur un microcontrôleur, nous souhaitons éviter d'utiliser des nombres flottants et donc utiliser exclusivement des entiers. Nous multiplions donc les coefficients \Kp\ et \Ki\ par 1000, ce qui nous donne $\Kp = 29$ et $\Ki = 25$. Il faut ensuite simplement diviser la commande par 1000 lors de son application pour contrebalancer l'effet de la multiplication par 1000 des coefficients.
+
+\paragraph{Point de fonctionnement et ajustement de la commande}
 
 Notons que le rapport cyclique appliqué est $512 + \text{cmd}$ afin de se placer autour du point de fonctionnement choisi qui est de 512 sur 1023. De plus, afin de rester dans ce domaine, nous limitons la commande cmd à $\pm 50$ (après la division par 1000 donc $\pm 50 000$ dans la véritable variable). Lors des premiers tests, nous avons remarqué que le système fonctionnait mal car la commande était trop faible (1 ou 2). Nous avons donc divisé la commande lors de l'application par 100 ou lieu de 1000 (ce qui fait une commande multipliée par 10), ce qui donne des performances satisfaisantes.
 
+\paragraph{Retrait des fonctions inutiles}
+
 De plus, nous avons vu que le nombre de cycles réalisés par le système d'input capture est constant et égal à 244, ce qui fait que nous n'utilisons pas cette information. Nous décidons alors de retirer la routine qui intervient lors du débordement du timer 1 et qui permet de compter le nombre de cycle réalisé. Cela permet de réduire la taille du code et d'éviter un grand nombre d'interruptions inutiles, ce qui ralenti le code.
 
+\paragraph{Sélection de la consigne}
+
 À noter que cette commande n'est calculée et appliquée qu'une fois par seconde, ce qui correspond à notre période d'échantillonnage. La valeur de consigne est prise comme étant la fréquence mesurée \SI{5}{\second} après le démarrage du système afin de laisser le temps à la fréquence de se stabiliser avec un rapport cyclique du PWM de \SI{50}{\percent} (512/1023). C'est ensuite cette fréquence qui sera maintenue grâce à la régulation.
+
+\paragraph{Test}
 
 On voit sur la figure \ref{Graphique - Comparaison} en annexe que le régulateur permet d'avoir un système beaucoup moins sensible aux perturbations. De plus, nous avons remarqué que sans régulation, lorsque le résonateur refroidi, la fréquence tend parfois vers une autre valeur que celle avant le chauffage. C'est un effet que l'on ne retrouve pas avec le régulateur puisqu'une commande est appliquée afin que la fréquence retrouve rapidement sa valeur de consigne (on peut observer la consigne sur le graphique du bas).
 
@@ -606,7 +614,7 @@ Nous profitons de ce compte rendu pour remercier chaleureusement nos enseignants
 \begin{sidewaysfigure}
     \centering
     \includegraphics[width=0.9\linewidth]{Ressources/Schemas/Simulation.png}
-    \caption{Schéma de l’oscillateur à quartz avec réglage de fréquence par varicap.}
+    \caption{Schéma permettant de simuler le filtre RC et l’oscillateur à quartz avec réglage de fréquence par varicap.}
     \label{schsimul}
 \end{sidewaysfigure}
 
@@ -627,14 +635,14 @@ Nous profitons de ce compte rendu pour remercier chaleureusement nos enseignants
 \begin{sidewaysfigure}[htb!]
     \centering
     \includegraphics[width=0.9\textwidth]{Ressources/Images/Simulation-Filtre-Tau.png}
-    \caption{Simulation de la constante de temps \(\tau\) pour \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\).}
+    \caption{Simulation du filtre RC et visualisation du temps de réponse pour \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\).}
     \label{fig:tauR5C1}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}[htb!]
     \centering
     \includegraphics[width=0.9\textwidth]{Ressources/Images/Simulation-Filtre-Valeur_finale.png}
-    \caption{Mesure de la différence de voltage dans la réponse stabilisée du circuit RC.}
+    \caption{Simulation du filtre RC et visualisation de l'évolution de la tension finale pour \(R = 5,1\,\mathrm{k}\Omega\) et \(C = 1\,\mu\mathrm{F}\).}
     \label{fig:voltageR5C1}
 \end{sidewaysfigure}
 
@@ -652,26 +660,26 @@ Nous profitons de ce compte rendu pour remercier chaleureusement nos enseignants
 	\label{Schéma - ICP}
 \end{figure}
 
-\begin{figure}[htb!]
+\begin{sidewaysfigure}[htb!]
 	\centering
 	\includegraphics[width=\textwidth]{Ressources/Graphiques/ICP.png}
-	\caption{Graphique représentant l'évolution de la valeur de mesurée par l'input capture (ICP) en fonction du temps. L'ICP peut également être interprétée comme la fréquence de l'oscillateur modulo $2^16$ en \si{\hertz}.}
+	\caption{Graphique représentant l'évolution de la valeur de mesurée par l'input capture (ICP) en fonction du temps. L'ICP peut également être interprétée comme la fréquence de l'oscillateur modulo $2^{16}$ en \si{\hertz}.}
 	\label{Graphique - ICP}
-\end{figure}
+\end{sidewaysfigure}
 
-\begin{figure}[htb!]
+\begin{sidewaysfigure}[htb!]
 	\centering
 	\includegraphics[width=\textwidth]{Ressources/Graphiques/Influence_Varicap.png}
 	\caption{Graphique représentant la fréquence mesurée de l'oscillateur modulo 65536 ($2^{16}$) en fonction du rapport cyclique du signal PWM, et donc de la tension de polarisation de la Varicap.}
 	\label{Graphique - Influence Varicap}
-\end{figure}
+\end{sidewaysfigure}
 
-\begin{figure}[htb!]
+\begin{sidewaysfigure}[htb!]
 	\centering
 	\includegraphics[width=\textwidth]{Ressources/Graphiques/Reponse_indicielle.png}
 	\caption{Réponse indicielle moyenne d'un échelon de rapport cyclique passant de 462 à 562 sur 1023.}
 	\label{Graphique - Réponse indicielle}
-\end{figure}
+\end{sidewaysfigure}
 
 \begin{sidewaysfigure}[htb!]
 	\centering
