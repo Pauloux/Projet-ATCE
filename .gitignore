@@ -10,9 +10,6 @@
 *.bak
 *.DS_Store
 
-# Compte rendu
-Compte rendu/*.pdf
-
 # PCB
 **/*backups
 **fp-info-cache
